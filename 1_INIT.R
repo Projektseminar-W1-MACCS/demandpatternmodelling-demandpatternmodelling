@@ -4,12 +4,16 @@
 
 
 ## ======================================INPUT MASK============================================================
+  PRODUCTION_ENVIRONMENT = list()
+  COSTING_SYSTEM = list()
   
-  NUMB_PRO =         50;      #INPUT independent Variable - Number of products 
-  NUMB_RES =         50;      #INPUT independent variable - Number of factors
+  
+  
+  PRODUCTION_ENVIRONMENT$NUMB_PRO =         50;      #INPUT independent Variable - Number of products 
+  COSTING_SYSTEM$NUMB_RES          =         50;      #INPUT independent variable - Number of factors
   SIM_NUMB =         5;       #Control Variable - Number of Simulations for every single environment (standard: 30)     
   tt   =             1;       #Periods
-  
+
 
   ProductOutput=     1;       #Zero = no tracking
   set_pe_constant=   1;       #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
@@ -24,97 +28,67 @@
   dec_CP=            1;       # =
   dec_CD=            1;       # =
   
+  
+  
+  COSTING_SYSTEM$CP = c(1,2,3,4,5,6,7,8,9,10)
+  PRODUCTION_ENVIRONMENT$COR = c(0)
+  COSTING_SYSTEM$RC_VAR =  c(0.55)
+  PRODUCTION_ENVIRONMENT$Q_VAR = c(1)
+  COSTING_SYSTEM$Error = c(0.1,0.3,0.5)
+  COSTING_SYSTEM$NUMB_Error = c(1)
+  
 ## ======================================END OF INPUT MASK=====================================================                           
 
-              o=1
-              nn=1
-              source('./src/ProductionEnvironmentGeneration.R')              
-              source('./src/.RES_CONS_PAT.R')
+    
+  
+  
+  
+  
+            o=1
+            nn=1
+            #source('./src/ProductionEnvironmentGeneration.R')              
+            #source('./src/.RES_CONS_PAT.R')
+            # initialize global variables #
+            data_log<-list()    # List for Logging Data
+              
+              
               
 ## ======================================DESIGN OF EXPERIMENTS===================================================== 
 ## EVIRONMENTAL FACTORS [FULLDESIGN: PER CP = *SIM_NUMB] [3k Design - 324 DP*SIM_NUMB]
-  
-  for (CP in 1:2) {
-    for (COR in c(0)) {
-      for (RC_VAR in 0.5) {
-        for (Q_VAR in 0.5) {
-          for (Error in 0.5) {
-            for (NUMB_Error in 1) {
-    
-               if ( dec_CP==1) {
               
-              #} else if ( dec_CP==2) {
-              #   #statement2
-              # } else {
-              #   printf("Blub")
-              }
+  for (ix_CP in seq_along(COSTING_SYSTEM$CP)) {
+     for (ix_COR in seq_along(PRODUCTION_ENVIRONMENT$COR)) {
+       for (ix_RC_VAR in seq_along(COSTING_SYSTEM$RC_VAR)) {
+         for (ix_Q_VAR in seq_along(PRODUCTION_ENVIRONMENT$Q_VAR)) {
+           for (ix_Error in seq_along(COSTING_SYSTEM$Error)) {
+             for (ix_NUMB_Error in seq_along(COSTING_SYSTEM$NUMB_Error)) {
+     
               
-              ## 
+               
+#if ( dec_CP==1) {
+#} else if ( dec_CP==2) {
+#   #statement2
+# } else {
+#   printf("Blub")}
               
-              
-              
-              
-              
+            
   
 ## ====================================== SIMULATION ROUTINE   =====================================================    
-for (ii in 1:SIM_NUMB) {
+for (nn in 1:SIM_NUMB) {
 
   
-print(ii)  
-  
-  
+print(COSTING_SYSTEM$CP[ix_CP])  
+  print(COSTING_SYSTEM$Error[ix_Error])  
 }
-            }
-          }
-        }
-      }
-    }
-  }
+             }
+           }
+         }
+       }
+     }
+   }
   
 
   
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-#   [ProductionEnvironment,CostSystem,CHECK] = genProductionEnvironment(NUMB_PRO,NUMB_RES,DENS,RC_VAR,Q_VAR,VOL_SHARE_PERC,COR,...
-#                                                                       OH_SHARE, vary_demand,seed);
-#   
-#   switch dec_DC
-#   case 3%
-#   [ProductionEnvironment,CostSystem,CHECK] = SELECT_DC_ADDITIONAL(OH_SHARE,ProductionEnvironment,CostSystem,CHECK);
-#   case 2%
-#   [ProductionEnvironment,CostSystem,CHECK] = SELECT_DC_RANDOM(OH_SHARE,ProductionEnvironment,CostSystem,CHECK);
-#   case 1%
-#   [ProductionEnvironment,CostSystem,CHECK] = SELECT_DC_SIZE(OH_SHARE,ProductionEnvironment,CostSystem,CHECK);
-#   case 0%
-#   
-#   %no direct costs 
-#   end
-#   
-#   
 #   switch dec_CP
 #   case 1% 
 #   [APC,index] = MAP_RES_CP_RANDOM(ProductionEnvironment,CostSystem,CP);
@@ -149,7 +123,19 @@ print(ii)
 #   case 8 
 #   [ACT_CONS_PAT]= MAP_CP_PRO_NonUnitActivityMeasure(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
 #   end
-#   
+# 
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
 #   %% BENCHMARK VS. REPORTED 
 #   
 #   PC_B = CostSystem.PC_B + CostSystem.PC_B_DC ;  % Product cost from Benchmark system
