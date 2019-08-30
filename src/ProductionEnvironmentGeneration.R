@@ -3,34 +3,23 @@
 # 
 #############################################################
 
-ProductionEnvironment <- function(Q_VAR) {
-  
-   
-  
-  
-   ## ====================== STEP 0  Generation of the demand  ========================= 
-  .UNITS = 10^3
-  
-x=  dlnorm(10, meanlog = 0, sdlog = 1, log = FALSE)
-x=  rlnorm(20, 10, 2.5)
-  
- #  if VOL_VAR == -1
- #  VOL_VAR_MIN = 0.5; 
- #  VOL_VAR_MAX = 1.5;
- #  VOL_VAR = VOL_VAR_MIN + (VOL_VAR_MAX-VOL_VAR_MIN).*rand(1,1);
- #  else
- #    end 
- #  
- #  if vary_demand==0 
+gen_ProductionEnvironment <- function(PRODUCTION_ENVIRONMENT) {
+
+  #  if vary_demand==0 
  #  DEMAND_BASE = lognrnd(1,VOL_VAR,NUMB_PRO,1);
  #  else
- #  rng('shuffle')
- #  
- # 
- #  TQ = ceil(DEMAND_BASE./sum(DEMAND_BASE).*UNITS);
- #  ProductionEnvironment.DEMAND = TQ;
- #  
- #  
+ #  rng('shuffle') 
+
+
+## ====================== STEP 1 REALIZED DEMAND GENERATION ========================= 
+
+units = 10^3
+preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1)
+DEMAND = ceiling(preDemand/sum(preDemand)*units)
+
+barplot(sort(DEMAND))
+
+
  # ## ====================== STEP 1  Determining the ACT_CONS_PA  =========================
  #    
  #  ProductionEnvironment.NUMB_RES = NUMB_RES; #Amount of processes
@@ -95,5 +84,5 @@ x=  rlnorm(20, 10, 2.5)
  #  CORAP_pre=max(RES_CONS_PATp)-min(RES_CONS_PATp);
  #  CHECK.CORAP=mean(CORAP_pre)*100;  
  #  
-
+return(PRODUCTION_ENVIRONMENT)
   } # Function end

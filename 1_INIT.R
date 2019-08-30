@@ -6,11 +6,11 @@
 ## ======================================INPUT MASK============================================================
   PRODUCTION_ENVIRONMENT = list()
   COSTING_SYSTEM = list()
+  DATA = data.frame()
   
   
-  
-  PRODUCTION_ENVIRONMENT$NUMB_PRO =         50;      #INPUT independent Variable - Number of products 
-  COSTING_SYSTEM$NUMB_RES          =         50;      #INPUT independent variable - Number of factors
+  NUMB_PRO =         50;      #INPUT independent Variable - Number of products 
+  NUMB_RES  =        50;      #INPUT independent variable - Number of factors
   SIM_NUMB =         5;       #Control Variable - Number of Simulations for every single environment (standard: 30)     
   tt   =             1;       #Periods
 
@@ -30,41 +30,48 @@
   
   
   
-  COSTING_SYSTEM$CP = c(1,2,3,4,5,6,7,8,9,10)
-  PRODUCTION_ENVIRONMENT$COR = c(0)
-  COSTING_SYSTEM$RC_VAR =  c(0.55)
-  PRODUCTION_ENVIRONMENT$Q_VAR = c(1)
-  COSTING_SYSTEM$Error = c(0.1,0.3,0.5)
-  COSTING_SYSTEM$NUMB_Error = c(1)
+  CP = c(1,2,3,4,5,6,7,8,9,10)
+  COR = c(0)
+  RC_VAR =  c(0.55)
+  Q_VAR = c(1,2)
+  Error = c(0.1,0.3,0.5)
+  NUMB_Error = c(1)
+  DENS = c(0.5,0.8)
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
     
-  
-  
-  
-  
             o=1
             nn=1
             #source('./src/ProductionEnvironmentGeneration.R')              
             #source('./src/.RES_CONS_PAT.R')
             # initialize global variables #
-            data_log<-list()    # List for Logging Data
-              
-              
+                  
               
 ## ======================================DESIGN OF EXPERIMENTS===================================================== 
 ## EVIRONMENTAL FACTORS [FULLDESIGN: PER CP = *SIM_NUMB] [3k Design - 324 DP*SIM_NUMB]
               
-  for (ix_CP in seq_along(COSTING_SYSTEM$CP)) {
-     for (ix_COR in seq_along(PRODUCTION_ENVIRONMENT$COR)) {
-       for (ix_RC_VAR in seq_along(COSTING_SYSTEM$RC_VAR)) {
-         for (ix_Q_VAR in seq_along(PRODUCTION_ENVIRONMENT$Q_VAR)) {
-           for (ix_Error in seq_along(COSTING_SYSTEM$Error)) {
-             for (ix_NUMB_Error in seq_along(COSTING_SYSTEM$NUMB_Error)) {
-     
-              
-               
+  for (ix_CP in seq_along(CP)) {
+     for (ix_COR in seq_along(COR)) {
+       for (ix_RC_VAR in seq_along(RC_VAR)) {
+         for (ix_Q_VAR in seq_along(Q_VAR)) {
+           for (ix_Error in seq_along(Error)) {
+             for (ix_NUMB_Error in seq_along(NUMB_Error)) {
+               for (ix_DENS in seq_along(DENS)) {
+                 
+                 
+## ===================================== DETERMINE PRODUCTION ENVIRONMENT AND COSTING SYSTEM =======================             
+  
+                 
+  PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]   
+  PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
+  PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
+  COSTING_SYSTEM$CP = CP[ix_CP]
+  COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
+  COSTING_SYSTEM$Error = Error[ix_Error]
+  COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
+    
+
 #if ( dec_CP==1) {
 #} else if ( dec_CP==2) {
 #   #statement2
@@ -75,10 +82,22 @@
   
 ## ====================================== SIMULATION ROUTINE   =====================================================    
 for (nn in 1:SIM_NUMB) {
-
+  o = o + 1 #Runs insgesamt
   
-print(COSTING_SYSTEM$CP[ix_CP])  
+  print(COSTING_SYSTEM$CP[ix_CP])  
   print(COSTING_SYSTEM$Error[ix_Error])  
+  
+  
+  ## PRODUCTION ENVIRONMENT GENERATION
+  source('src/ProductionEnvironmentGeneration.R')
+  PRODUCTION_ENVIRONMENT = gen_ProductionEnvironment(PRODUCTION_ENVIRONMENT)
+  
+  
+  
+  preData = data.frame(o,nn,COSTING_SYSTEM)
+  DATA = rbind(DATA,preData) 
+  
+  
 }
              }
            }
@@ -86,7 +105,7 @@ print(COSTING_SYSTEM$CP[ix_CP])
        }
      }
    }
-  
+ } 
 
   
 #   switch dec_CP

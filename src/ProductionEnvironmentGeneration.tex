@@ -1,0 +1,225 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={ProductionEnvironmentGeneration.R},
+            pdfauthor={kaigm},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{ProductionEnvironmentGeneration.R}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{kaigm}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2019-08-30}
+
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#############################################################}
+\CommentTok{# PRODUCTION ENVIRONMENT GENERATION V 0.01}
+\CommentTok{# }
+\CommentTok{#############################################################}
+
+\NormalTok{gen_ProductionEnvironment <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(PRODUCTION_ENVIRONMENT) \{}
+
+  \CommentTok{#  if vary_demand==0 }
+ \CommentTok{#  DEMAND_BASE = lognrnd(1,VOL_VAR,NUMB_PRO,1);}
+ \CommentTok{#  else}
+ \CommentTok{#  rng('shuffle') }
+
+
+\CommentTok{## ====================== STEP 1 REALIZED DEMAND GENERATION ========================= }
+
+\NormalTok{units =}\StringTok{ }\DecValTok{10}\OperatorTok{^}\DecValTok{3}
+\NormalTok{preDemand =}\StringTok{ }\KeywordTok{rlnorm}\NormalTok{(NUMB_PRO, }\DataTypeTok{meanlog =} \DecValTok{0}\NormalTok{, }\DataTypeTok{sdlog =} \FloatTok{0.1}\NormalTok{)}
+\NormalTok{DEMAND =}\StringTok{ }\KeywordTok{ceiling}\NormalTok{(preDemand}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(preDemand)}\OperatorTok{*}\NormalTok{units)}
+
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{sort}\NormalTok{(DEMAND))}
+
+
+ \CommentTok{# ## ====================== STEP 1  Determining the ACT_CONS_PA  =========================}
+ \CommentTok{#    }
+ \CommentTok{#  ProductionEnvironment.NUMB_RES = NUMB_RES; #Amount of processes}
+ \CommentTok{#  ProductionEnvironment.NUMB_PRO = NUMB_PRO; #Amount of products}
+ \CommentTok{#  }
+ \CommentTok{#  }
+ \CommentTok{# ## ====================== STEP 2 Determining the amount of cost categories (fix vs. variable costs) =========================}
+ \CommentTok{#    }
+ \CommentTok{#  if VOL_SHARE_RES == -1}
+ \CommentTok{#  VOL_SHARE_RES_MIN = 0.3; }
+ \CommentTok{#  VOL_SHARE_RES_MAX = 0.7;}
+ \CommentTok{#  VOL_SHARE_RES = VOL_SHARE_RES_MIN + (VOL_SHARE_RES_MAX-VOL_SHARE_RES_MIN).*rand(1,1);}
+ \CommentTok{#  else}
+ \CommentTok{#  end }
+ \CommentTok{#  }
+ \CommentTok{#  ProductionEnvironment.UnitSize=floor(VOL_SHARE_RES*ProductionEnvironment.NUMB_RES);}
+ \CommentTok{#  ProductionEnvironment.BatchSize=ProductionEnvironment.NUMB_RES-ProductionEnvironment.UnitSize;}
+ \CommentTok{#  }
+ \CommentTok{# ## ====================== STEP 2.b Determining a DMM (RES_CONS_PAT);  =========================}
+ \CommentTok{#    }
+ \CommentTok{#    %% Randomization and setting clear design points. }
+ \CommentTok{#  if DENS == -1}
+ \CommentTok{#  DENS_MIN = 0.4; }
+ \CommentTok{#  DENS_MAX = 0.7;}
+ \CommentTok{#  DENS_RUN = DENS_MIN + (DENS_MAX-DENS_MIN).*rand(1,1);}
+ \CommentTok{#  else}
+ \CommentTok{#    DENS_MIN = DENS-0.1;}
+ \CommentTok{#  DENS_MAX = DENS;}
+ \CommentTok{#  DENS_RUN = DENS_MIN + (DENS_MAX-DENS_MIN).*rand(1,1);}
+ \CommentTok{#  end }
+ \CommentTok{#  }
+ \CommentTok{#  }
+ \CommentTok{#  }
+ \CommentTok{#  %DENS_RUN = 1 ; }
+ \CommentTok{#  }
+ \CommentTok{#  }
+ \CommentTok{#  [RES_CONS_PAT,CHECK] = genRES_CONS_PAT(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat}
+ \CommentTok{#  %[RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat}
+ \CommentTok{#  }
+ \CommentTok{#  ## ====================== STEP 2.b Determining a DMM (RES_CONS_PAT) ===========================}
+ \CommentTok{#    }
+ \CommentTok{#    RC = genRC(ProductionEnvironment,VOL_SHARE_RES,RC_VAR,TC);}
+ \CommentTok{#  [RES_CONS_PATp,CostSystem,CHECK] = genCOST_CONS_PAT(ProductionEnvironment,CHECK,RC,RES_CONS_PAT,DENS_RUN,COR);}
+ \CommentTok{#  }
+ \CommentTok{#  }
+ \CommentTok{#  }
+ \CommentTok{#  %% COMPUTING DESCRIPTIVE VALUES }
+ \CommentTok{#  % Computing Resource cost percentage: How many percentage are in the}
+ \CommentTok{#  RC_sort = sort(RC,'descend');}
+ \CommentTok{#  RC_20p = sum(RC_sort(1:(NUMB_RES*0.2)));}
+ \CommentTok{#  CHECK.RC_20p = RC_20p./TC*100;}
+ \CommentTok{#  }
+ \CommentTok{#  % Computing Output distribution percentage; How many percentage are in the % 20% values?}
+ \CommentTok{#    DEMAND_sort = sort(TQ,'descend');}
+ \CommentTok{#  DEMAND_20p = sum(DEMAND_sort(1:(NUMB_PRO*0.2))); }
+ \CommentTok{#  CHECK.DEMAND_20p = DEMAND_20p./sum(TQ)*100;}
+ \CommentTok{#  }
+ \CommentTok{#  % Computing heterogeneity }
+ \CommentTok{#  [CHECK] = measure_heterogeneity(RES_CONS_PATp,ProductionEnvironment,CHECK);}
+ \CommentTok{#  }
+ \CommentTok{#  % Averange range between lowest and highest consumption.}
+ \CommentTok{#  CORAP_pre=max(RES_CONS_PATp)-min(RES_CONS_PATp);}
+ \CommentTok{#  CHECK.CORAP=mean(CORAP_pre)*100;  }
+ \CommentTok{#  }
+\KeywordTok{return}\NormalTok{(PRODUCTION_ENVIRONMENT)}
+\NormalTok{  \} }\CommentTok{# Function end}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
