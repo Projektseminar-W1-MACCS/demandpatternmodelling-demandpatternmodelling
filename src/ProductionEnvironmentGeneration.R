@@ -20,14 +20,13 @@ DEMAND = ceiling(preDemand/sum(preDemand)*units)
 barplot(sort(DEMAND))
 
 
- # ## ====================== STEP 1  Determining the ACT_CONS_PA  =========================
- #    
- #  ProductionEnvironment.NUMB_RES = NUMB_RES; #Amount of processes
- #  ProductionEnvironment.NUMB_PRO = NUMB_PRO; #Amount of products
- #  
- #  
+## ====================== STEP 2  Determining the ACTIVITY STRUCTURE =========================
+    blub
+ProductionEnvironment.NUMB_RES = NUMB_RES; #Amount of processes
+ProductionEnvironment.NUMB_PRO = NUMB_PRO; #Amount of products
+  
  # ## ====================== STEP 2 Determining the amount of cost categories (fix vs. variable costs) =========================
- #    
+    
  #  if VOL_SHARE_RES == -1
  #  VOL_SHARE_RES_MIN = 0.3; 
  #  VOL_SHARE_RES_MAX = 0.7;
