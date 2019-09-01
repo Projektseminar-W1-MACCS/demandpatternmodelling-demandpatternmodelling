@@ -11,11 +11,11 @@
 #   "tidyr",
 #   "rmarkdown",
 #   "ggplot2"
+#   "Rfast"
 # ))
 # 
-# Packages <- c("dplyr", "ggplot2", "dplyr", "tidyr")
+# Packages <- c("dplyr", "ggplot2", "dplyr", "tidyr", "Rfast")
 # lapply(Packages, library, character.only = TRUE)
-
 
 ##############################
 # 1 - Start
