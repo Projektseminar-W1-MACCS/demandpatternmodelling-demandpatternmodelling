@@ -9,24 +9,26 @@
   DATA = data.frame()
   
   
-  NUMB_PRO =         50;      #INPUT independent Variable - Number of products 
-  NUMB_RES  =        50;      #INPUT independent variable - Number of factors
-  SIM_NUMB =         5;       #Control Variable - Number of Simulations for every single environment (standard: 30)     
-  tt   =             1;       #Periods
+  NUMB_PRO =         50      #INPUT independent Variable - Number of products 
+  NUMB_RES  =        50      #INPUT independent variable - Number of factors
+  SIM_NUMB =         5       #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  tt   =             1       #Periods
+  TC =               1000000  #Total costs
 
-
-  ProductOutput=     1;       #Zero = no tracking
-  set_pe_constant=   1;       #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
-  set_cs_constant=   0;       #Control Variable 
-  vary_demand =      0;       #Control Variable
+  ProductOutput=     1       #Zero = no tracking
+  set_pe_constant=   1       #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
+  set_cs_constant=   0       #Control Variable 
+  vary_demand =      0       #Control Variable
   
   
-  dec_ERROR=         1;       #Control Variable - 
-  seed=              13;      #Control Variable -
+  dec_ERROR=         1       #Control Variable - 
+  seed=              13      #Control Variable -
   
- #dec_DC=            0;       # = no direct costs 
-  dec_CP=            1;       # =
-  dec_CD=            1;       # =
+ #dec_DC=            0       # = no direct costs 
+  dec_CP=            1       # =
+  dec_CD=            1       # =
+  
+  
   
   
   
@@ -40,7 +42,7 @@
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
-    
+            set.seed(seed)
             o=1
             nn=1
             #source('./src/ProductionEnvironmentGeneration.R')              
@@ -48,7 +50,7 @@
             # initialize global variables #
                   
               
-## ======================================DESIGN OF EXPERIMENTS===================================================== 
+## ===================================== DESIGN OF EXPERIMENTS ================================================== 
 ## EVIRONMENTAL FACTORS [FULLDESIGN: PER CP = *SIM_NUMB] [3k Design - 324 DP*SIM_NUMB]
               
   for (ix_CP in seq_along(CP)) {
@@ -72,7 +74,7 @@
   COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
   COSTING_SYSTEM$Error = Error[ix_Error]
   COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
-    
+  COSTING_SYSTEM$TC = TC 
 
 #if ( dec_CP==1) {
 #} else if ( dec_CP==2) {
@@ -84,21 +86,14 @@
   
 ## ====================================== SIMULATION ROUTINE   =====================================================    
 for (nn in 1:SIM_NUMB) {
-  o = o + 1 #Runs insgesamt
-  
-  print(COSTING_SYSTEM$CP[ix_CP])  
-  print(COSTING_SYSTEM$Error[ix_Error])  
   
   
-  ## PRODUCTION ENVIRONMENT GENERATION
-  source('src/ProductionEnvironmentGeneration.R')
-  source('src/.gen_RES_CONS_PAT.R')
+  print(COSTING_SYSTEM$CP)  
+  print(COSTING_SYSTEM$Error)  
   
   PRODUCTION_ENVIRONMENT = gen_ProductionEnvironment(PRODUCTION_ENVIRONMENT)
   
-  
-  
-  preData = data.frame(o,nn,COSTING_SYSTEM)
+  preData = data.frame(nn,COSTING_SYSTEM)
   DATA = rbind(DATA,preData) 
   
   
@@ -253,5 +248,7 @@ for (nn in 1:SIM_NUMB) {
 #      
 # end
 #   
-#   
+output = paste("output/CDSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+write.csv(DATA, file = output)
+print("hello")
 #  

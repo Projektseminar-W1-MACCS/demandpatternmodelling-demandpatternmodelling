@@ -11,16 +11,20 @@
 #   "tidyr",
 #   "rmarkdown",
 #   "ggplot2"
-#   "Rfast"
+#   
 # ))
 # 
-# Packages <- c("dplyr", "ggplot2", "dplyr", "tidyr", "Rfast")
+# Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr")
 # lapply(Packages, library, character.only = TRUE)
 
 ##############################
 # 1 - Start
 ##############################
 
-
+## PRODUCTION ENVIRONMENT GENERATION
+source('src/ProductionEnvironmentGeneration.R')
+source('src/.gen_RES_CONS_PAT.R')
+source('src/.gen_RC.R')
 source('src/ProductionEnvironmentGeneration.R')
 source("1_INIT.R")
+

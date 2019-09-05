@@ -27,40 +27,44 @@ sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
 COR2 <- runif(1, -0.2, 0.8);
 sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
 
-for (i in 2:(PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*(PRODUCTION_ENVIRONMENT$NUMB_RES+1))) {
+for (i in 1:(PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*PRODUCTION_ENVIRONMENT$NUMB_RES)+1)
+{
   RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i - 1)];
 }
 
-for (i in ((PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*PRODUCTION_ENVIRONMENT$NUMB_RES) + 1) : PRODUCTION_ENVIRONMENT$NUMB_RES+1) {
+for (i in ((PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*PRODUCTION_ENVIRONMENT$NUMB_RES)) : PRODUCTION_ENVIRONMENT$NUMB_RES+1)
+{
   RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i - 1)];
 }
 
-# take absolute value of X and Z and scale by 10 and round them
-RES_CONS_PAT[,1] <- (BASE);
-RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10); 
-
-
-
 ## ====================== STEP 1.b DENSITY ========================= 
-
+res_cons_pat_b_pre = runif(PRODUCTION_ENVIRONMENT$NUMB_PRO*PRODUCTION_ENVIRONMENT$NUMB_RES)
 
 ## 1/0 DENSITY
-res_cons_part_b <- matrix(ifelse(runif(PRODUCTION_ENVIRONMENT$NUMB_PRO*PRODUCTION_ENVIRONMENT$NUMB_RES) > PRODUCTION_ENVIRONMENT$DENS, 0,1),
+res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > PRODUCTION_ENVIRONMENT$DENS, 0,1),
                           PRODUCTION_ENVIRONMENT$NUMB_PRO,PRODUCTION_ENVIRONMENT$NUMB_RES)
   
 RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
 PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
 
+## ====================== STEP 1.c Ceiling and Scaling ============= 
+
+# take absolute value of X and Z and scale by 10 and round them
+# Anand et al. 2019 
+RES_CONS_PAT[,1] <- (BASE);
+RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10); 
+
 
 ## ===================== EXCPETION HANDLER ====================
 
-# EXPECTION HANDLER  & CHECKS
+# EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019
 PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)
 RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)
-BASE_ZEROS<-any(RES_CONS_PAT[,1]==0)
+BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)
 
 
-if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE){
+if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE)
+{
   break
 }
 

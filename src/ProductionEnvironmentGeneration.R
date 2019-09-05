@@ -24,9 +24,10 @@ UNITLEVEL_ACT_SHARE_MIN = 0.3
 UNITLEVEL_ACT_SHARE_MAX = 0.7
 PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1)
 
+
 ## =================== STEP 2.1 Determining the amount of cost categories =================
 
-unitsize = floor(UNITLEVEL_ACT_SHARE*PRODUCTION_ENVIRONMENT$NUMB_RES)
+unitsize = floor(PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*PRODUCTION_ENVIRONMENT$NUMB_RES)
 nonunitsize = PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
 
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
@@ -43,13 +44,7 @@ PRODUCTION_ENVIRONMENT = .gen_RES_CONS_PAT(PRODUCTION_ENVIRONMENT);
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
-
- #  [RES_CONS_PAT,CHECK] = genRES_CONS_PAT(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
- #  RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
- #  
- #  ## ====================== STEP 2.b Determining a DMM (RES_CONS_PAT) ===========================
- #    
- #    RC = genRC(ProductionEnvironment,VOL_SHARE_RES,RC_VAR,TC);
+RC = .gen_RC(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM, unitsize, nonunitsize);
  #  [RES_CONS_PATp,CostSystem,CHECK] = genCOST_CONS_PAT(ProductionEnvironment,CHECK,RC,RES_CONS_PAT,DENS_RUN,COR);
  #  
  #  
@@ -73,4 +68,7 @@ PRODUCTION_ENVIRONMENT = .gen_RES_CONS_PAT(PRODUCTION_ENVIRONMENT);
  #  CHECK.CORAP=mean(CORAP_pre)*100;  
  #  
 return(PRODUCTION_ENVIRONMENT)
+
+
   } # Function end
+
