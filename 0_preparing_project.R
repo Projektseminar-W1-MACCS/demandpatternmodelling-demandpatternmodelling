@@ -26,5 +26,8 @@ source('src/ProductionEnvironmentGeneration.R')
 source('src/.gen_RES_CONS_PAT.R')
 source('src/.gen_RC.R')
 source('src/ProductionEnvironmentGeneration.R')
+source('src/CPBH_Random.R')
+source('src/CD_Heuristics.R')
+source('src/.gen_COST_CONS_PAT.R')
 source("1_INIT.R")
 

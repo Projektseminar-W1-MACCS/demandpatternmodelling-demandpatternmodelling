@@ -15,7 +15,7 @@ gen_ProductionEnvironment <- function(PRODUCTION_ENVIRONMENT) {
 
 units = 10^3
 preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1)
-DEMAND = ceiling(preDemand/sum(preDemand)*units)
+PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units)
 
 
 ## ====================== STEP 2  Determining the ACTIVITY STRUCTURE =========================
@@ -44,11 +44,19 @@ PRODUCTION_ENVIRONMENT = .gen_RES_CONS_PAT(PRODUCTION_ENVIRONMENT);
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
-RC = .gen_RC(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM, unitsize, nonunitsize);
+PRODUCTION_ENVIRONMENT$RCC = .gen_RCC(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM, unitsize, nonunitsize);
+
+
+FIRM = .genCOST_CONS_PAT(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,COST_APPROACH = "ANAND")
+
+
+
+
+
+
+#COSTING_SYSTEM$PCB = COSTING_SYSTEM$RCC*PRODUCTION_ENVIRONMENT$
  #  [RES_CONS_PATp,CostSystem,CHECK] = genCOST_CONS_PAT(ProductionEnvironment,CHECK,RC,RES_CONS_PAT,DENS_RUN,COR);
- #  
- #  
- #  
+   
  #  %% COMPUTING DESCRIPTIVE VALUES 
  #  % Computing Resource cost percentage: How many percentage are in the
  #  RC_sort = sort(RC,'descend');

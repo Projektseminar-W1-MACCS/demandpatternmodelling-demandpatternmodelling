@@ -2,7 +2,7 @@
 # BUILDING A RESOURCE COST VECTOR
 #####################################################
 
-.gen_RC <- function(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,unitsize,nonunitsize) {
+.gen_RCC <- function(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,unitsize,nonunitsize) {
 
 # 
   RC_VAR_MIN = 0.4

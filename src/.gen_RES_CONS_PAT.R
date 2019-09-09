@@ -4,8 +4,6 @@
 
 .gen_RES_CONS_PAT <- function(PRODUCTION_ENVIRONMENT) {
 
-
-
 ## ====================== STEP 1 BASELINE NORM ========================= 
 
   repeat    {
@@ -87,6 +85,8 @@ PRODUCTION_ENVIRONMENT$CHECK$COR2<-mean(cor(RES_CONS_PAT[,c(1,((PRODUCTION_ENVIR
 #Average distance 
 RES_CONS_PATp = t(t(RES_CONS_PAT)/rowSums(t(RES_CONS_PAT))) 
 PRODUCTION_ENVIRONMENT$RES_CONS_PATp = RES_CONS_PATp
+PRODUCTION_ENVIRONMENT$TRU = colSums(RES_CONS_PAT*PRODUCTION_ENVIRONMENT$DEMAND)
+  
 ## OPEN 
 # for schliefe? 
 # 

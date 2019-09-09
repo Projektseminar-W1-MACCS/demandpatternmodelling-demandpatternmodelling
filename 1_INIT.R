@@ -32,7 +32,7 @@
   
   
   
-  CP = c(1,2,3,4,5,6,7,8,9,10)
+  CP = c(10)
   COR = c(0)
   RC_VAR =  c(0.55)
   Q_VAR = c(1,2)
@@ -51,8 +51,7 @@
                   
               
 ## ===================================== DESIGN OF EXPERIMENTS ================================================== 
-## EVIRONMENTAL FACTORS [FULLDESIGN: PER CP = *SIM_NUMB] [3k Design - 324 DP*SIM_NUMB]
-              
+## EVIRONMENTAL FACTORS [] 
   for (ix_CP in seq_along(CP)) {
      for (ix_COR in seq_along(COR)) {
        for (ix_RC_VAR in seq_along(RC_VAR)) {
@@ -93,8 +92,27 @@ for (nn in 1:SIM_NUMB) {
   
   PRODUCTION_ENVIRONMENT = gen_ProductionEnvironment(PRODUCTION_ENVIRONMENT)
   
-  preData = data.frame(nn,COSTING_SYSTEM)
+  COSTING_SYSTEM = MAP_RES_CP_RANDOM(PRODUCTION_ENVIRONMENT, COSTING_SYSTEM,COSTING_SYSTEM$CP)
+  COSTING_SYSTEM = MAP_CP_PRO(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,method= "BIG-POOL",Error)
+  
+  
+  
+  #                 EUCD = sqrt(sum(((PC_B-PC_H).^2)));  
+  #                 MSE = (mean((PC_B - PC_H).^2));
+  #                 MPE = sum((abs(PC_B-PC_H)./PC_B))./NUMB_PRO;
+  
+  preData = data.frame(nn)
   DATA = rbind(DATA,preData) 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
 }
@@ -164,9 +182,7 @@ for (nn in 1:SIM_NUMB) {
 #       
 # %% DATA OUTPUT
 #                 % Generating EUCD as the dependent variable TOTAL       
-#                 EUCD = sqrt(sum(((PC_B-PC_H).^2)));  
-#                 MSE = (mean((PC_B - PC_H).^2));
-#                 MPE = sum((abs(PC_B-PC_H)./PC_B))./NUMB_PRO;
+
 #                 
 #                 % Gathering the factors from the production environment. 
 #                 ProductionEnvironment.RC_VAR = RC_VAR;
