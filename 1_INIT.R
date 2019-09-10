@@ -9,8 +9,8 @@
   DATA = data.frame()
   
   
-  NUMB_PRO =         50      #INPUT independent Variable - Number of products 
-  NUMB_RES  =        50      #INPUT independent variable - Number of factors
+  NUMB_PRO =         5      #INPUT independent Variable - Number of products 
+  NUMB_RES  =        5      #INPUT independent variable - Number of factors
   SIM_NUMB =         5       #Control Variable - Number of Simulations for every single environment (standard: 30)     
   tt   =             1       #Periods
   TC =               1000000  #Total costs
@@ -110,6 +110,7 @@ for (nn in 1:SIM_NUMB) {
   
   
   
+  print(sum(COSTING_SYSTEM$PCB))
   
   
   
