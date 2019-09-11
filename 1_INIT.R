@@ -10,7 +10,7 @@
   
   
   NUMB_PRO =         5      #INPUT independent Variable - Number of products 
-  NUMB_RES  =        5      #INPUT independent variable - Number of factors
+  NUMB_RES  =        10     #INPUT independent variable - Number of factors
   SIM_NUMB =         5       #Control Variable - Number of Simulations for every single environment (standard: 30)     
   tt   =             1       #Periods
   TC =               1000000  #Total costs
@@ -96,6 +96,9 @@ for (nn in 1:SIM_NUMB) {
   COSTING_SYSTEM = MAP_CP_PRO(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,method= "BIG-POOL",Error)
   
   
+  
+
+  COSTING_SYSTEM$PCH = COSTING_SYSTEM$ACP *COSTING_SYSTEM$ACT_CONS_PAT
   
   #                 EUCD = sqrt(sum(((PC_B-PC_H).^2)));  
   #                 MSE = (mean((PC_B - PC_H).^2));

@@ -11,7 +11,7 @@
 BASE = rnorm(PRODUCTION_ENVIRONMENT$NUMB_PRO)
   
 RES_CONS_PATpre = matrix(rnorm(PRODUCTION_ENVIRONMENT$NUMB_PRO*PRODUCTION_ENVIRONMENT$NUMB_RES,mean=0,sd=1), PRODUCTION_ENVIRONMENT$NUMB_PRO, PRODUCTION_ENVIRONMENT$NUMB_RES) 
-RES_CONS_PAT = matrix(0, nrow = PRODUCTION_ENVIRONMENT$NUMB_RES, ncol = PRODUCTION_ENVIRONMENT$NUMB_PRO, byrow = TRUE)  
+RES_CONS_PAT = matrix(0, nrow = PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE)  
 
 ## ====================== STEP 1.a CORRELATION ========================= 
 # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model

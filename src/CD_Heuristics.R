@@ -19,7 +19,7 @@ if(method=="BIG-POOL"){
     for (i in 1:length(RC_ACP_index)){
     
     ## exception handler if ACP[i] has only one RCP
-    # in original version not needed, this is due to basic implemantion of Rs function rowSums
+    # in original version not needed, this is due to basic implementation of Rs function rowSums
     if(length(RC_ACP_index[[i]])==1){
       ACT_CONS_PAT[,i]<-RES_CONS_PAT[,RC_ACP_index[[i]]]
     }else{

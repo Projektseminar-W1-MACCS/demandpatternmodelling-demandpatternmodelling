@@ -27,7 +27,7 @@ MAP_RES_CP_RANDOM<-function(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,CP){
      ACP[i]<-sum(RCC[RC_to_ACP[[i]]])
      
    }
-   
+   COSTING_SYSTEM$ACP = ACP
    COSTING_SYSTEM$RC_ACP = RC_to_ACP
   
    return(COSTING_SYSTEM)

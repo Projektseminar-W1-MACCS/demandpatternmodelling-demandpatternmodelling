@@ -43,7 +43,7 @@
     #check1 = sum(PC_B); % sum must be 10^6
     # RES_CONS_PATp is essential for further cost allocation.
     
-    RES_CONS_PATp = as.data.frame(scale(RES_CONS_PAT, center=FALSE, scale=colSums(RES_CONS_PAT)))
+    #RES_CONS_PATp = as.data.frame(scale(RES_CONS_PAT, center=FALSE, scale=colSums(RES_CONS_PAT)))
     
     
     
