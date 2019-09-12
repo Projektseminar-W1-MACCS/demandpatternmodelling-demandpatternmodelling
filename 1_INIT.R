@@ -45,13 +45,7 @@
 
             set.seed(seed)
             o=1
-          
-            #source('./src/ProductionEnvironmentGeneration.R')              
-            #source('./src/.RES_CONS_PAT.R')
-            # initialize global variables #
-                  
-              
-## ===================================== DESIGN OF EXPERIMENTS ================================================== 
+## ====================================== DESIGN OF EXPERIMENTS ================================================== 
 ## EVIRONMENTAL FACTORS [] 
   for (ix_CP in seq_along(CP)) {
      for (ix_COR in seq_along(COR)) {
@@ -83,7 +77,7 @@
 #   printf("Blub")}
               
 nn=1 # necessary for repeating the SIM_NUMB loop
-## ====================================== SIMULATION ROUTINE   =====================================================    
+## SIMULATION ROUTINE ===
 for (nn in 1:SIM_NUMB) {
   
   
@@ -102,24 +96,20 @@ for (nn in 1:SIM_NUMB) {
   
   
   
-  # ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+  ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
   EUCD<-round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
-  
   MPE <- round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
-  
-  MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
-  
-  preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
+   MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
+
+  #COLLECTING THE DATA FOR OUTPUT;
+preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MPE,MSE)
-
-  colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+  # Stacking the data with each run
+DATA = rbind(DATA,preData) 
   
-  
-                       #CostSystemDesign OUTPUT
-  DATA = rbind(DATA,preData) 
-  
-
+##  DATA COLLECTION END  
   
   
   
@@ -142,151 +132,15 @@ for (nn in 1:SIM_NUMB) {
    }
  } 
 
-  
-#   switch dec_CP
-#   case 1% 
-#   [APC,index] = MAP_RES_CP_RANDOM(ProductionEnvironment,CostSystem,CP);
-#   case 2% 
-#   [APC,index] = MAP_RES_CP_CORRSIZE(ProductionEnvironment,CostSystem,CP,set_cs_constant,seed);
-#   case 3%
-#   [APC,index] = MAP_RES_CP_CORRRANDOM(ProductionEnvironment,CostSystem,CP,set_cs_constant);
-#   case 4 
-#   [APC,index] = MAP_RES_CP_SIZEMISC(ProductionEnvironment,CostSystem,CP);
-#   case 5 
-#   [APC,index] = MAP_RES_CP_SIZERANDOM(ProductionEnvironment,CostSystem,CP,set_cs_constant,seed);
-#   case 6 
-#   [APC,index] = MAP_RES_CP_UNITSIZERANDOM(ProductionEnvironment,CostSystem,CP,set_cs_constant,seed);
-#   end
-#   
-#   
-#   switch dec_CD      %switch between the Resource Allocation Heuristics (depending on choosen INPUT Variable )
-#   case 1
-#   [ACT_CONS_PAT]=MAP_CP_PRO_BigPool(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
-#   case 2
-#   [ACT_CONS_PAT]=MAP_CP_PRO_Average(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
-#   case 3 
-#   [ACT_CONS_PAT]=MAP_CP_PRO_Division(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
-#   case 4   
-#   [ACT_CONS_PAT,CHECK]=MAP_CP_PRO_BigPool_Error(ProductionEnvironment,CostSystem,index,dec_ERROR,Error,ErrNUMB,CHECK);
-#   case 5
-#   [ACT_CONS_PAT]= MAP_CP_PRO_UnitActivityMeasure(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
-#   case 6
-#   [ACT_CONS_PAT]= MAP_CP_PRO_DirectLaborHours(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
-#   case 7 
-#   [ACT_CONS_PAT]= MAP_CP_PRO_DirectMaterial(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
-#   case 8 
-#   [ACT_CONS_PAT]= MAP_CP_PRO_NonUnitActivityMeasure(ProductionEnvironment,CostSystem,index,dec_ERROR,Error);
-#   end
-# 
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-#   %% BENCHMARK VS. REPORTED 
-#   
-#   PC_B = CostSystem.PC_B + CostSystem.PC_B_DC ;  % Product cost from Benchmark system
-#   PC_H = sum((APC.*ACT_CONS_PAT'),2) + CostSystem.PC_B_DC; %Product cost from the Heuristic system
-#                     
-#                CostSystem.PC_H = PC_H;  % Put  value in  structure
-#                CostSystem.PC_B = PC_B;
-#       
-# %% DATA OUTPUT
-#                 % Generating EUCD as the dependent variable TOTAL       
-
-#                 
-#                 % Gathering the factors from the production environment. 
-#                 ProductionEnvironment.RC_VAR = RC_VAR;
-#                 ProductionEnvironment.VOL_VAR = Q_VAR;
-#                 ProductionEnvironment.ErrorLevel = Error;
-#                 ProductionEnvironment.ErrorNUMB = ErrNUMB;
-#                 ProductionEnvironment.VOL_SHARE = VOL_SHARE_PERC;
-#                 ProductionEnvironment.COR = COR;
-#              
-#                 % CostSystem 
-#                 CostSystem.dec_CP = dec_CP;
-#                 CostSystem.dec_CD = dec_CD;
-#                 CostSystem.DC_SHARE = OH_SHARE;
-#                 
-#                 %% DATA LOGGING
-#                 DATA = f_DataLog(DATA,o,nn,tt,ProductionEnvironment,CostSystem,CP,EUCD,MSE,MPE,CHECK);
-#                                              
-#                 if track_p_level==1 
-#                 DATAp = f_DataLog_p(DATAp,o,nn,tt,ProductionEnvironment,CostSystem,CP,CHECK);
-#                 end
-# %%COUNTER FOR PERIODS
-#  tt=tt+1;
-# 
-# %% Counter
-#  nn=nn+1;
-# %% Display command.
-#  disp(['RUN',num2str(nn),' CP',num2str(CP),' DENS',num2str(DENS),' VOL_VAR',num2str(Q_VAR)])
-# end %% SIM_NUMB
-#  o=o+1;
-# end % COR
-# end % RC_VAR
-# end % DENS
-# end % Error
-# end % Error_Numb
-# end % VOL_VAR
-# end % DC_RATIO
-# end % VOLSHARE
-# end % SIM NUM LOOP
-# 
-# 
-# % %% ======================================FINAL DATA LOGGING & FILE WRITING =====================================================    
-# % %% Aggregated system file 
-# try
-# t = datestr(now,'yyyymmdd-HHMM');
-# filename = ['SimOutV2_',num2str(dec_CP), num2str(dec_CD),'_',  t, '.xlsx'];
-# writetable(DATA,filename, 'WriteVariableNames', true);
-# 
-# disp('============================')
-# disp('SYSTEM OUTPUT is written')
-# disp('============================')
-# catch 
-# end 
-# % %% Productlevel file
-# try
-#    filename = ['Productcosts2_', num2str(dec_CP), num2str(dec_CD), '_', t, '.xlsx'];
-#    writetable(DATAp,filename);
-# disp('============================')
-# disp('PORTFOLIO OUTPUT is written')
-# disp('============================')
-#      
-# catch
-#     try  
-#     filename = ['Productcosts2_', num2str(dec_CP), num2str(dec_CD), '_', t, '.txt'];
-#     writetable(DATAp,filename);
-#     disp('============================')
-#     disp('PORTFOLIO OUTPUT is written')
-#     disp('============================')
-#      
-#     catch 
-#     disp('=====================================')
-#     disp('PORTFOLIO OUTPUT has not been written')
-#     disp('=====================================')  
-#     end 
-#    
-# end    
-# 
-# 
-# disp(['END  ', datestr(now,'yyyymmdd-HHMM')]); 
-#      
-# end
-#   
+## ====================================== OUTPUT WRITING ===================================
+            
             
 output = paste("output/CDSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
-#  
+
+
+
 
 
 
