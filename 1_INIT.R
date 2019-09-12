@@ -33,13 +33,13 @@
   
   
   
-  CP = c(1,5,10,15,20)
+  CP = c(1,5,10,15,20,25,30)
   COR = c(0)
   RC_VAR =  c(0.55)
-  Q_VAR = c(1)
-  Error = c(0)
+  Q_VAR = c(0.5,1,1.5)
+  Error = c(0.1,0.3,0.5)
   NUMB_Error = c(1)
-  DENS = c(0.5)
+  DENS = c(0,35,0.6,0.85)
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
@@ -112,8 +112,14 @@ for (nn in 1:SIM_NUMB) {
   preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MPE,MSE)
+
+  colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+  
+  
                        #CostSystemDesign OUTPUT
   DATA = rbind(DATA,preData) 
+  
+
   
   
   
@@ -276,7 +282,13 @@ for (nn in 1:SIM_NUMB) {
 #      
 # end
 #   
+            
 output = paste("output/CDSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
-print("hello")
+print("Cost System Design FILE has been written")
 #  
+
+
+
+
+
