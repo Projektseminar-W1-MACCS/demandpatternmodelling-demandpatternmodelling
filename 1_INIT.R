@@ -4,14 +4,15 @@
 
 
 ## ======================================INPUT MASK============================================================
-  PRODUCTION_ENVIRONMENT = list()
-  COSTING_SYSTEM = list()
+  FIRM = list()
+  FIRM$PRODUCTION_ENVIRONMENT = list()
+  FIRM$COSTING_SYSTEM = list()
   DATA = data.frame()
   
   
-  NUMB_PRO =         5      #INPUT independent Variable - Number of products 
-  NUMB_RES  =        10     #INPUT independent variable - Number of factors
-  SIM_NUMB =         5       #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  NUMB_PRO =         50      #INPUT independent Variable - Number of products 
+  NUMB_RES  =        50    #INPUT independent variable - Number of factors
+  SIM_NUMB =         10       #Control Variable - Number of Simulations for every single environment (standard: 30)     
   tt   =             1       #Periods
   TC =               1000000  #Total costs
 
@@ -32,19 +33,19 @@
   
   
   
-  CP = c(10)
+  CP = c(1,5,10,15,20)
   COR = c(0)
   RC_VAR =  c(0.55)
-  Q_VAR = c(1,2)
-  Error = c(0.1,0.3,0.5)
+  Q_VAR = c(1)
+  Error = c(0)
   NUMB_Error = c(1)
-  DENS = c(0.5,0.8)
+  DENS = c(0.5)
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
             set.seed(seed)
             o=1
-            nn=1
+          
             #source('./src/ProductionEnvironmentGeneration.R')              
             #source('./src/.RES_CONS_PAT.R')
             # initialize global variables #
@@ -64,16 +65,16 @@
 ## ===================================== DETERMINE PRODUCTION ENVIRONMENT AND COSTING SYSTEM =======================             
   
                  
-  PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]   
-  PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
-  PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
-  PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
-  PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
-  COSTING_SYSTEM$CP = CP[ix_CP]
-  COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
-  COSTING_SYSTEM$Error = Error[ix_Error]
-  COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
-  COSTING_SYSTEM$TC = TC 
+  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]   
+  FIRM$PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
+  FIRM$PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
+  FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
+  FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
+  FIRM$COSTING_SYSTEM$CP = CP[ix_CP]
+  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
+  FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
+  FIRM$COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
+  FIRM$COSTING_SYSTEM$TC = TC 
 
 #if ( dec_CP==1) {
 #} else if ( dec_CP==2) {
@@ -81,44 +82,51 @@
 # } else {
 #   printf("Blub")}
               
-            
-  
+nn=1 # necessary for repeating the SIM_NUMB loop
 ## ====================================== SIMULATION ROUTINE   =====================================================    
 for (nn in 1:SIM_NUMB) {
   
   
-  print(COSTING_SYSTEM$CP)  
-  print(COSTING_SYSTEM$Error)  
+  #print(FIRM$COSTING_SYSTEM$CP)  
+  #print(FIRM$COSTING_SYSTEM$Error)  
   
-  PRODUCTION_ENVIRONMENT = gen_ProductionEnvironment(PRODUCTION_ENVIRONMENT)
+  FIRM = gen_ProductionEnvironment(FIRM)
   
-  COSTING_SYSTEM = MAP_RES_CP_RANDOM(PRODUCTION_ENVIRONMENT, COSTING_SYSTEM,COSTING_SYSTEM$CP)
-  COSTING_SYSTEM = MAP_CP_PRO(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,method= "BIG-POOL",Error)
+  FIRM = MAP_RES_CP_RANDOM(FIRM)
+  FIRM = MAP_CP_PRO(FIRM,method= "BIG-POOL",Error)
   
-  
-  
-
-  COSTING_SYSTEM$PCH = COSTING_SYSTEM$ACP *COSTING_SYSTEM$ACT_CONS_PAT
-  
+  FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
   #                 EUCD = sqrt(sum(((PC_B-PC_H).^2)));  
   #                 MSE = (mean((PC_B - PC_H).^2));
   #                 MPE = sum((abs(PC_B-PC_H)./PC_B))./NUMB_PRO;
   
-  preData = data.frame(nn)
+  
+  
+  # ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+  EUCD<-round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
+  
+  MPE <- round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
+  
+  MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
+  
+  preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
+                       FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
+                       FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MPE,MSE)
+                       #CostSystemDesign OUTPUT
   DATA = rbind(DATA,preData) 
   
   
   
   
   
+  print(o)
+  print((nn))
+  print((EUCD))
   
   
-  print(sum(COSTING_SYSTEM$PCB))
   
   
-  
-  
-  
+  o=o+1 #Counting for the total number of runs
 }
              }
            }

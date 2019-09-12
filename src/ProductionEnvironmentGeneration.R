@@ -3,7 +3,7 @@
 # 
 #############################################################
 
-gen_ProductionEnvironment <- function(PRODUCTION_ENVIRONMENT) {
+gen_ProductionEnvironment <- function(FIRM) {
 
   #  if vary_demand==0 
  #  DEMAND_BASE = lognrnd(1,VOL_VAR,NUMB_PRO,1);
@@ -15,20 +15,20 @@ gen_ProductionEnvironment <- function(PRODUCTION_ENVIRONMENT) {
 
 units = 10^3
 preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1)
-PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units)
+FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units)
 
 
 ## ====================== STEP 2  Determining the ACTIVITY STRUCTURE =========================
 
 UNITLEVEL_ACT_SHARE_MIN = 0.3
 UNITLEVEL_ACT_SHARE_MAX = 0.7
-PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1)
+FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1)
 
 
 ## =================== STEP 2.1 Determining the amount of cost categories =================
 
-unitsize = floor(PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*PRODUCTION_ENVIRONMENT$NUMB_RES)
-nonunitsize = PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
+unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
+nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
 
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
 
@@ -36,18 +36,20 @@ nonunitsize = PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
 DENS_MIN = 0.4;
 DENS_MAX = 0.7;
 DENS = DENS_MIN + (DENS_MAX-DENS_MIN)*runif(1);
-PRODUCTION_ENVIRONMENT$DENS = DENS
+FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
+source('src/.gen_RES_CONS_PAT.R')
+source('src/.gen_RC.R')
 
-
-PRODUCTION_ENVIRONMENT = .gen_RES_CONS_PAT(PRODUCTION_ENVIRONMENT);
+FIRM = .gen_RES_CONS_PAT(FIRM);
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
-PRODUCTION_ENVIRONMENT$RCC = .gen_RCC(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM, unitsize, nonunitsize);
+FIRM$COSTING_SYSTEM$RCC = .gen_RCC(FIRM, unitsize, nonunitsize);
 
 
-FIRM = .genCOST_CONS_PAT(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,COST_APPROACH = "ANAND")
+
+FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 
 
@@ -75,7 +77,7 @@ FIRM = .genCOST_CONS_PAT(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,COST_APPROACH = "
  #  CORAP_pre=max(RES_CONS_PATp)-min(RES_CONS_PATp);
  #  CHECK.CORAP=mean(CORAP_pre)*100;  
  #  
-return(PRODUCTION_ENVIRONMENT)
+return(FIRM)
 
 
   } # Function end

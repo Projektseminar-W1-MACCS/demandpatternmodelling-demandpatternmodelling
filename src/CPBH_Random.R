@@ -3,9 +3,10 @@
 # The algorithm orientates to Balakrishnan, Hansen, Labro 2011
 #############################################################
 
-MAP_RES_CP_RANDOM<-function(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,CP){
+MAP_RES_CP_RANDOM<-function(FIRM){
   
- RCC=PRODUCTION_ENVIRONMENT$RCC
+ CP = FIRM$COSTING_SYSTEM$CP
+ RCC= FIRM$COSTING_SYSTEM$RCC
  RCCn = length(RCC)
 
  ## r
@@ -27,10 +28,10 @@ MAP_RES_CP_RANDOM<-function(PRODUCTION_ENVIRONMENT,COSTING_SYSTEM,CP){
      ACP[i]<-sum(RCC[RC_to_ACP[[i]]])
      
    }
-   COSTING_SYSTEM$ACP = ACP
-   COSTING_SYSTEM$RC_ACP = RC_to_ACP
+   FIRM$COSTING_SYSTEM$ACP = ACP
+   FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
   
-   return(COSTING_SYSTEM)
+   return(FIRM)
  }
  
  
