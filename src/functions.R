@@ -1,4 +1,0 @@
-#####
-# Auxilary Function
-#####
-

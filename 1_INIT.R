@@ -70,11 +70,6 @@
   FIRM$COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
   FIRM$COSTING_SYSTEM$TC = TC 
 
-#if ( dec_CP==1) {
-#} else if ( dec_CP==2) {
-#   #statement2
-# } else {
-#   printf("Blub")}
               
 nn=1 # necessary for repeating the SIM_NUMB loop
 ## SIMULATION ROUTINE ===
@@ -84,32 +79,39 @@ for (nn in 1:SIM_NUMB) {
   #print(FIRM$COSTING_SYSTEM$CP)  
   #print(FIRM$COSTING_SYSTEM$Error)  
   
-  FIRM = gen_ProductionEnvironment(FIRM)
+  FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
+  
+  
+  
+  
+  
   
   FIRM = MAP_RES_CP_RANDOM(FIRM)
+  
+  
+  
+  
   FIRM = MAP_CP_PRO(FIRM,method= "BIG-POOL",Error)
   
+  
+  
+  
   FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
-  #                 EUCD = sqrt(sum(((PC_B-PC_H).^2)));  
-  #                 MSE = (mean((PC_B - PC_H).^2));
-  #                 MPE = sum((abs(PC_B-PC_H)./PC_B))./NUMB_PRO;
-  
-  
-  
+
   ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
   EUCD<-round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
   MPE <- round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
-   MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
+  MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
 
   #COLLECTING THE DATA FOR OUTPUT;
-preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
+  preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MPE,MSE)
-colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+  colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
   # Stacking the data with each run
-DATA = rbind(DATA,preData) 
+  DATA = rbind(DATA,preData) 
   
-##  DATA COLLECTION END  
+  ##  DATA COLLECTION END  
   
   
   
