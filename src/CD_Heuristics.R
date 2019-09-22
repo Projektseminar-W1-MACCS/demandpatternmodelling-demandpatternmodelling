@@ -74,10 +74,6 @@ if(method=="BIG-POOL"){
   }
 }
 
-## percentage value of how many costs of each activity pool are used
-
-# ACT_CONS_PAT<- as.data.frame(scale(ACT_CONS_PAT, center=FALSE, scale=colSums(ACT_CONS_PAT)))
-
 if (!is.null(ME_AD)) {
   if(length(RC_ACP_index)==1){
     ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))

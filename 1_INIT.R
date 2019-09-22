@@ -30,10 +30,7 @@
   dec_CD=            1       # =
   
   
-  
-  
-  
-  CP = c(1,5,10,15,20,25,30)
+  CP = c(2,5,10,15,20,25,30)
   COR = c(0)
   RC_VAR =  c(0.55)
   Q_VAR = c(0.5,1,1.5)
@@ -82,47 +79,35 @@ for (nn in 1:SIM_NUMB) {
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
   
-  
-  
-  
-  
-  FIRM = MAP_RES_CP_RANDOM(FIRM)
-  
-  
-  
-  
-  FIRM = MAP_CP_PRO(FIRM,method= "BIG-POOL",Error)
-  
+  FIRM = MAP_RES_CP_SIZERANDOM(FIRM) #Building the cost pools
+  FIRM = MAP_CP_PRO(FIRM,method= "BIG-POOL",Error) #Selecting the drivers
   
   
   
   FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
 
   ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
-  EUCD<-round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
-  MPE <- round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
+  EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
+  MPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
   MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
 
-  #COLLECTING THE DATA FOR OUTPUT;
+#### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
   preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MPE,MSE)
-  colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
-  # Stacking the data with each run
+  colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
+                     'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+  
+  #stacking the data with each run
   DATA = rbind(DATA,preData) 
   
-  ##  DATA COLLECTION END  
-  
-  
-  
-  
-  
+  # Print outputs;
   print(o)
   print((nn))
   print((EUCD))
   
   
-  
+  ####  ####  
   
   o=o+1 #Counting for the total number of runs
 }

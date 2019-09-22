@@ -22,10 +22,10 @@
 ##############################
 
 ## PRODUCTION ENVIRONMENT GENERATION
-source('src/ProductionEnvironmentGeneration.R')
+source('src/gen_ProductionEnvironment.R')
 source('src/.gen_RES_CONS_PAT.R')
 source('src/.gen_RC.R')
-source('src/CPBH_Random.R')
+source('src/CP_Heuristics.R')
 source('src/CD_Heuristics.R')
 source('src/.gen_COST_CONS_PAT.R')
 source("1_INIT.R")
