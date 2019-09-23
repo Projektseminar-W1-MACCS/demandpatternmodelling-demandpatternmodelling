@@ -11,10 +11,9 @@
   
   
   NUMB_PRO =         50      #INPUT independent Variable - Number of products 
-  NUMB_RES  =        50    #INPUT independent variable - Number of factors
-  SIM_NUMB =         10       #Control Variable - Number of Simulations for every single environment (standard: 30)     
-  tt   =             1       #Periods
-  TC =               1000000  #Total costs
+  NUMB_RES  =        50      #INPUT independent variable - Number of factors
+  SIM_NUMB =         10      #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  TC =               1000000 #Total costs
 
   ProductOutput=     1       #Zero = no tracking
   set_pe_constant=   1       #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
@@ -25,7 +24,7 @@
   dec_ERROR=         1       #Control Variable - 
   seed=              13      #Control Variable -
   
- #dec_DC=            0       # = no direct costs 
+  #dec_DC=           0       # = no direct costs 
   dec_CP=            1       # =
   dec_CD=            1       # =
   
