@@ -1,12 +1,2 @@
 # CostSystemDesignSim
-#
-# Transfered to organization
-#
-#
-#
-#
-#
-#
-#
-#
-#
+Transfered to the organization 20190923
