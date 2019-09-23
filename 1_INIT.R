@@ -88,13 +88,15 @@ for (nn in 1:SIM_NUMB) {
 
   ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
   EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
-  MPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
+  MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
   MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
 
 #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
   preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
-                       FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MPE,MSE)
+                       FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
+  
+  
   #colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
   #                   'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
   
@@ -122,6 +124,6 @@ for (nn in 1:SIM_NUMB) {
 ## ====================================== OUTPUT WRITING ===================================
             
             
-output = paste("output/CDSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
