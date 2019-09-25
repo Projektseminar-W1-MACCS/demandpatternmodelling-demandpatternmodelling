@@ -29,7 +29,7 @@
   dec_CD=            1       # =
   
   
-  CP = c(50) #Cost Pools
+  CP = c(50) #Cost Pools hallo
   COR = c(0)
   RC_VAR =  c(0.55)
   Q_VAR = c(1)
