@@ -30,7 +30,7 @@
   
   
   CP = c(50) #Cost Pools
-  COR = c(0) #Correlation
+  COR = c(0) #Correlation between resources
   RC_VAR =  c(0.55) #Resource Costs Variation
   Q_VAR = c(1)
   Error = c(0)
