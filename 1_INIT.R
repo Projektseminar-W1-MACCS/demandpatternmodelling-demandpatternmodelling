@@ -2,8 +2,6 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
-###Another try to commit##
-
 ## ======================================INPUT MASK============================================================
   FIRM = list()
   FIRM$PRODUCTION_ENVIRONMENT = list()
