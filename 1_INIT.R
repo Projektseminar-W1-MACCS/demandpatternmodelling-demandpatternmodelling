@@ -2,6 +2,7 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
+###Another try to commit##
 
 ## ======================================INPUT MASK============================================================
   FIRM = list()
@@ -29,9 +30,15 @@
   dec_CD=            1       # =
   
   
+<<<<<<< HEAD
   CP = c(50) #Cost Pools
   COR = c(0) #Correlation between resources
   RC_VAR =  c(0.55) #Resource Costs Variation
+=======
+  CP = c(50) #Cost Pools 
+  COR = c(0) #Correlation between resources
+  RC_VAR =  c(0.55)
+>>>>>>> b8305aad1124fe9c8f2c13cb55e1f75d50486a18
   Q_VAR = c(1)
   Error = c(0)
   NUMB_Error = c(1)
