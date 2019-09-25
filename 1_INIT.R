@@ -10,9 +10,9 @@
   DATA = data.frame()
   
   
-  NUMB_PRO =         50      #INPUT independent Variable - Number of products 
+  NUMB_PRO =         10      #INPUT independent Variable - Number of products 
   NUMB_RES  =        50      #INPUT independent variable - Number of factors
-  SIM_NUMB =         10      #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         10    #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000 #Total costs
 
   ProductOutput=     1       #Zero = no tracking
@@ -29,13 +29,13 @@
   dec_CD=            1       # =
   
   
-  CP = c(1,5,10,15,20,25,30)
+  CP = c(30)
   COR = c(0)
   RC_VAR =  c(0.55)
-  Q_VAR = c(0.5,1,1.5)
-  Error = c(0.1,0.3,0.5)
+  Q_VAR = c(1)
+  Error = c(0)
   NUMB_Error = c(1)
-  DENS = c(0,35,0.6,0.85)
+  DENS = c(0.6)
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
@@ -79,18 +79,35 @@ for (nn in 1:SIM_NUMB) {
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
   
-  FIRM = MAP_RES_CP_RANDOM(FIRM) #Building the cost pools
+  FIRM = MAP_RES_CP_SIZERANDOM(FIRM) #Building the cost pools
+  
+  
   FIRM = MAP_CP_PRO(FIRM,method= "BIG-POOL",Error) #Selecting the drivers
   
   
   
   FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
 
-  ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+  
+    ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
   EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
   MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
   MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
   preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
@@ -105,7 +122,7 @@ for (nn in 1:SIM_NUMB) {
   
   # Print outputs;
   print(o)
-  print((nn))
+  print((FIRM$COSTING_SYSTEM$CP))
   print((EUCD))
   
   
