@@ -29,8 +29,8 @@
   dec_CD=            1       # =
   
   
-  CP = c(50) #Cost Pools hallo
-  COR = c(0)
+  CP = c(50) #Cost Pools 
+  COR = c(0) #Correlation between resources
   RC_VAR =  c(0.55)
   Q_VAR = c(1)
   Error = c(0)
