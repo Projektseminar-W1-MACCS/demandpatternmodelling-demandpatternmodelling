@@ -29,13 +29,13 @@
   dec_CD=            1       # =
   
   
-  CP = c(50) #Cost Pools hallo
-  COR = c(0)
-  RC_VAR =  c(0.55)
+  CP = c(50) #Cost Pools
+  COR = c(0) #Correlation
+  RC_VAR =  c(0.55) #Resource Costs Variation
   Q_VAR = c(1)
   Error = c(0)
   NUMB_Error = c(1)
-  DENS = c(0.6)
+  DENS = c(0.6) # Density
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
