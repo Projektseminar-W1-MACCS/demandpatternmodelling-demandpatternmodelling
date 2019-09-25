@@ -81,18 +81,14 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    
    
    ########  PROBLEM #########
-   
-   
-   i=0
-   for (Row in RCCs_to_CPs_random_draw)
+  
+   for (i in 1:length(RCCs_to_CPs_random_draw))
    {
-     i=i+1
-     RCCs_to_CPs_random_draw[i]
-     RCCs_random_index[nrow(RCCs_to_CPs_random_draw[i])]= Row
+     idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))
+     RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]
    }
    
 
-   
    ACP_pre2<-vector(mode="numeric")
    for (i in 1:length(RCCs_random_index)) {
    
@@ -109,8 +105,10 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    
    # Bringing the pre index vectors RC_to_ACP_pre together
    RC_to_ACP = list()
-   for (i in 1:CP) {
-       RC_to_ACP[[i]]<-c(RC_to_ACP_pre1[[i]],RCCs2$ix[RCCs_to_CPs_random_draw[[i]]])
+  
+   
+    for (i in 1:CP) {
+       RC_to_ACP[[i]]<-c(RC_to_ACP_pre1[[i]],RCCs2$ix[RCCs_random_index[[i]]])
     }
  
    FIRM$COSTING_SYSTEM$ACP = ACP
