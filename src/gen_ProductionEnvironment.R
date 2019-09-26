@@ -14,8 +14,8 @@ gen_ProductionEnvironment <- function(FIRM) {
 ## ====================== STEP 1 REALIZED DEMAND GENERATION ========================= 
 
 units = 10^3
-preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1)
-FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units)
+preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1) #pre Demand is buildup as a log normal distribution
+FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for the firm
 
 
 ## ====================== STEP 2  Determining the ACTIVITY STRUCTURE =========================

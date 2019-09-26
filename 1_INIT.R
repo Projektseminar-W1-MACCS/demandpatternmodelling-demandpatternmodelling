@@ -2,7 +2,6 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
-###Another try to commit##
 
 ## ======================================INPUT MASK============================================================
   FIRM = list()
@@ -13,7 +12,7 @@
   
   NUMB_PRO =         10      #INPUT independent Variable - Number of products 
   NUMB_RES  =        50      #INPUT independent variable - Number of factors
-  SIM_NUMB =         10    #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         10     #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000 #Total costs
 
   ProductOutput=     1       #Zero = no tracking
@@ -30,7 +29,7 @@
   dec_CD=            1       # =
   
   
-  CP = c(50) #Cost Pools
+  CP = c(49) #Cost Pools
   COR = c(0) #Correlation between resources
   RC_VAR =  c(0.55)
   Q_VAR = c(1)
