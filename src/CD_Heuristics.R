@@ -1,8 +1,10 @@
-########
-## Mapping the cost pools to products
-########
+################################################
+# COST DRIVER SELECTION HEURISTICS
+# The algorithms orientates to 
+# Balakrishnan, Hansen, Labro 2011
+################################################
 
-MAP_CP_PRO<-function(FIRM,method="BIG-POOL",ME_AD=NULL,ME_NUM=NULL){
+MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 
 ACP_index_choosen<-vector(mode="numeric")
 # normalize RES_CONS_PAT
@@ -90,4 +92,99 @@ FIRM$COSTING_SYSTEM$ACP_index_choosen
 
 return(FIRM)
 
+}
+
+MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
+  
+  ACP_index_choosen<-vector(mode="numeric")
+  # normalize RES_CONS_PAT
+  RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+  ME_AD = FIRM$COSTING_SYSTEM$Error
+  RCC<-FIRM$COSTING_SYSTEM$RCC
+  RC_ACP_index<-FIRM$COSTING_SYSTEM$RC_ACP
+  
+  # preallocation
+  ACT_CONS_PAT<-matrix(0,nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,ncol = length(RC_ACP_index))
+  
+  
+    stop("Not fully implemented yet")
+    for (i in 1:length(ACP_index)){
+      
+      ## exception handler if ACP[i] has only one RCP
+      # in original version not needed, this is due to basic implemantion of Rs function rowMeans
+      if(length(ACP_index[[i]])==1){
+        ACT_CONS_PAT[,i]<-RES_CONS_PATp[,ACP_index[[i]]]
+      }else{
+        ACT_CONS_PAT[,i]<-rowMeans(RES_CONS_PATp[,ACP_index[[i]]]) #resource allocation for each product
+      }
+    }
+  
+  if (!is.null(ME_AD)) {
+    if(length(RC_ACP_index)==1){
+      ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
+    }else{
+      err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*length(RC_ACP_index),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
+      ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
+      ACT_CONS_PAT = ACT_CONS_PAT/colSums(ACT_CONS_PAT)
+    }
+  
+  
+  FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
+  FIRM$COSTING_SYSTEM$ACP_index_choosen
+  
+  
+  return(FIRM)
+  
+}
+}
+
+MAP_CP_P_INDEXED <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
+  
+  ACP_index_choosen<-vector(mode="numeric")
+  # normalize RES_CONS_PAT
+  RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+  ME_AD = FIRM$COSTING_SYSTEM$Error
+  RCC<-FIRM$COSTING_SYSTEM$RCC
+  RC_ACP_index<-FIRM$COSTING_SYSTEM$RC_ACP
+  
+  # preallocation
+  ACT_CONS_PAT<-matrix(0,nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,ncol = length(RC_ACP_index))
+  
+  
+    
+
+    # coppied from Anand et al. (2017) still need to translate
+    # // Indexed drivers.
+    # else if (this.r == 1) {
+    #   // First, go through the lists in D and remove resources for which there
+    #   // is zero usage
+    #   D_prime =
+    #     D_prime.Select(list => list.Where(resource => TRU_F[resource] != 0.0).ToList()).ToList();
+    #
+    #   // If any list in D_prime is empty, find a resource in the corresponding
+    #   // list in B_prime that has non-zero resource usage, and add that one resource
+    #   // to the empty list in D_prime.
+    #   for (int i = 0; i < D_prime.Count; ++i) {
+    #     if (D_prime[i].Count == 0) {
+    #       D_prime[i].Add(possibleDrivers2[i]);
+    #     }
+    #   }
+    # }
+ 
+  if (!is.null(ME_AD)) {
+    if(length(RC_ACP_index)==1){
+      ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
+    }else{
+      err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*length(RC_ACP_index),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
+      ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
+      ACT_CONS_PAT = ACT_CONS_PAT/colSums(ACT_CONS_PAT)
+    }
+  }
+  
+  FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
+  FIRM$COSTING_SYSTEM$ACP_index_choosen
+  
+  
+  return(FIRM)
+  
 }
