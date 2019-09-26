@@ -2,6 +2,7 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
+
 ## ======================================INPUT MASK============================================================
   FIRM = list()
   FIRM$PRODUCTION_ENVIRONMENT = list()
@@ -11,7 +12,9 @@
   
   NUMB_PRO =         10      #INPUT independent Variable - Number of products 
   NUMB_RES  =        50      #INPUT independent variable - Number of factors
-  SIM_NUMB =         10      #Control Variable - Number of Simulations for every single environment (standard: 30)     
+
+  SIM_NUMB =         10     #Control Variable - Number of Simulations for every single environment (standard: 30)     
+
   TC =               1000000 #Total costs
 
   ProductOutput=     1       #Zero = no tracking

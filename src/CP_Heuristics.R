@@ -41,9 +41,9 @@ MAP_RES_CP_RANDOM<-function(FIRM){
 
 MAP_RES_CP_SIZERANDOM<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
-   CP = FIRM$COSTING_SYSTEM$CP
-   RCC= FIRM$COSTING_SYSTEM$RCC
-   RCCn = length(RCC)
+   CP = FIRM$COSTING_SYSTEM$CP                  #
+   RCC= FIRM$COSTING_SYSTEM$RCC                 #
+   RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
    
   
    ####---- pre allocation of largest resorces ----####
@@ -67,7 +67,7 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
     
    }
    
-  RCCs2$x = RCCs$x[! RCCs$x %in% RCCs$x[1:CP]]  ## Can be improved in speed;
+  RCCs2$x = RCCs$x[! RCCs$x %in% RCCs$x[1:CP]]  ## Can be improved in speed; the remaining resources that are not yet allocated to a CP
   RCCs2$ix = RCCs$ix[! RCCs$ix %in% RCCs$ix[1:CP]]
  
     ####---- Assign other RC randomly ----####
@@ -77,17 +77,19 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
       
 
    
-   RCCs_to_CPs_random_draw<-split(sample(c(1:length(RCCs2$ix)),length(RCCs2$ix)),rep(1:CP,ACP_SIZE)) #Assign Resources (RC) to ACP
+   RCCs_to_CPs_random_draw<-split(sample(c(1:length(RCCs2$ix)),length(RCCs2$ix)),rep(1:CP,ACP_SIZE)) #Assign  remaining Resources (RC) to ACP
    
    
    
    
-   ########  PROBLEM #########
   
-   for (i in 1:length(RCCs_to_CPs_random_draw))
+   if(length(RCCs_to_CPs_random_draw)>0)                       #if there are remaining, not assigned resources, if CP = Resources, these steps are not necessary
    {
-     idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))
-     RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]
+   
+   for (i in 1:length(RCCs_to_CPs_random_draw))                   #for every cost pools that gets at least one of the remaining resources
+   {
+     idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))          # set idx (index) as the cost pool that gets the i. resource that is remaining 
+     RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]       
    }
    
 
@@ -98,10 +100,14 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
       
    }
    
+   
    # SUMS ARE CHECKED 23/09/2019 
    
    
    ACP<-ACP_pre1+ACP_pre2
+   }
+   
+   ACP<-ACP_pre1
    #RC_to_ACP = vector(mode="numeric")
    
    
