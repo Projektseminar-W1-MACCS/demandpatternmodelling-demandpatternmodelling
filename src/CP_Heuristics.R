@@ -39,7 +39,7 @@ MAP_RES_CP_RANDOM<-function(FIRM){
  
 MAP_RES_CP_SIZERANDOM<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
-   CP = FIRM$COSTING_SYSTEM$CP                  #error : deletes CP and sets it to NULL?
+   CP = FIRM$COSTING_SYSTEM$CP                  #
    RCC= FIRM$COSTING_SYSTEM$RCC                 #
    RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
    
@@ -80,15 +80,14 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    
    
    
-   ########  PROBLEM #########
   
-   if(length(RCCs_to_CPs_random_draw)>0)
+   if(length(RCCs_to_CPs_random_draw)>0)                       #if there are remaining, not assigned resources, if CP = Resources, these steps are not necessary
    {
    
    for (i in 1:length(RCCs_to_CPs_random_draw))                   #for every cost pools that gets at least one of the remaining resources
    {
      idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))          # set idx (index) as the cost pool that gets the i. resource that is remaining 
-     RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]   #error line for the problem
+     RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]       
    }
    
 
