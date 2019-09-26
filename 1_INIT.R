@@ -29,7 +29,7 @@
   dec_CD=            1       # =
   
   
-  CP = c(49) #Cost Pools
+  CP = c(50) #Cost Pools (currently not working when CP > 49)
   COR = c(0) #Correlation between resources
   RC_VAR =  c(0.55)
   Q_VAR = c(1)

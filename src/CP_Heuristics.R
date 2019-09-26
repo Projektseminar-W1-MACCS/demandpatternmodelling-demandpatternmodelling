@@ -80,13 +80,15 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    
    
    
-   
    ########  PROBLEM #########
   
+   if(length(RCCs_to_CPs_random_draw)>0)
+   {
+   
    for (i in 1:length(RCCs_to_CPs_random_draw))                   #for every cost pools that gets at least one of the remaining resources
    {
-     idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))          # set idx (index) as the cost pool that gets the i resource that is remaining in 
-     RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]       #error line for the problem
+     idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))          # set idx (index) as the cost pool that gets the i. resource that is remaining 
+     RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]   #error line for the problem
    }
    
 
@@ -97,10 +99,14 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
       
    }
    
+   
    # SUMS ARE CHECKED 23/09/2019 
    
    
    ACP<-ACP_pre1+ACP_pre2
+   }
+   
+   ACP<-ACP_pre1
    #RC_to_ACP = vector(mode="numeric")
    
    
