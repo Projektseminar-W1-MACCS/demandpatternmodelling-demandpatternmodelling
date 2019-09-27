@@ -83,7 +83,7 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    
    
   
-   if(length(RCCs_to_CPs_random_draw)>0)                       #if there are remaining, not assigned resources, if CP = Resources, these steps are not necessary
+   if(length(RCCs_to_CPs_random_draw)>0)                       #if there are remaining not assigned resources, if CP = Resources, these steps are not necessary
    {
    
    for (i in 1:length(RCCs_to_CPs_random_draw))                   #for every cost pools that gets at least one of the remaining resources
@@ -106,8 +106,10 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    
    ACP<-ACP_pre1+ACP_pre2
    }
+      else{
+      ACP <- ACP_pre1
+      }
    
-   ACP<-ACP_pre1
    #RC_to_ACP = vector(mode="numeric")
    
    
@@ -367,7 +369,7 @@ MAP_RES_CP_SIZEMISC<-function(FIRM){
 
 ################################################
 
-#### ANAND et sl. 2019 -> NOT ADAPATED TO NEW NAMES; 
+#### ANAND et al. 2019 -> NOT ADAPATED TO NEW NAMES; 
 
 MAP_CP_CORREL_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE,CC=0.4){
    

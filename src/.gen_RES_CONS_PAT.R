@@ -8,11 +8,12 @@
 
   repeat    {
     
-BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO)
+BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
   
 RES_CONS_PATpre = matrix(rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,mean=0,sd=1), 
-                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES) 
-RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE)  
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)                            #random pre matrix, as Baseline
+
+RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE) #empy matrix, that is going to be filled 
 
 ## ====================== STEP 1.a CORRELATION ========================= 
 # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
