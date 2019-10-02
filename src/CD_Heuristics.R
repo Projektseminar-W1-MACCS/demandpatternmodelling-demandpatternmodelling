@@ -4,6 +4,7 @@
 # Balakrishnan, Hansen, Labro 2011
 ################################################
 
+## Balakrishnan, Hansen, Labro 2011
 MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 
 ACP_index_choosen<-vector(mode="numeric")
@@ -140,6 +141,7 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 
 MAP_CP_P_INDEXED <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
+  stop("Not fully implemented yet")
   ACP_index_choosen<-vector(mode="numeric")
   # normalize RES_CONS_PAT
   RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
@@ -188,3 +190,4 @@ MAP_CP_P_INDEXED <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   return(FIRM)
   
 }
+

@@ -371,8 +371,9 @@ MAP_RES_CP_SIZEMISC<-function(FIRM){
 
 #### ANAND et al. 2019 -> NOT ADAPATED TO NEW NAMES; 
 
-MAP_CP_CORREL_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE,CC=0.4){
+MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
    
+   stop("Not fully implemented yet")
    
    RC = CostSystem$RCC
    RCn= length(RC)
@@ -477,11 +478,12 @@ MAP_CP_CORREL_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE,CC
    
 }
 
-MAP_CP_SIZE_RANDOM_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE){
+MAP_RES_CP_SIZE_RANDOM_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE){
+   
+   stop("Not fully implemented yet")
    
    
-   
-   RC = CostSystem$RCC
+   RCC = CostSystem$RCC
    RCn= length(RC)
    
    
@@ -541,8 +543,9 @@ MAP_CP_SIZE_RANDOM_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSI
    
 }
 
-MAP_CP_CORREL_CUTOFF<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE,CC=0.4){
+MAP_RES_CP_CORREL_CUTOFF<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE,CC=0.4){
    
+   stop("Not fully implemented yet")
    
    RC = CostSystem$RCC
    RCn= length(RC)
