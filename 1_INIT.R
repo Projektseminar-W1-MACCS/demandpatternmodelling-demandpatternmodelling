@@ -101,7 +101,7 @@ for (nn in 1:SIM_NUMB) {
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
   
-  preData_p = .datalogging()
+  #preData_p = .datalogging()
   #colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
   #                   'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
   
