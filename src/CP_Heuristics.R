@@ -15,8 +15,9 @@ MAP_RES_CP_RANDOM<-function(FIRM){
  RCC= FIRM$COSTING_SYSTEM$RCC
  RCCn = length(RCC)
 
+ 
    repeat{
-     ACP_SIZE<-rmultinom(n = 1, size = RCCn, prob = rep(1/CP, CP))    # validate
+     ACP_SIZE<-rmultinom(n = 1, size = RCCn, prob = rep(1/CP, CP))    # validate, define size (#of RC) of each ACP
      
      # break if every ACP has at least one resource 
      if(any(ACP_SIZE==0)==FALSE){
@@ -24,17 +25,17 @@ MAP_RES_CP_RANDOM<-function(FIRM){
      }
    }
    
-   RC_to_ACP<-split(sample(c(1:RCCn),RCCn),rep(1:CP,ACP_SIZE)) #Assign Resources (RC) to ACP
+   RC_to_ACP<-split(sample(c(1:RCCn),RCCn),rep(1:CP,ACP_SIZE)) #Assign Resources (RC) to ACP, by splitting the # RC into each ACP and taking into account the ACP_Size
    
-   ACP<-vector(mode="numeric")
+   ACP<-vector(mode="numeric") #empty vector for all ACPs volume
    for (i in 1:length(RC_to_ACP)) {
      
-     ACP[i]<-sum(RCC[RC_to_ACP[[i]]])
+     ACP[i]<-sum(RCC[RC_to_ACP[[i]]]) # assign to every row in ACP the sum of resource costs for evey ACP in to RC_to_ACP
      
    }
  
-   FIRM$COSTING_SYSTEM$ACP = ACP
-   FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
+   FIRM$COSTING_SYSTEM$ACP = ACP             #class ACP as a variable of the firms costing system
+   FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP    #class RC_to_ACP as a variable of the firms costing system 
   
    return(FIRM)
  }
@@ -62,8 +63,8 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    
    for (i in 1:CP){               # assign the biggest RCC each to one cost pool
       
-      ACP_pre1[i]<-RCCs$x[i]
-      RC_to_ACP_pre1[[i]]<-RCCs$ix[i]
+      ACP_pre1[i]<-RCCs$x[i]           #Volume for each of the biggest Resources
+      RC_to_ACP_pre1[[i]]<-RCCs$ix[i]  #Resource itself (index)
     
    }
    
