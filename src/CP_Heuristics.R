@@ -194,7 +194,7 @@ MAP_RES_CP_SIZECORREL<-function(FIRM){
 }
 
 MAP_RES_CP_RANDOMCORREL<-function(FIRM){
-   #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
+   #### Random Allocation of Resources to Cost Pools and then correlative allocation ####    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
    RCCn = length(RCC)
@@ -327,7 +327,7 @@ MAP_RES_CP_SIZEMISC<-function(FIRM){
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
    return(FIRM)
-}
+}  #fully implemented
 
 ################################################
 
@@ -337,11 +337,11 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
    
    stop("Not fully implemented yet")
    
-   RC = CostSystem$RCC
-   RCn= length(RC)
-   PEARSONCORR<-ProductionEnvironment$PEARSONCORR
+   RCC = FIRM$CostSystem$RCC
+   RCCn= length(RCC)
+   PEARSONCORR<-FIRM$ProductionEnvironment$PEARSONCORR
    
-   RCs<-sort(RC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
+   RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
    
    if(CP>1){
       ####---- pre allocation (one pool left open) ----####
@@ -349,8 +349,8 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
       ACP_pre1<-rep(0,(CP-1))
       for (i in 1:(CP-1)){               # assign the biggest Resource -1  each to one activity pool
          
-         ACP_pre1[i]<-RCs$x[i]
-         RC_to_ACP[[i]]<-RCs$ix[i]
+         ACP_pre1[i]<-RCCs$x[i]
+         RC_to_ACP[[i]]<-RCCs$ix[i]
          
       }
       
@@ -368,7 +368,7 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
          RC_correl<-t(as.matrix(RC_correl))
       }
       
-      colnames(RC_correl)<-1:RCn
+      colnames(RC_correl)<-1:RCCn
       rownames(RC_correl)<-already_assigned
       RC_correl<-RC_correl[,-already_assigned]
       
@@ -376,7 +376,7 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
          RC_correl<-t(as.matrix(RC_correl))
       }else if( CP==NCOL(PEARSONCORR)){
          RC_correl<-as.matrix(RC_correl)
-         colnames(RC_correl)<-c(1:RCn)[!1:RCn %in% already_assigned]
+         colnames(RC_correl)<-c(1:RCn)[!1:RCCn %in% already_assigned]
       }
       
       #for each resource find the ACP-1 pool with the highest correlation
@@ -400,17 +400,17 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
       
       
       ## Start assigning the rescources until MISCPOOLSIZE is reached
-      cutoff_Reached<-sum(RC[-already_assigned])/sum(RC) < MISCPOOLSIZE
+      cutoff_Reached<-sum(RCC[-already_assigned])/sum(RCC) < MISCPOOLSIZE
       
       for (i in 1:NROW(miscRes)) {
          
          if(cutoff_Reached==FALSE & miscRes[i,2]>=CC){
             acp_pool<-miscRes[i,3]
             res<-miscRes[i,1]
-            ACP_pre2[acp_pool]<-ACP_pre2[acp_pool]+RC[res]
+            ACP_pre2[acp_pool]<-ACP_pre2[acp_pool]+RCC[res]
             RC_to_ACP[[acp_pool]]<-c(RC_to_ACP[[acp_pool]],res)
-            already_assigned<-unlist( RC_to_ACP)
-            cutoff_Reached<-sum(RC[-already_assigned])/sum(RC) < MISCPOOLSIZE
+            already_assigned<-unlist(RC_to_ACP)
+            cutoff_Reached<-sum(RC[-already_assigned])/sum(RCC) < MISCPOOLSIZE
          }else{
             break
          }
@@ -419,7 +419,7 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
       
       # ## add remaining rescources to the misc pool
       RC_to_ACP[[CP]]<-as.integer(miscRes[i:NROW(miscRes),1])
-      ACP_pre2[CP]<-sum(RC[RC_to_ACP[[CP]]])
+      ACP_pre2[CP]<-sum(RCC[RC_to_ACP[[CP]]])
       
       
       ACP<-c(ACP_pre1,0)+ACP_pre2
@@ -446,10 +446,10 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPO
    
    
    RCC = CostSystem$RCC
-   RCn= length(RC)
+   RCCn= length(RCC)
    
    
-   RCs<-sort(RC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
+   RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
    
    if(CP>1){
       ####---- pre allocation (one pool left open) ----####
@@ -457,36 +457,36 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPO
       ACP_pre1<-rep(0,(CP-1))
       for (i in 1:(CP-1)){               # assign the biggest Resource -1  each to one activity pool
          
-         ACP_pre1[i]<-RCs$x[i]
-         RC_to_ACP[[i]]<-RCs$ix[i]
+         ACP_pre1[i]<-RCCs$x[i]
+         RC_to_ACP[[i]]<-RCCs$ix[i]
          
       }
       already_assigned<-unlist(RC_to_ACP)
-      unassigned_RES<-c(1:RCn)[-already_assigned]
+      unassigned_RES<-c(1:RCCn)[-already_assigned]
       
       ####---- Random Assignment ----####
       ## assign randomly to pool until misc size is reaced
       ACP_pre2<-rep(0,CP)
-      miscPoolPrct<-sum(RC[-already_assigned])/sum(RC)
+      miscPoolPrct<-sum(RCC[-already_assigned])/sum(RCC)
       
       while (miscPoolPrct>MISCPOOLSIZE &
-             sum(RC[-ifelse(length(already_assigned[-1])==0,already_assigned,already_assigned[-1])])>0) {
+             sum(RCC[-ifelse(length(already_assigned[-1])==0,already_assigned,already_assigned[-1])])>0) {
          ## choose random ACP-1 pool
          pool<-sample(1:(CP-1),1)
          res<-unassigned_RES[1]
-         ACP_pre2[pool]<-ACP_pre2[pool]+RC[res]
+         ACP_pre2[pool]<-ACP_pre2[pool]+RCC[res]
          RC_to_ACP[[pool]]<-c(RC_to_ACP[[pool]],res)
          
          already_assigned<-unlist(RC_to_ACP)
-         unassigned_RES<-c(1:RCn)[-already_assigned]
-         miscPoolPrct<-sum(RC[-already_assigned])/sum(RC)
+         unassigned_RES<-c(1:RCCn)[-already_assigned]
+         miscPoolPrct<-sum(RCC[-already_assigned])/sum(RCC)
          
          
       }
       
       ## add remaining rescources to the misc pool
       RC_to_ACP[[CP]]<-unassigned_RES
-      ACP_pre2[CP]<-sum(RC[unassigned_RES])
+      ACP_pre2[CP]<-sum(RCC[unassigned_RES])
       
       ACP<-c(ACP_pre1,0)+ACP_pre2
       
