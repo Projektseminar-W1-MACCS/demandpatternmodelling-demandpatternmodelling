@@ -339,7 +339,7 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
    
    RCC = FIRM$CostSystem$RCC
    RCCn= length(RCC)
-   PEARSONCORR<-FIRM$ProductionEnvironment$PEARSONCORR            # PEARSONCORR = COR in Init?
+   PEARSONCORR<-FIRM$PRODUCTION_ENVIRONMENT$COR        # PEARSONCORR = COR in Init?
    
    RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
    
@@ -363,10 +363,29 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
       
       ## compute correlation between unassigned resources and assigned
       
+      RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
+      
+      
+      RC_Correl = matrix(nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, ncol = length(already_assigned))#empty matrix for correlations between assigned and not assigned resources
+      
+      
+      for (i in 1:length(already_assigned)){
+         for (j in 1:ncol(RES_CONS_PAT)){
+            
+            RC_Correl[j,i] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
+            
+         }
+         RC_Correl <- RC_Correl[RC_Correl[i,]!=1,]
+      }
       
       
       
       
+      for (i in 1:length(RC_to_ACP)){
+         
+         RC_to_ACP[i] <- c(RC_to_ACP[i],max(RC_Correl[,i]))
+         
+      }
       
       
       
