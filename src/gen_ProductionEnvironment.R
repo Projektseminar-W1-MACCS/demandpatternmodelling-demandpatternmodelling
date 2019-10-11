@@ -17,13 +17,23 @@ units = 10^3
 preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1) #pre Demand is buildup as a log normal distribution
 FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for each product
 
+# it is possible that the sum(units) >= units !
 
+#sum(FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
+demand_var =list()
+
+# for (i in 1:100){
+#   preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1)
+#   FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units)
+#   demand_var[i] <- sum(FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
+# }
+# plot(unlist(demand_var), type = "l")
 ## ====================== STEP 2  Determining the ACTIVITY STRUCTURE =========================
 
 UNITLEVEL_ACT_SHARE_MIN = 0.3
 UNITLEVEL_ACT_SHARE_MAX = 0.7
-FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1)
-
+FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1) #random activity share between lower and upper bounds
+#print(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE)
 
 ## =================== STEP 2.1 Determining the amount of cost categories =================
 

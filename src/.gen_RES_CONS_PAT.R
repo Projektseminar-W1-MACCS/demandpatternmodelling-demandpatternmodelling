@@ -6,7 +6,7 @@
 
 ## ====================== STEP 1 BASELINE NORM ========================= 
 
-  repeat    {
+repeat    {
     
 BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
   
@@ -14,6 +14,9 @@ RES_CONS_PATpre = matrix(rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCT
                          FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)                            #random pre matrix, as Baseline
 
 RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE) #empy matrix, that is going to be filled 
+
+
+
 
 ## ====================== STEP 1.a CORRELATION ========================= 
 # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
@@ -27,12 +30,12 @@ sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
 COR2 <- runif(1, -0.2, 0.8);
 sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
 
-for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1)
+for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) #unitsize+1 (16+1)
 {
   RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i - 1)];
 }
 
-for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES+1)
+for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES+1) #nonunitsize+1 (34+1)
 {
   RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i - 1)];
 }
@@ -51,19 +54,20 @@ FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
 
 # take absolute value of X and Z and scale by 10 and round them
 # Anand et al. 2019 
-RES_CONS_PAT[,1] <- (BASE);
-RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10); 
+RES_CONS_PAT[,1] <- (BASE)
+RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
 
 
 ## ===================== EXCPETION HANDLER ====================
 
-# EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019
-PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)
-RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)
-BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)
+# EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
+# in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; Substantiation of this hidden formalization remains unclear. 
 
+PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   #every product need at least one resource
+RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   #every resource needs to be used at least once
+BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         #first resource needs to be in every product ->why?
 
-if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE)
+if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE) #discard the matrix if one of these conditions is not met
 {
   break
 }
@@ -74,24 +78,26 @@ if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE)
 ## ====================== STEP 3 CHECK ========================= 
 
 # AverageZeroConsumption
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$NonZeroConsumption = sum(colSums(RES_CONS_PAT != 0))/
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$NonZeroConsumption = sum(colSums(RES_CONS_PAT != 0))/     #Ratio of Zeros in Res_cons_pat
   (FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO * FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 
 # Average consumption of products consuming a resource
   FIRM$PRODUCTION_ENVIRONMENT$CHECK$countNonZero<-mean(colSums(RES_CONS_PAT[,]>0))
 
 # Correlation Test
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1<-mean(cor(RES_CONS_PAT[,1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1<-mean(cor(RES_CONS_PAT[,1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*    #correltion of first 16 resources with first resource
                                                                       FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)])[1,])
+  
   FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2<-mean(cor(RES_CONS_PAT[,c(1,((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*
                                                                          FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
                                                +1):FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)])[1,])
 
 
+cor(RES_CONS_PAT[,2],RES_CONS_PAT[,3])
 #Average distance 
 RES_CONS_PATp = t(t(RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND)/rowSums(t(RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND))) # CHECKED 19/09/12
 FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp = RES_CONS_PATp
-FIRM$PRODUCTION_ENVIRONMENT$TRU = colSums(RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
+FIRM$PRODUCTION_ENVIRONMENT$TRU = colSums(RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND) #total demand of every resource
 FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT  
 ## OPEN ´´
 # for schliefe? 
@@ -100,7 +106,4 @@ FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
 #
 #
 return(FIRM)
-
 }
-
-
