@@ -16,6 +16,9 @@ gen_ProductionEnvironment <- function(FIRM) {
 units = 10^3
 preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1) #pre Demand is buildup as a log normal distribution
 FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for the firm per product (10 Products)
+
+# it is possible that the sum(units) >= units !
+
 #sum(FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
 demand_var =list()
 

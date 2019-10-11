@@ -40,7 +40,7 @@ MAP_RES_CP_RANDOM<-function(FIRM){
    return(FIRM)
  } #fully implemented
 
-MAP_RES_CP_SIZERANDOM<-function(FIRM){
+MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
    CP = FIRM$COSTING_SYSTEM$CP                  #
    RCC= FIRM$COSTING_SYSTEM$RCC                 #
@@ -126,7 +126,7 @@ MAP_RES_CP_SIZERANDOM<-function(FIRM){
    return(FIRM)
 }#fully implemented
 
-MAP_RES_CP_SIZECORREL<-function(FIRM){
+MAP_RES_CP_SIZE_CORREL<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -193,7 +193,7 @@ MAP_RES_CP_SIZECORREL<-function(FIRM){
    return(FIRM)
 }
 
-MAP_RES_CP_RANDOMCORREL<-function(FIRM){
+MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
    #### Random Allocation of Resources to Cost Pools and then correlative allocation ####    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -263,7 +263,7 @@ MAP_RES_CP_RANDOMCORREL<-function(FIRM){
    return(FIRM)
 }
 
-MAP_RES_CP_SIZEMISC<-function(FIRM){
+MAP_RES_CP_SIZE_MISC<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -304,12 +304,6 @@ MAP_RES_CP_SIZEMISC<-function(FIRM){
    RC_to_ACP_misc = list(RCCs2$ix)
    
    
-   
-   
-
-  
-      
-      
    ACP = vector(mode='numeric', length = 30)
    ACP<-append(ACP_pre1, ACP_misc, after = (CP-1))
    ACP
@@ -333,13 +327,13 @@ MAP_RES_CP_SIZEMISC<-function(FIRM){
 
 #### ANAND et al. 2019 -> NOT ADAPATED TO NEW NAMES; 
 
-MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
+MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
    
    #stop("Not fully implemented yet")
    
    RCC = FIRM$CostSystem$RCC
    RCCn= length(RCC)
-   PEARSONCORR<-FIRM$PRODUCTION_ENVIRONMENT$COR        # PEARSONCORR = COR in Init?
+   PEARSONCORR<-FIRM$PRODUCTION_ENVIRONMENT$COR        # COR
    
    RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
    

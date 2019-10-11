@@ -6,7 +6,7 @@
 
 ## ====================== STEP 1 BASELINE NORM ========================= 
 
-  repeat    {
+repeat    {
     
 BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
   
@@ -14,6 +14,9 @@ RES_CONS_PATpre = matrix(rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCT
                          FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)                            #random pre matrix, as Baseline
 
 RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE) #empy matrix, that is going to be filled 
+
+
+
 
 ## ====================== STEP 1.a CORRELATION ========================= 
 # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
@@ -57,7 +60,9 @@ RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
 
 ## ===================== EXCPETION HANDLER ====================
 
-# EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019
+# EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
+# in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; Substantiation of this hidden formalization remains unclear. 
+
 PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   #every product need at least one resource
 RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   #every resource needs to be used at least once
 BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         #first resource needs to be in every product ->why?
