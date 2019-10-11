@@ -364,22 +364,32 @@ MAP_RES_CP_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
       ## compute correlation between unassigned resources and assigned
       
       RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
+      MISCPOOLSIZE = 0.25 
       
       
+      ##Create empty matrix that shows correlation between assigned and unassigned resources
       RC_Correl = matrix(nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, ncol = length(already_assigned))#empty matrix for correlations between assigned and not assigned resources
       
       
+      ##fill empty matrix with correlations
       for (i in 1:length(already_assigned)){
          for (j in 1:ncol(RES_CONS_PAT)){
             
             RC_Correl[j,i] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
             
          }
-         RC_Correl <- RC_Correl[RC_Correl[i,]!=1,]
       }
       
+      #delete resources that are already assigned, so they dont get assigned twice
+      RC_Correl = RC_Correl[-already_assigned,]
       
+      ##Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
       
+      While(nrow(RC_Correl)>(MISCPOOLSIZE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)){
+         
+         RC_to_ACP[i] <- c(RC_to_ACP[i],max(RC_Correl[,i]))
+         
+      }
       
       for (i in 1:length(RC_to_ACP)){
          
