@@ -379,7 +379,8 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM,MISCPOOLSIZE,CC=0.4){
       
       ##Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
       
-      While(nrow(RC_Correl)>(MISCPOOLSIZE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)){
+      While(nrow(RC_Correl)>(MISCPOOLSIZE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES))
+      {
          
          RC_to_ACP[i] <- c(RC_to_ACP[i],max(RC_Correl[,i]))
          
