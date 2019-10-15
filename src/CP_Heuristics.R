@@ -350,7 +350,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
          
       }
       
-      ####---- Correlation Based Assigned ----####
+   ####---- Correlation Based Assigned ----####
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- RCCs$ix[CP:length(RCC)]
       
@@ -365,59 +365,64 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       MISCPOOLSIZE = 0.25 
       
       
-      ##Create empty matrix that shows correlation between assigned and unassigned resources
-      RC_Correl = matrix(nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, ncol = length(already_assigned))#empty matrix for correlations between assigned and not assigned resources
       
+      ####BUILDIUNG OF CORRELATION MATRIX####
+      
+      ##Create empty matrix that shows correlation between assigned and unassigned resources
+      RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
+      #RC_Correl = matrix(nrow = 3, ncol = 3)
       
       ##fill empty matrix with correlations
       for (i in 1:length(already_assigned)){
          for (j in 1:ncol(RES_CONS_PAT)){
             
-            RC_Correl[j,i] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
+            RC_Correl[i,j] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
             
          }
       }
       
-      #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
-      RC_Correl = RC_Correl[-already_assigned,]
+      
+      colnames(RC_Correl) = paste(c(1:50))   #changing the column names to the resource number
+      RC_Correl = RC_Correl[,-already_assigned] #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
       
       #Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
+      #Sorting the RC_Correl Matrix by high correlations
       
-      #Problem with this heuristic: Iteration through column or row is wrong! otherwise always the end of the list would go into the misc pool withou even looking at their correlations
       
+      ####SORTING THE CORRELATION MATRIX BY BIGGEST CORRELATIONS####
       
-      for (i in 1:length(not_assigned)){
+      new_order = list()
+      for (i in 1:ncol(RC_Correl)){
          
-         print(which.max(RC_Correl[i,]))
-         
+       new_order$x[i]<- max(RC_Correl[,i])
+       new_order$ix[i]<- which.max(RC_Correl[i,])
+       
       }
       
-      RC_Correl<- RC_Correl[order()]
+      
+      which.max(RC_Correl)
+      which.max(RC_Correl[,1])
+      
+      RC_Correl<- RC_Correl[,order(new_order$x,decreasing = TRUE), drop = F]
+      
+      
+      
+      ###ASSIGNMENT OF CORRELATIVE RESOURECS TO COST POOLS####
       
       
       While(length(not_assigned)>(floor(MISCPOOLSIZE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)))
       
       {
          
-      for (i in 1:length(not_assigned)){
+      for (i in 1:(length(not_assigned)-FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES*MISCPOOLSIZE)){
          
-         RC_to_ACP[[which.max(RC_Correl[i,])]] <- unlist(c(RC_to_ACP[which.max(RC_Correl[i,])],not_assigned[i]))
+         RC_to_ACP[which.max(RC_Correl[,i])] <- unlist(c(RC_to_ACP[[i]],not_assigned[i]))
          not_assigned = not_assigned[]
       }
       }
       
-      c(2,5)
       
-      which.max(RC_Correl[,1])
-      
-      
-      
-      for (i in 1:length(RC_to_ACP)){
-         
-         RC_to_ACP[i] <- c(RC_to_ACP[i],max(RC_Correl[,i]))
-         
-      }
-      
+   
       
       
       

@@ -19,15 +19,6 @@ FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ce
 
 # it is possible that the sum(units) >= units !
 
-#sum(FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
-demand_var =list()
-
-# for (i in 1:100){
-#   preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1)
-#   FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units)
-#   demand_var[i] <- sum(FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
-# }
-# plot(unlist(demand_var), type = "l")
 ## ====================== STEP 2  Determining the ACTIVITY STRUCTURE =========================
 
 UNITLEVEL_ACT_SHARE_MIN = 0.3

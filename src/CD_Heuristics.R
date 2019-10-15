@@ -50,7 +50,7 @@ if(length(RC_ACP_index[[i]])==1){
     ACT_CONS_PAT = ACT_CONS_PAT/colSums(ACT_CONS_PAT)
   }    
 ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
-
+}
 FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
 FIRM$COSTING_SYSTEM$ACP_index_choosen
 
