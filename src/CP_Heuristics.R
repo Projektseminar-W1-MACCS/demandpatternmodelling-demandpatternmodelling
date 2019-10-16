@@ -352,11 +352,9 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
    ####---- Correlation Based Assigned ----####
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
-      not_assigned <- RCCs$ix[CP:length(RCC)]
-      
-      
-      # Initialize vector for allocation of ACP_pre1 correlation and MISC
-      ACP_pre2<-vector(mode='numeric', length = CP)
+      not_assigned <- setdiff(RCCs$ix,already_assigned)
+      RCCs$ix
+      already_assigned
       
       
       ## compute correlation between unassigned resources and assigned
@@ -382,7 +380,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       }
       
       
-      colnames(RC_Correl) = paste(c(1:50))   #changing the column names to the resource number
+      colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PAT)))   #changing the column names to the resource number
       RC_Correl = RC_Correl[,-already_assigned] #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
       
       #Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
@@ -390,20 +388,107 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       
       ####SORTING THE CORRELATION MATRIX BY BIGGEST CORRELATIONS####
+      # new_order = list()
+      # 
+      # for (i in colnames(RC_Correl)){
+      #       
+      #    new_order$x[i]<- max(RC_Correl[,i])
+      #    new_order$ix[i]<- which.max(RC_Correl[,i])
+      #  
+      # }
       
-      new_order = list()
-      for (i in 1:ncol(RC_Correl)){
+      #RC_Correl<- RC_Correl[,order(new_order$x,decreasing = TRUE), drop = F]
+      #new_order = data.frame(new_order)
+      
+      RC_to_ACP_cor <- which(RC_Correl>=sort(RC_Correl, decreasing = T)[ncol(RC_Correl)*nrow(RC_Correl)], arr.ind = T)
+      
+      RC_to_ACP_cor = data.frame(RC_to_ACP_cor)
+      
+      RC_Correl_V = as.vector(RC_Correl)
+      
+      RC_to_ACP_cor$cor = RC_Correl_V
+      
+      RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),]
+      
+      for (i in RC_to_ACP_cor$col){
          
-       new_order$x[i]<- max(RC_Correl[,i])
-       new_order$ix[i]<- which.max(RC_Correl[i,])
-       
+         RC_to_ACP_cor$col[RC_to_ACP_cor$col == i] =  colnames(RC_Correl)[i]
+         #print(colnames(RC_Correl)[i])
       }
       
       
-      which.max(RC_Correl)
-      which.max(RC_Correl[,1])
       
-      RC_Correl<- RC_Correl[,order(new_order$x,decreasing = TRUE), drop = F]
+      #RC_to_ACP_cor = RC_to_ACP_cor[!duplicated(RC_to_ACP_cor$col),]
+      
+      RC_to_ACP_cors = list()
+         
+      for (i in 1:length(RC_to_ACP_cor$cor)){
+         if(!(any(RC_to_ACP_cor$row[1:i-1] == RC_to_ACP_cor$row[i]) & any(RC_to_ACP_cor$col[1:i-1] == RC_to_ACP_cor$col[i]))){
+            RC_to_ACP_cors$row = RC_to_ACP_cor$row[i]
+            RC_to_ACP_cors$col = RC_to_ACP_cor$col[i]
+            RC_to_ACP_cors$cor = RC_to_ACP_cor$cor[i]
+         }
+      }
+         
+      ####Allocation of resources to pools 
+      
+      for (i in 1:100){
+      if(any(RC_to_ACP_cor$row[1:i-1] == RC_to_ACP_cor$row[i])){
+         print('true')
+      }
+      }
+      
+      
+      
+      RC_to_ACP_pre2 = list()
+      
+      for (i in RC_to_ACP_cor$row[1:ceiling(length(not_assigned)-FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES*MISCPOOLSIZE)]){
+         
+         RC_to_ACP_pre2[i] = as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i])
+         
+      }
+      
+      ##currently an assignment of more than one resource to one cost pool is possible 
+      
+      # Initialize vector for allocation of ACP_pre1 correlation and MISC
+      ACP_pre2<-vector(mode='numeric', length = CP-1)
+      
+      
+      for (i in RC_to_ACP_cor$row[1:ceiling(length(not_assigned)-FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES*MISCPOOLSIZE)]){
+         
+         ACP_pre2[i] = RCC[as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i])]
+         
+      }
+      
+      
+      Miscpool = setdiff(as.integer(RC_to_ACP_cor$col),unlist(RC_to_ACP_pre2))
+      
+      
+      
+      
+      RC_to_ACP_cor$row[9]
+      
+      for (i in RC_to_ACP_cor$col){
+         
+         x = RC_to_ACP_cor$col[i]
+         RC_to_ACP_cor$col[i] = colnames(RC_Correl)[x]
+         #print(RC_to_ACP_cor$col[2])
+      }
+      
+      RC_Correl_V = as.vector(RC_Correl)
+      
+      RC_to_ACP_cor$cor = RC_Correl_V
+      
+      RC_to_ACP_pre2 = list()
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
