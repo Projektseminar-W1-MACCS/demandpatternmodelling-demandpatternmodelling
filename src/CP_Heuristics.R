@@ -454,9 +454,10 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       ACP_pre2<-vector(mode='numeric', length = CP-1)
       
       
+
       for (i in RC_to_ACP_cor$row[1:ceiling(length(not_assigned)-FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES*MISCPOOLSIZE)]){
-         
-         ACP_pre2[i] = RCC[as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i])]
+
+        ACP_pre2[i] = RCC[as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i])]
          
       }
       
