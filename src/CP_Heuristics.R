@@ -338,11 +338,12 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    RCCn= length(RCC)
    PEARSONCORR<-FIRM$PRODUCTION_ENVIRONMENT$COR        # COR
    
-   RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
+   
    
    
    ####SIZE RULE####
       ####---- pre allocation (one pool left open) ----####
+      RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
       RC_to_ACP<-list()
       ACP_pre1<-vector(mode ='numeric', length = (CP-1))    #rep(0,(CP-1))
       for (i in 1:(CP-1)){               # assign the biggest Resource -1  each to one activity pool
@@ -356,7 +357,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(RCCs$ix,already_assigned)
 
-    
     #### compute correlation between unassigned resources and assigned
       
       RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
@@ -455,7 +455,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       Miscpool = setdiff(as.integer(RC_to_ACP_cor$col),unlist(RC_to_ACP_pre2))
       
       
-      
+}     
       
       
    
