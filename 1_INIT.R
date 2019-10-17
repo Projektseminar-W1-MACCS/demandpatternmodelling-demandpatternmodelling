@@ -31,7 +31,7 @@
   
   
   CP = c(30) #Cost Pools
-  COR = c(0) #Correlation between resources
+  COR = c(0.6) #Correlation between resources
   RC_VAR =  c(0.55) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
   Error = c(0) #Measurement error
@@ -78,18 +78,18 @@ for (nn in 1:SIM_NUMB) {
   
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
-  
-  FIRM = MAP_RES_CP_SIZERANDOM(FIRM) #Building the cost pools
-  
-  
+  FIRM = MAP_RES_CP_SIZE_CORREL_MISC(FIRM) #Building the cost pools
+
   FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
+  
+  
+  
   
   
   ## Calculating the estimated product costs
   FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
 
-  
-  ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+    ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
   EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
   MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
   MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);

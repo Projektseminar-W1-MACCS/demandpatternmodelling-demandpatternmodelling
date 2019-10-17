@@ -35,12 +35,7 @@ if(length(RC_ACP_index[[i]])==1){
   # ACs<-sort(colSums(RES_CONS_PAT_temp),decreasing = TRUE,index.return=TRUE)
   ACT_CONS_PAT[,i]<-RES_CONS_PAT_temp[,1] #use the largest Rescource as a driver
 }
-
-
-
 }
-
-  
  if (!is.null(ME_AD)) {
   if(length(RC_ACP_index)==1){
     ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
@@ -53,10 +48,15 @@ ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
 }
 FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
 FIRM$COSTING_SYSTEM$ACP_index_choosen
-
-
+}
 return(FIRM)
 }
+
+
+
+
+
+
 
 MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
@@ -117,25 +117,6 @@ MAP_CP_P_INDEXED <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
   
     
-
-    # coppied from Anand et al. (2017) still need to translate
-    # // Indexed drivers.
-    # else if (this.r == 1) {
-    #   // First, go through the lists in D and remove resources for which there
-    #   // is zero usage
-    #   D_prime =
-    #     D_prime.Select(list => list.Where(resource => TRU_F[resource] != 0.0).ToList()).ToList();
-    #
-    #   // If any list in D_prime is empty, find a resource in the corresponding
-    #   // list in B_prime that has non-zero resource usage, and add that one resource
-    #   // to the empty list in D_prime.
-    #   for (int i = 0; i < D_prime.Count; ++i) {
-    #     if (D_prime[i].Count == 0) {
-    #       D_prime[i].Add(possibleDrivers2[i]);
-    #     }
-    #   }
-    # }
- 
   if (!is.null(ME_AD)) {
     if(length(RC_ACP_index)==1){
       ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))

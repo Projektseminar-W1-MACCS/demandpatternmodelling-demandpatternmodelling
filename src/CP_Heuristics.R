@@ -190,6 +190,7 @@ MAP_RES_CP_SIZE_CORREL<-function(FIRM){
    FIRM$COSTING_SYSTEM$ACP = ACP
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
+   
    return(FIRM)
 }
 
@@ -321,9 +322,9 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
    return(FIRM)
-}  #fully implemented
+   
+} #fully implemented
 
-################################################
 
 #### ANAND et al. 2019 -> NOT ADAPATED TO NEW NAMES; 
 
@@ -331,7 +332,9 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    
    ##INIT##
    
-   RCC = FIRM$CostSystem$RCC
+   CP = FIRM$COSTING_SYSTEM$CP
+   RCC= FIRM$COSTING_SYSTEM$RCC
+   
    RCCn= length(RCC)
    PEARSONCORR<-FIRM$PRODUCTION_ENVIRONMENT$COR        # COR
    
@@ -350,9 +353,10 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
          
       }
       
-   ####---- Correlation Based Assigned ----####
+    ####---- Correlation Based Assigned ----####
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(RCCs$ix,already_assigned)
+<<<<<<< HEAD
       
       ## compute correlation between unassigned resources and assigned
       
@@ -362,9 +366,19 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       
       ####BUILDIUNG OF CORRELATION MATRIX####
+=======
+    
+    #### compute correlation between unassigned resources and assigned
+      
+      RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
+      MISCPOOLSIZE = 0.25 
+       
+    #### BUILDIUNG OF CORRELATION MATRIX####
+>>>>>>> 7aeb8e72d4794eb82735efef4dff17829e12748d
       
       ##Create empty matrix that shows correlation between assigned and unassigned resources
       RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
+      
       #RC_Correl = matrix(nrow = 3, ncol = 3)
       
       ##fill empty matrix with correlations
@@ -464,9 +478,10 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       ACP_pre2<-vector(mode='numeric', length = CP-1)
       
       
+
       for (i in RC_to_ACP_cor$row[1:ceiling(length(not_assigned)-FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES*MISCPOOLSIZE)]){
-         
-         ACP_pre2[i] = RCC[as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i])]
+
+        ACP_pre2[i] = RCC[as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i])]
          
       }
       
