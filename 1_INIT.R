@@ -10,7 +10,7 @@
   DATA = data.frame()
   
   
-  NUMB_PRO =         10      #INPUT independent Variable - Number of products 
+  NUMB_PRO =         50      #INPUT independent Variable - Number of products 
   NUMB_RES  =        50      #INPUT independent variable - Number of factors
 
   SIM_NUMB =         10     #Control Variable - Number of Simulations for every single environment (standard: 30)     
@@ -30,7 +30,7 @@
   dec_CD=            1       # =
   
   
-  CP = c(49,50) #Cost Pools
+  CP = c(30) #Cost Pools
   COR = c(0) #Correlation between resources
   RC_VAR =  c(0.55) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
@@ -111,7 +111,7 @@ for (nn in 1:SIM_NUMB) {
   #Print outputs;
   print(o)
   print(FIRM$COSTING_SYSTEM$CP)
-  print((EUCD))
+  print((MAPE))
   
   o=o+1 #Counting for the total number of runs
 }
