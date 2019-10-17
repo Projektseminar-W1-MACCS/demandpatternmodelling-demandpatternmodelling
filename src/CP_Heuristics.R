@@ -353,21 +353,23 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
          
       }
       
-    ####---- Correlation Based Assigned ----####
+   ####CORRELATION RULE####
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
-      not_assigned <- setdiff(RCCs$ix,already_assigned)
+      not_assigned <- setdiff(c(1:FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES),already_assigned)
 
     #### compute correlation between unassigned resources and assigned
       
-      RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
-      MISCPOOLSIZE = 0.25 
+      #RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
+      #RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_total
+      
+      RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+      
+      MISCPOOLSIZE = 0.25 * sum(FIRM$PRODUCTION_ENVIRONMENT$TRU)
        
-    #### BUILDIUNG OF CORRELATION MATRIX####
+    #### BUILDIUNG OF CORRELATION MATRIX
       
       ##Create empty matrix that shows correlation between assigned and unassigned resources
       RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
-      
-      #RC_Correl = matrix(nrow = 3, ncol = 3)
       
       ##fill empty matrix with correlations
       for (i in 1:length(already_assigned)){
@@ -394,40 +396,32 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       RC_to_ACP_cor$cor = RC_Correl_V
       
+      RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),]
+      
+      RC_to_ACP_cor = RC_to_ACP_cor[!duplicated(RC_to_ACP_cor$col, fromLast = FALSE),]
+      
+      
+      
       
       for (i in RC_to_ACP_cor$col){
          
-         RC_to_ACP_cor$col[RC_to_ACP_cor$col == i] =  colnames(RC_Correl)[i]
-         #print(colnames(RC_Correl)[i])
+         RC_to_ACP_cor$col[i] =  not_assigned[i]
       }
-      
-      RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),]
-      
-            #RC_to_ACP_cor = RC_to_ACP_cor[!duplicated(RC_to_ACP_cor$col),]
-      
-      
-      
-      
-      RC_to_ACP_cor$com = paste(RC_to_ACP_cor$row,RC_to_ACP_cor$col)
-      
-         for (i in 1:length(RC_to_ACP_cor$cor)){
-         if(!(any(RC_to_ACP_cor$row[1:i-1] == RC_to_ACP_cor$row[i]) & any(RC_to_ACP_cor$col[1:i-1] == RC_to_ACP_cor$col[i]))){
-            RC_to_ACP_cor[i,] = RC_to_ACP_cor[-i,]
-         }
-      }
-   
-      
-      
-
-      
-
       
       
         
       ####Allocation of resources to pools
       ##It is possible and allowed that more than one resource is assigned to one cost pool
+      setdiff(not_assigned, RC_to_ACP_cor$col)
+      sum(RCC[not_assigned])
+      sum(RCC[as.integer(RC_to_ACP_cor$col)])
+      
+      while (sum(RCC[as.integer(RC_to_ACP_cor$col)])> MISCPOOLSIZE) {
+         
+      } 
       
       RC_to_ACP_pre2 = list()
+     
       
       for (i in RC_to_ACP_cor$row[1:ceiling(length(not_assigned)-FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES*MISCPOOLSIZE)]){
          
@@ -436,7 +430,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       }
       
       
-      RC_to_ACP_pre2[2]
       
       ##currently an assignment of more than one resource to one cost pool is possible 
       

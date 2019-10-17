@@ -11,7 +11,7 @@
   
   
   NUMB_PRO =         50      #INPUT independent Variable - Number of products 
-  NUMB_RES  =        50      #INPUT independent variable - Number of factors
+  NUMB_RES  =        50     #INPUT independent variable - Number of factors
 
   SIM_NUMB =         10     #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
