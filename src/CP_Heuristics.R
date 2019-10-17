@@ -342,7 +342,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    
    
    ####SIZE RULE####
-   if(CP>1){
       ####---- pre allocation (one pool left open) ----####
       RC_to_ACP<-list()
       ACP_pre1<-vector(mode ='numeric', length = (CP-1))    #rep(0,(CP-1))
@@ -356,17 +355,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
     ####---- Correlation Based Assigned ----####
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(RCCs$ix,already_assigned)
-<<<<<<< HEAD
-      
-      ## compute correlation between unassigned resources and assigned
-      
-      RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
-      MISCPOOLSIZE = 0.25  #from Ananad et al. 2019 
-      
-      
-      
-      ####BUILDIUNG OF CORRELATION MATRIX####
-=======
+
     
     #### compute correlation between unassigned resources and assigned
       
@@ -374,7 +363,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       MISCPOOLSIZE = 0.25 
        
     #### BUILDIUNG OF CORRELATION MATRIX####
->>>>>>> 7aeb8e72d4794eb82735efef4dff17829e12748d
       
       ##Create empty matrix that shows correlation between assigned and unassigned resources
       RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
@@ -398,19 +386,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       #Sorting the RC_Correl Matrix by high correlations
       
       
-      ####SORTING THE CORRELATION MATRIX BY BIGGEST CORRELATIONS####
-      # new_order = list()
-      # 
-      # for (i in colnames(RC_Correl)){
-      #       
-      #    new_order$x[i]<- max(RC_Correl[,i])
-      #    new_order$ix[i]<- which.max(RC_Correl[,i])
-      #  
-      # }
-      
-      #RC_Correl<- RC_Correl[,order(new_order$x,decreasing = TRUE), drop = F]
-      #new_order = data.frame(new_order)
-      
       RC_to_ACP_cor <- which(RC_Correl>=sort(RC_Correl, decreasing = T)[ncol(RC_Correl)*nrow(RC_Correl)], arr.ind = T)
       
       RC_to_ACP_cor = data.frame(RC_to_ACP_cor)
@@ -428,10 +403,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),]
       
-      #RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor,RC_to_ACP_cor$col,RC_to_ACP_cor$row, decreasing = TRUE),]
-      #RC_to_ACP_cor <- RC_to_ACP_cor[with(RC_to_ACP_cor, order(-row,col,-cor)),]
-      
-      #RC_to_ACP_cor = RC_to_ACP_cor[!duplicated(RC_to_ACP_cor$col),]
+            #RC_to_ACP_cor = RC_to_ACP_cor[!duplicated(RC_to_ACP_cor$col),]
       
       
       
@@ -448,13 +420,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
 
       
-      
-      
-      
-      
-      
-      
-      
+
       
       
         
@@ -499,83 +465,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       
       
-      RC_correl<-PEARSONCORR[already_assigned,]
       
-      if(CP==2){
-         RC_correl<-t(as.matrix(RC_correl))
-      }
-      
-      colnames(RC_correl)<-1:RCCn
-      rownames(RC_correl)<-already_assigned
-      RC_correl<-RC_correl[,-already_assigned]
-      
-      if(CP==2){
-         RC_correl<-t(as.matrix(RC_correl))
-      }else if( CP==NCOL(PEARSONCORR)){
-         RC_correl<-as.matrix(RC_correl)
-         colnames(RC_correl)<-c(1:RCCn)[!1:RCCn %in% already_assigned]
-      }
-      
-      #for each resource find the ACP-1 pool with the highest correlation
-      # miscRes is a list returning the correlation and the index of ACP-1 cost pool
-      miscRes<-apply(RC_correl,2,function(x){list(cor=max(x),pool=which(x==max(x)))})
-      
-      miscRes<-sapply(miscRes,function(x){
-         c(cor=x$cor,
-           pool=as.integer(x$pool[1]))
-      })
-      miscRes<-as.matrix(t(miscRes))
-      miscRes<-cbind(res=as.integer(rownames(miscRes)),miscRes)
-      
-      # miscRes is now a ordered matrix where the first column represents the unassigned res
-      # the second the correlation and the third the ACP pool
-      miscRes<-miscRes[order(miscRes[,2],decreasing = TRUE),]
-      
-      if(CP==NCOL(PEARSONCORR)){
-         miscRes<-t(as.matrix(miscRes))
-      }
-      
-      
-      ## Start assigning the rescources until MISCPOOLSIZE is reached
-      cutoff_Reached<-sum(RCC[-already_assigned])/sum(RCC) < MISCPOOLSIZE
-      
-      for (i in 1:NROW(miscRes)) {
-         
-         if(cutoff_Reached==FALSE & miscRes[i,2]>=CC){
-            acp_pool<-miscRes[i,3]
-            res<-miscRes[i,1]
-            ACP_pre2[acp_pool]<-ACP_pre2[acp_pool]+RCC[res]
-            RC_to_ACP[[acp_pool]]<-c(RC_to_ACP[[acp_pool]],res)
-            already_assigned<-unlist(RC_to_ACP)
-            cutoff_Reached<-sum(RC[-already_assigned])/sum(RCC) < MISCPOOLSIZE
-         }else{
-            break
-         }
-         
-      }
-      
-      # ## add remaining rescources to the misc pool
-      RC_to_ACP[[CP]]<-as.integer(miscRes[i:NROW(miscRes),1])
-      ACP_pre2[CP]<-sum(RCC[RC_to_ACP[[CP]]])
-      
-      
-      ACP<-c(ACP_pre1,0)+ACP_pre2
-      
-      
-   }else{
-      
-      
-      CS<-MAP_RES_CP_RANDOM(CostSystem,CP)
-      ACP<-CS$ACP
-      RC_to_ACP<-CS$assign
-      
-   }
-   
-   
-   
-   return(list(ACP=ACP,assign=RC_to_ACP))
-   
-}               #size correl misc
 
 MAP_RES_CP_SIZE_RANDOM_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE){
    
