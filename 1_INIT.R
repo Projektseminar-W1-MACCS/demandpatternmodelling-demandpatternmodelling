@@ -31,7 +31,7 @@
   
   
   CP = c(30) #Cost Pools
-  COR = c(0) #Correlation between resources
+  COR = c(0.6) #Correlation between resources
   RC_VAR =  c(0.55) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
   Error = c(0) #Measurement error
