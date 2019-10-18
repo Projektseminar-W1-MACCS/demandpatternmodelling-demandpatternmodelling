@@ -39,8 +39,7 @@ DENS_MAX = 0.7;
 DENS = DENS_MIN + (DENS_MAX-DENS_MIN)*runif(1);
 FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
-source('src/.gen_RES_CONS_PAT.R')
-source('src/.gen_RC.R')
+
 
 FIRM = .gen_RES_CONS_PAT(FIRM);
 
