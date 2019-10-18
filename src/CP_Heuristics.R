@@ -334,6 +334,9 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
+   RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+   MISCPOOLSIZE = 0.25 * TC
+   
    
    RCCn= length(RCC)
    PEARSONCORR<-FIRM$PRODUCTION_ENVIRONMENT$COR        # COR
@@ -357,15 +360,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(c(1:FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES),already_assigned)
 
-    #### compute correlation between unassigned resources and assigned
-      
-      #RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
-      #RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_total
-      
-      RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
-      
-      MISCPOOLSIZE = 0.25 * sum(FIRM$PRODUCTION_ENVIRONMENT$TRU)
-       
       #### BUILDIUNG OF CORRELATION MATRIX---------------
       
       ##Create empty matrix that shows correlation between assigned and unassigned resources
@@ -386,7 +380,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       
       
-      ### CREATING A LIST THAT SHOWS THE ALLOCATION OF RESOURCES TO COST POOLS---------------------
+      #### CREATING A LIST THAT SHOWS THE ALLOCATION OF RESOURCES TO COST POOLS---------------------
       
       #Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
       #Sorting the RC_Correl Matrix by high correlations
@@ -419,17 +413,53 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       ##It is possible and allowed that more than one resource is assigned to one cost pool
       
-      RC_to_ACP_pre2 = list(length(already_assigned))
+      i=1
+      while (sum(RCC)-sum(RCC[already_assigned])-sum(RCC[as.numeric(RC_to_ACP_cor$col[c(1:i)])])> MISCPOOLSIZE) {
+         
+         RC_to_ACP_cor = drop(RC_to_ACP_cor$col[i,])
+         #not_assigned = not_assigned[-as.integer(RC_to_ACP_cor$col[1:i])]
+         RC_to_ACP[[RC_to_ACP_cor$row[i]]] = c(RC_to_ACP[[RC_to_ACP_cor$row[i]]],as.integer(RC_to_ACP_cor$col[i]))
+         
+         
+         i = i+1
+      }
+      
+      drop(RC_to_ACP_cor$col[i])
+      
+      
+      
+      as.integer(RC_to_ACP_cor$col[1:i])
+      
+      
+      for (i in 1:3){
+         
+         
+         
+      } 
+      setdiff(not_assigned, already_assigned)
+      
+      match(1, not_assigned)
+      not_assigned = not_assigned[-10]
+      
+      RCC[as.numeric(RC_to_ACP_cor$col[1])]>MISCPOOLSIZE
+      
+      
+      
+      
       while (sum(RCC[as.integer(RC_to_ACP_cor$col)])> MISCPOOLSIZE) {
-         for (i in RC_to_ACP_cor$col){
+         for (i in 1:length(RC_to_ACP_cor$col)){
             
-            RC_to_ACP[as.integer(RC_to_ACP_cor$row[RC_to_ACP_cor$col == 49])] = c(RC_to_ACP[[as.integer(RC_to_ACP_cor$row[RC_to_ACP_cor$col == i])]], as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i]))
+            print(RC_to_ACP_cor$col[i])
+            print(RCC[as.numeric(RC_to_ACP_cor$col[i +i])])
+            print(RC_to_ACP_cor$row[i])
+            
+            #RC_to_ACP[as.integer(RC_to_ACP_cor$row[RC_to_ACP_cor$col == i])] = c(RC_to_ACP[[as.integer(RC_to_ACP_cor$row[RC_to_ACP_cor$col == i])]], as.integer(RC_to_ACP_cor$col[RC_to_ACP_cor$row == i]))
             #RC_to_ACP_cor = RC_to_ACP_cor[i,]
          }
          
       } 
       
-      sum(RCC[unlist(RC_to_ACP)])
+      sum(RCC[unlist(RC_to_ACP)])+sum(RCC[not_assigned])
       sum(RCC)
       
       for (i in RC_to_ACP_cor$row[1:ceiling(length(not_assigned)-FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES*MISCPOOLSIZE)]){
