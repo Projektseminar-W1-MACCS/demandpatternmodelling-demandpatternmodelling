@@ -63,7 +63,9 @@ RES_CONS_PAT_TOTAL <- RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
 TCU <- colSums(RES_CONS_PAT_TOTAL)
 
 ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
+
 RES_CONS_PATp <- sweep((RES_CONS_PAT_TOTAL),2,TCU,"/") #Absolute matrix to relative matrix
+
 
 
 #transposed Matrix is not equal to not-transposed Matrix -> why? 
