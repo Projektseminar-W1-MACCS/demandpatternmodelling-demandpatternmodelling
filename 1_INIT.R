@@ -10,8 +10,8 @@
   DATA = data.frame()
   
   
-  NUMB_PRO =         20     #INPUT independent Variable - Number of products 
-  NUMB_RES  =        20     #INPUT independent variable - Number of factors
+  NUMB_PRO =         50     #INPUT independent Variable - Number of products 
+  NUMB_RES  =        50    #INPUT independent variable - Number of factors
 
   SIM_NUMB =         10     #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
@@ -30,7 +30,7 @@
   dec_CD=            1       # =
   
   
-  CP = c(10) #Cost Pools
+  CP = c(20) #Cost Pools
   COR = c(0.6) #Correlation between resources
   RC_VAR =  c(0.55) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
@@ -79,7 +79,7 @@ for (nn in 1:SIM_NUMB) {
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
 
-  FIRM = MAP_RES_CP_RANDOM(FIRM) #Building the cost pools
+  FIRM = MAP_RES_CP_SIZE_RANDOM_MISC(FIRM) #Building the cost pools
 
 
   FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
