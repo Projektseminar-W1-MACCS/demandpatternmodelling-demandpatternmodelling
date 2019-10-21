@@ -334,6 +334,10 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    RCC = FIRM$CostSystem$RCC
    RCCn= length(RCC)
    PEARSONCORR<-FIRM$PRODUCTION_ENVIRONMENT$COR        # COR
+   RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
+   MISCPOOLSIZE = 0.25 
+   
+   
    
    RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
    
@@ -343,9 +347,9 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       ####---- pre allocation (one pool left open) ----####
       RC_to_ACP<-list()
       ACP_pre1<-vector(mode ='numeric', length = (CP-1))    #rep(0,(CP-1))
-      for (i in 1:(CP-1)){               # assign the biggest Resource -1  each to one activity pool
+      for (i in 1:(CP-1)){ # assign the biggest Resource -1  each to one activity pool #last is msic
          
-         ACP_pre1[i]<-RCCs$x[i]
+         ACP_pre1[i]<-RCCs$x[i] 
          RC_to_ACP[[i]]<-RCCs$ix[i]
          
       }
@@ -353,16 +357,8 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    ####---- Correlation Based Assigned ----####
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(RCCs$ix,already_assigned)
-      RCCs$ix
-      already_assigned
-      
       
       ## compute correlation between unassigned resources and assigned
-      
-      RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
-      MISCPOOLSIZE = 0.25 
-      
-      
       
       ####BUILDIUNG OF CORRELATION MATRIX####
       
@@ -400,15 +396,16 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       #RC_Correl<- RC_Correl[,order(new_order$x,decreasing = TRUE), drop = F]
       #new_order = data.frame(new_order)
       
-      RC_to_ACP_cor <- which(RC_Correl>=sort(RC_Correl, decreasing = T)[ncol(RC_Correl)*nrow(RC_Correl)], arr.ind = T)
+      RC_to_ACP_cor <- which(RC_Correl>=sort(RC_Correl, decreasing = T)
+                             [ncol(RC_Correl)*nrow(RC_Correl)], arr.ind = T)#description?????
       
-      RC_to_ACP_cor = data.frame(RC_to_ACP_cor)
+      RC_to_ACP_cor = data.frame(RC_to_ACP_cor) #???
       
-      RC_Correl_V = as.vector(RC_Correl)
+      RC_Correl_V = as.vector(RC_Correl) #???
       
-      RC_to_ACP_cor$cor = RC_Correl_V
+      RC_to_ACP_cor$cor = RC_Correl_V ### ?????
       
-      RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),]
+      RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),] # ????
       
       for (i in RC_to_ACP_cor$col){
          
@@ -483,16 +480,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       RC_to_ACP_pre2 = list()
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       ###ASSIGNMENT OF CORRELATIVE RESOURECS TO COST POOLS####
       
       
@@ -506,12 +493,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
          not_assigned = not_assigned[]
       }
       }
-      
-      
-   
-      
-      
-      
       
       RC_correl<-PEARSONCORR[already_assigned,]
       
@@ -590,6 +571,9 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    return(list(ACP=ACP,assign=RC_to_ACP))
    
 }               #size correl misc
+
+
+
 
 MAP_RES_CP_SIZE_RANDOM_MISC<-function(ProductionEnvironment,CostSystem,CP,MISCPOOLSIZE){
    
