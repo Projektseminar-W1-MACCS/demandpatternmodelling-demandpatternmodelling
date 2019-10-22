@@ -50,8 +50,9 @@ FIRM = .gen_RES_CONS_PAT(FIRM);
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
 
-FIRM = .gen_RCC(FIRM, unitsize, nonunitsize);
+#FIRM = .gen_RCC(FIRM, unitsize, nonunitsize);
 
+FIRM = .gen_RCC_DISP(FIRM, unitsize, nonunitsize);
 
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
