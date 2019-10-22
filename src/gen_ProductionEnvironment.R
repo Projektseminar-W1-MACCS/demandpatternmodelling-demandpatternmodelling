@@ -52,7 +52,7 @@ FIRM = .gen_RES_CONS_PAT(FIRM);
 
 #FIRM = .gen_RCC(FIRM, unitsize, nonunitsize);
 
-FIRM = .gen_RCC_DISP(FIRM, unitsize, nonunitsize);
+FIRM = .gen_RCC_DISP2(FIRM, unitsize, nonunitsize);
 
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")

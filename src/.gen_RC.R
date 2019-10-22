@@ -81,7 +81,7 @@
   RC_UNIT = (p_UNIT/sum(p_UNIT))*TC_UNIT #share of every unit resource costs multiplied with total unit costs
   RC_BATCH =(p_BATCH/sum(p_BATCH))*TC_BATCH #share of every batch resource costs multiplied with total unit costs
   RCC = c(RC_UNIT,RC_BATCH)  #same order as RES_CONS_PAT
-  
+  browser()
   if(sum(sort(RCC,decreasing = TRUE)[1:DISP1])/sum(sort(RCC,decreasing = TRUE))>=RC_VAR)
   {
     break
@@ -99,4 +99,86 @@
   
   return(FIRM)
   
+}
+
+.gen_RCC_DISP2 <- function(FIRM,unitsize,nonunitsize)
+{
+browser()
+
+DISP2 = 0.4
+DISP2 = 0.7
+DISP1 = 10
+
+
+TC=FIRM$COSTING_SYSTEM$TC
+NUMB_RES = FIRM$COSTING_SYSTEM
+  
+# Step 1
+r_MIN<-((1-DISP2)*TC)/(NUMB_RES-DISP1)
+
+#Step 2
+r1_MAX<-(DISP2*TC)-(DISP1-1)*r_MIN
+
+# Step 3
+r_MIN<-r_MIN+(r1_MAX-r_MIN)*0.025
+
+## Step 4
+#Initalize Values
+RC<-vector(mode="numeric")
+r_MAX<-vector(mode="numeric")
+temp1_ADD<-vector(mode="numeric")
+temp1_ADD[1]<-0
+
+
+for (i in 1:(DISP1-1)) {
+  
+  r_MAX[i]<-(DISP2*TC-sum(temp1_ADD))-(DISP1-i)*r_MIN
+  
+  RC[i]<-runif(1,min=r_MIN,max=r_MAX[i])
+  temp1_ADD[i]<-RC[i]
+  
+  
+}
+
+## The final element is computed to ensure that the total rescource cost is exactly DISP2*TC
+RC<-c(RC,DISP2*TC-sum(temp1_ADD))
+
+## Move the biggest resource to the front
+largest_RC<-sort(RC,decreasing = TRUE,index.return=TRUE)$ix[1]
+RC<-c(RC[largest_RC],RC[-largest_RC])
+
+
+#### Generate Small Rescources ####
+
+RC_small<-runif(length((length(RC)+1):NUMB_RES),min=0.05,max=0.95)
+RC_small<-RC_small/sum(RC_small) #normalize
+RC_small<-RC_small*(1-DISP2)*TC
+
+
+## Some Checks ##
+# Sum of first DISP1 resources not correct.
+# if(min(RC)> ((1-DISP2)*TC)/(NUMB_RES-DISP1)){
+
+while(max(RC_small) - min(RC) > 1.0) {
+  
+  RC_small<-sort(RC_small,decreasing = TRUE)
+  min_bigRes<-min(RC)
+  for (i in 1:(length(RC_small))) {
+    overage <- max(c(RC_small[i] -min_bigRes ,0))
+    RC_small[i]<-RC_small[i]-overage
+    RC_small[length(RC_small) - i+1]<-RC_small[length(RC_small) - i+1]+overage
+  }
+}
+
+
+# Step 6 Schuffle small rescources
+RC_small<-RC_small[sample(length(RC_small))]
+RC<-c(RC,RC_small)
+
+# sum(RC)
+RCs<-sort(RC,decreasing = TRUE,index.return=TRUE)
+RC<-list(RC=RC,CHECK=list(cost_largestRCP=RCs$x[1]/RCs$x[NUMB_RES],cost_topTEN=sum(RCs$x[1:10])/TC,DISP1=DISP1,DISP2=DISP2,RC_VAR=RC_VAR))
+
+
+
 }
