@@ -34,10 +34,14 @@ nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
 
 #Randomization and setting clear design points. 
+if(DENS == -1)
+{
 DENS_MIN = 0.4;
 DENS_MAX = 0.7;
-DENS = DENS_MIN + (DENS_MAX-DENS_MIN)*runif(1);
+DENS = runif(1, DENS_MIN, DENS_MAX);
 FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+}
+
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
 
 
