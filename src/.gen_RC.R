@@ -14,7 +14,7 @@
   }
  
 
-# NON-UNIT-LEVEL COST SHARE DETERMINED Ittner et al. 1997
+# NON-UNIT-LEVEL COST SHARE DETERMINED Ittner et al. (1997)
   RES_BATCH_COST_MIN = 0.2
   RES_BATCH_COST_MAX = 0.5
   PER_BATCH= RES_BATCH_COST_MIN + (RES_BATCH_COST_MAX-RES_BATCH_COST_MIN)*runif(1) # Uniform distribution (0,1)
@@ -25,8 +25,8 @@
   TC_UNIT  = TC - TC_BATCH;       #resources whose consumption is proportional to the number of units made
   
 # Draw from a lognornmal Function
-  p_UNIT = rlnorm(unitsize, meanlog = 0, sdlog = FIRM$COSTING_SYSTEM$RC_VAR/FIRM$COSTING_SYSTEM$RC_VAR) #%DRAW RANDOM NUMBER as costs per one unit of each resource
-  p_BATCH = rlnorm(nonunitsize, meanlog=0, sdlog= FIRM$COSTING_SYSTEM$RC_VAR/FIRM$COSTING_SYSTEM$RC_VAR); #%DRAW RANDOM NUMBER 
+  p_UNIT = abs(rlnorm(unitsize, meanlog = 0, sdlog = FIRM$COSTING_SYSTEM$RC_VAR)) #%DRAW RANDOM NUMBER as costs per one unit of each resource
+  p_BATCH = abs(rlnorm(nonunitsize, meanlog=0, sdlog= FIRM$COSTING_SYSTEM$RC_VAR)); #%DRAW RANDOM NUMBER 
 
   
 # 
@@ -38,8 +38,9 @@
   #### sourcing
   FIRM$COSTING_SYSTEM$RCC = RCC
   
+  #browser()
+  
   
   return(FIRM)
 
-  
 }
