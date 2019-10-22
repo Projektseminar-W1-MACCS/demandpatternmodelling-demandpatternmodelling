@@ -30,13 +30,13 @@
   dec_CD=            1       # =
   
   
-  CP = c(20) #Cost Pools
-  COR = c(0.6) #Correlation between resources
-  RC_VAR =  c(0.55) #Resource cost variation 
+  CP = c(1,2,4,6,8,10,12,14,16,18,20) #Cost Pools
+  COR = c(0) #Correlation between resources
+  RC_VAR =  c(-1) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
   Error = c(0) #Measurement error
   NUMB_Error = c(1) #Number of errornoues links
-  DENS = c(0.6) #Number of links between products and resources (sharing)
+  DENS = c(-1) #Number of links between products and resources (sharing)
   
 ## ======================================END OF INPUT MASK=====================================================                           
 

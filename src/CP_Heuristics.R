@@ -780,8 +780,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF<-function(FIRM){
    
    
    
-}   #fully implemented
-
+} #fully implemented
 
 
 ####### other CP Mapping Heuristics#####

@@ -5,10 +5,14 @@
 .gen_RCC <- function(FIRM,unitsize,nonunitsize) {
 
 # INIT 
-  RC_VAR_MIN = 0.4
-  RC_VAR_MAX = 0.7
-  RC_VAR = RC_VAR_MIN + (RC_VAR_MAX-RC_VAR_MIN)*runif(1)
-  
+  if(RC_VAR == -1)
+  {
+    RC_VAR_MIN = 0.4
+    RC_VAR_MAX = 0.7
+    RC_VAR = runif(1, RC_VAR_MIN, RC_VAR_MAX);
+    FIRM$PRODUCTION_ENVIRONMENT$RC_VAR = RC_VAR
+  }
+ 
 # NON-UNIT-LEVEL COST SHARE DETERMINED Ittner et al. 1997
   RES_BATCH_COST_MIN = 0.2
   RES_BATCH_COST_MAX = 0.5
