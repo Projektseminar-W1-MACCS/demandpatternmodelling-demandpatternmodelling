@@ -79,7 +79,7 @@ for (nn in 1:SIM_NUMB) {
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
 
-  FIRM = MAP_RES_CP_SIZE_MISC(FIRM) #Building the cost pools
+  FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM) #Building the cost pools
 
 
   FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
