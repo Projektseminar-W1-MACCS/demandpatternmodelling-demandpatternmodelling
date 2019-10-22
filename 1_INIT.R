@@ -104,7 +104,7 @@ for (nn in 1:SIM_NUMB) {
 
   #preData_p = .datalogging()
   colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
-                     'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+                     'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
   
   #stacking the data with each run
   DATA = rbind(DATA,preData)
