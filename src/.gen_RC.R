@@ -35,8 +35,11 @@
   RCC = c(RC_UNIT,RC_BATCH)  #same order as RES_CONS_PAT
   
   
+  #### sourcing
+  FIRM$COSTING_SYSTEM$RCC = RCC
   
-  return(RCC)
+  
+  return(FIRM)
   
   
 }
