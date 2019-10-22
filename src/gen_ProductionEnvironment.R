@@ -49,6 +49,7 @@ FIRM = .gen_RES_CONS_PAT(FIRM);
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
+
 FIRM$COSTING_SYSTEM$RCC = .gen_RCC(FIRM, unitsize, nonunitsize);
 
 
