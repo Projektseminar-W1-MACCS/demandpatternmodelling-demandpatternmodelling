@@ -419,7 +419,7 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
 MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    
    ##INIT##
-   
+
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
    RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp #taking the p
@@ -540,7 +540,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       FIRM$COSTING_SYSTEM$ACP = ACP
       FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
-      
+   
       return(FIRM)
 } #fully implemented
 
