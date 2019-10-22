@@ -25,8 +25,8 @@
   TC_UNIT  = TC - TC_BATCH;       #resources whose consumption is proportional to the number of units made
   
 # Draw from a lognornmal Function
-  p_UNIT = rlnorm(unitsize, meanlog = 0, sdlog = FIRM$COSTING_SYSTEM$RC_VAR) #%DRAW RANDOM NUMBER as costs per one unit of each resource
-  p_BATCH = rlnorm(nonunitsize, meanlog=0, sdlog= FIRM$COSTING_SYSTEM$RC_VAR); #%DRAW RANDOM NUMBER 
+  p_UNIT = rlnorm(unitsize, meanlog = 0, sdlog = FIRM$COSTING_SYSTEM$RC_VAR/FIRM$COSTING_SYSTEM$RC_VAR) #%DRAW RANDOM NUMBER as costs per one unit of each resource
+  p_BATCH = rlnorm(nonunitsize, meanlog=0, sdlog= FIRM$COSTING_SYSTEM$RC_VAR/FIRM$COSTING_SYSTEM$RC_VAR); #%DRAW RANDOM NUMBER 
 
   
 # 
@@ -34,12 +34,12 @@
   RC_BATCH =(p_BATCH/sum(p_BATCH))*TC_BATCH #share of every batch resource costs multiplied with total unit costs
   RCC = c(RC_UNIT,RC_BATCH)  #same order as RES_CONS_PAT
   
-  
+
   #### sourcing
   FIRM$COSTING_SYSTEM$RCC = RCC
   
   
   return(FIRM)
-  
+
   
 }
