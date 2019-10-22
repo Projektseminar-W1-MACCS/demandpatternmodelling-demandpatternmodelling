@@ -9,7 +9,7 @@
   {
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
-    RC_VAR = round(runif(1, RC_VAR_MIN, RC_VAR_MAX),2);
+    RC_VAR = runif(1, RC_VAR_MIN, RC_VAR_MAX);
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
  
