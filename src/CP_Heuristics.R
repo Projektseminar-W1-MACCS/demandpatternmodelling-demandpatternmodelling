@@ -417,25 +417,24 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
 #### ANAND et al. 2019; 
 
 MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
-   
-   ##INIT##
 
+  
+#### SOURCE ####
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
    RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp #taking the p
    MISCPOOLSIZE = 0.25 * TC
-   
-   
    RCCn= length(RCC)
+
 ####SIZE RULE####
       ####pre allocation, one pool left open
    if (CP > 1){
       RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
       RC_to_ACP<-list()
       ACP_pre1<-vector(mode ='numeric', length = (CP-1))    #rep(0,(CP-1))
-      for (i in 1:(CP-1)){               # assign the biggest Resource -1  each to one activity pool
+      for (i in 1:(CP-1)){ # assign the biggest Resource -1  each to one activity pool #last is msic
          
-         ACP_pre1[i]<-RCCs$x[i]
+         ACP_pre1[i]<-RCCs$x[i] 
          RC_to_ACP[[i]]<-RCCs$ix[i]
          
       }
@@ -445,7 +444,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
           if (NUMB_RES > CP){
 ####CORRELATION RULE####
       
-      #### BUILDIUNG OF CORRELATION MATRIX---------------
+      #### BUILDIUNG OF CORRELATION MATRIX ####
       
       ##Create empty matrix that shows correlation between assigned and unassigned resources
       RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
@@ -480,7 +479,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       
       RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$col, decreasing = FALSE),]     # sort it by decreasing resource so resource numbers can get changed into the not assigned ones
       
-      
       for (i in RC_to_ACP_cor$col){
          
          RC_to_ACP_cor$col[i] =  colnames(RC_Correl)[i]           #change the resource names, according to the ones that are not yet assigned
@@ -503,7 +501,6 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
          not_assigned = as.integer(RC_to_ACP_cor$col[i+1:(length(RC_to_ACP_cor$col)-i)])
          i = i+1
       }
-   
 
 ###MISCPOOL RULE####
       
@@ -515,10 +512,9 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       #Adding the misc pool value to ACP
       ACP_misc = sum(RCC[not_assigned])
       ACP = append((ACP_pre1 + ACP_pre2),ACP_misc)
-      
-      
-    
- } else{
+
+          } else{
+        
         RC_to_ACP_misc =list(not_assigned)
         RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
         
@@ -543,6 +539,12 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    
       return(FIRM)
 } #fully implemented
+
+
+
+
+
+
 
 # MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
 #    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
@@ -664,6 +666,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
 # } #not fully implemented!!
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF<-function(FIRM){
+
    
    
    ##INIT##
