@@ -101,7 +101,7 @@ for (nn in 1:SIM_NUMB) {
   preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
-  browser()
+
   #preData_p = .datalogging()
   colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
                      'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
