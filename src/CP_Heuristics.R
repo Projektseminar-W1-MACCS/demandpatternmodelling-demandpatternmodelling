@@ -422,7 +422,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
-   RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+   RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp #taking the p
    MISCPOOLSIZE = 0.25 * TC
    
    
@@ -544,125 +544,124 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
       return(FIRM)
 } #fully implemented
 
-MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
-   #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
-   CP = FIRM$COSTING_SYSTEM$CP                  #
-   RCC= FIRM$COSTING_SYSTEM$RCC                 #
-   RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
-   MISCPOOLSIZE = 0.25 * FIRM$COSTING_SYSTEM$TC
-   
-   
-   ####---- pre allocation of largest resorces ----####
-   ACP_pre1<-vector(mode="numeric")                      #empty vector for ACP-biggest resource assignment
-   RCCs_random_index <- vector(mode = "list", CP-1)        #
-   RC_to_ACP = list()
-  
-   
-   #### Find the largest RCC (resource costs) for one cost pool each####
-   RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sort resource costs 
-   
-   for (i in 1:(CP-1)){                    #assign the biggest RCC each to one cost pool
-      
-      ACP_pre1[i]<-RCCs$x[i]           #Volume for each of the biggest Resources
-      RC_to_ACP[[i]]<-RCCs$ix[i]  #Resource itself (index)
-      
-   }
-   
-   
-   already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
-   not_assigned <- setdiff(c(1:RCCn),already_assigned)
-   
-   
-   ####Create randomized misc pool####
-   RC_to_ACP_misc = vector(mode = 'numeric', length(not_assigned))
-   not_assigned_shuffled = sample(not_assigned,length(not_assigned),replace = FALSE)
-   i=1 
-   while (MISCPOOLSIZE-sum(RCC[RC_to_ACP_misc[1:i]])>max(RCC[not_assigned])){
-      RC_to_ACP_misc[[i]] = not_assigned_shuffled[i]
-      i= i+1
-   }
-   
-   which(RC_to_ACP_misc>0)
-   
-   ACP_misc = sum(RCC[RC_to_ACP_misc])
-   
-   
-   not_assigned = setdiff(not_assigned, miscpool)
-  
-   
-   
-   ###these steps are only necessary if after the size assignment step there are still remaining resources that are not yet assigned to an ACP###
-   
-   if(NUMB_RES>CP){                                                #if there are more resources than cost pools
-      
-      ACP_SIZE<-rmultinom(n = 1, size = length(not_assigned), prob = rep(1/(CP-1), (CP-1)))
-      
-      
-      #Validate; defines sizes of remaining cost pools (No. of RC)
-      RCCs_to_CPs_random_draw<-split(sample(c(1:length(not_assigned)),length(not_assigned)),rep(1:(CP-1),ACP_SIZE)) #Assign  remaining Resources (RC) to ACP   
-      
-      
-      for (i in 1:length(RCCs_to_CPs_random_draw))                   #for every cost pools that gets at least one of the remaining resources
-      {
-         idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))          #set idx (index) as the cost pool that gets the i. resource that is remaining 
-         RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]       
-      }
-      
-      # Bringing the pre index vectors RC_to_ACP_pre together
-      for (i in 1:(CP-1)) {
-         RC_to_ACP[[i]]<-c(RC_to_ACP[[i]],RCCs2$ix[RCCs_random_index[[i]]])   #states which resources are in each ACP
-      
-      }
-            
-      ACP_pre2<-vector(mode="numeric")                               #empty vector for the assignment of the remaining resources to ACPs
-      
-      for (i in 1:length(RCCs_random_index)) {
-         
-         ACP_pre2[i] = sum(RCC[not_assigned[RCCs_random_index[[i]]]])             # sum up the volume of the now assigned resources togeher that are in one ACP
-         
-      }
-      sum(ACP_pre2)
-      
-      # SUMS ARE CHECKED 23/09/2019 
-      
-      
-      ACP<-ACP_pre1+ACP_pre2+ACP_misc                                         #The total volume of each ACP is the sum of all resources together in one ACP
-      
-      sum(ACP_pre1)+sum(ACP_pre2)+ACP_misc
-      
-      ###MISCPOOL RULE####
-      
-      #Appending 
-      RC_to_ACP_misc =list(not_assigned)
-      RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
-      
-      
-      #Adding the misc pool value to ACP
-      ACP_misc = sum(RCC[not_assigned])
-      ACP = append((ACP_pre1 + ACP_pre2),ACP_misc)
-      
-      
-      
-      
-   } else{ 
-      ACP <- ACP_pre1                                             #if there was no second assignment of remaining resources (No. of RC = No. of ACP) all RC are in ACP_pre1
-   }
-   
-   
-   
-
-   
-   
-   
-   
-###SOURCING
-   FIRM$COSTING_SYSTEM$ACP = ACP
-   FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
-   
-   return(FIRM)
-  
-   
-} #fully implemented
+# MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
+#    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
+#    CP = FIRM$COSTING_SYSTEM$CP                  #
+#    RCC= FIRM$COSTING_SYSTEM$RCC                 #
+#    RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
+#    MISCPOOLSIZE = 0.25 * FIRM$COSTING_SYSTEM$TC
+#    
+#    
+#    ####---- pre allocation of largest resorces ----####
+#    ACP_pre1<-vector(mode="numeric")                      #empty vector for ACP-biggest resource assignment
+#    RCCs_random_index <- vector(mode = "list", CP-1)        #
+#    RC_to_ACP = list()
+#   
+#    
+#    #### Find the largest RCC (resource costs) for one cost pool each####
+#    RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sort resource costs 
+#    
+#    for (i in 1:(CP-1)){                    #assign the biggest RCC each to one cost pool
+#       
+#       ACP_pre1[i]<-RCCs$x[i]           #Volume for each of the biggest Resources
+#       RC_to_ACP[[i]]<-RCCs$ix[i]  #Resource itself (index)
+#       
+#    }
+#    
+#    
+#    already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
+#    not_assigned <- setdiff(c(1:RCCn),already_assigned)
+#    
+#    
+#    ####Create randomized misc pool####
+#    RC_to_ACP_misc = vector(mode = 'numeric', length(not_assigned))
+#    not_assigned_shuffled = sample(not_assigned,length(not_assigned),replace = FALSE)
+#    
+#    i=1 
+#    while (MISCPOOLSIZE-sum(RCC[RC_to_ACP_misc[1:i]])>max(RCC[not_assigned])){
+#       RC_to_ACP_misc[[i]] = not_assigned_shuffled[i]
+#       i= i+1
+#    }
+#    
+#    
+#    ACP_misc = sum(RCC[RC_to_ACP_misc])
+#    
+#    
+#    not_assigned = setdiff(not_assigned, miscpool)
+#   
+#    
+#    
+#    ###these steps are only necessary if after the size assignment step there are still remaining resources that are not yet assigned to an ACP###
+#    
+#    if(NUMB_RES>CP){                                                #if there are more resources than cost pools
+#       
+#       ACP_SIZE<-rmultinom(n = 1, size = length(not_assigned), prob = rep(1/(CP-1), (CP-1)))
+#       
+#       
+#       #Validate; defines sizes of remaining cost pools (No. of RC)
+#       RCCs_to_CPs_random_draw<-split(sample(c(1:length(not_assigned)),length(not_assigned)),rep(1:(CP-1),ACP_SIZE)) #Assign  remaining Resources (RC) to ACP   
+#       
+#       
+#       for (i in 1:length(RCCs_to_CPs_random_draw))                   #for every cost pools that gets at least one of the remaining resources
+#       {
+#          idx = as.numeric(names(RCCs_to_CPs_random_draw[i]))          #set idx (index) as the cost pool that gets the i. resource that is remaining 
+#          RCCs_random_index[[idx]]= RCCs_to_CPs_random_draw[[i]]       
+#       }
+#       
+#       # Bringing the pre index vectors RC_to_ACP_pre together
+#       for (i in 1:(CP-1)) {
+#          RC_to_ACP[[i]]<-c(RC_to_ACP[[i]],RCCs2$ix[RCCs_random_index[[i]]])   #states which resources are in each ACP
+#       
+#       }
+#             
+#       ACP_pre2<-vector(mode="numeric")                               #empty vector for the assignment of the remaining resources to ACPs
+#       
+#       for (i in 1:length(RCCs_random_index)) {
+#          
+#          ACP_pre2[i] = sum(RCC[not_assigned[RCCs_random_index[[i]]]])             # sum up the volume of the now assigned resources togeher that are in one ACP
+#          
+#       }
+#       sum(ACP_pre2)
+#       
+#       # SUMS ARE CHECKED 23/09/2019 
+#       
+#       
+#       ACP<-ACP_pre1+ACP_pre2+ACP_misc                                         #The total volume of each ACP is the sum of all resources together in one ACP
+#       
+#       sum(ACP_pre1)+sum(ACP_pre2)+ACP_misc
+#       
+#       ###MISCPOOL RULE####
+#       
+#       #Appending 
+#       RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
+#       
+#       
+#       #Adding the misc pool value to ACP
+#       ACP_misc = sum(RCC[not_assigned])
+#       ACP = append((ACP_pre1 + ACP_pre2),ACP_misc)
+#       
+#       
+#       
+#       
+#    } else{ 
+#       ACP <- ACP_pre1                                             #if there was no second assignment of remaining resources (No. of RC = No. of ACP) all RC are in ACP_pre1
+#    }
+#    
+#    
+#    
+# 
+#    
+#    
+#    
+#    
+# ###SOURCING
+#    FIRM$COSTING_SYSTEM$ACP = ACP
+#    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
+#    
+#    return(FIRM)
+#   
+#    
+# } #not fully implemented!!
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF<-function(FIRM){
    

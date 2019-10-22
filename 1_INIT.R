@@ -31,7 +31,7 @@
   
   
   CP = c(1,2,4,6,8,10,12,14,16,18,20) #Cost Pools
-  COR = c(0) #Correlation between resources
+  COR = c(0.6) #Correlation between resources
   RC_VAR =  c(-1) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
   Error = c(0) #Measurement error
@@ -104,11 +104,12 @@ for (nn in 1:SIM_NUMB) {
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
   
   #preData_p = .datalogging()
-  #colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
-  #                   'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+  colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
+                     'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
   
   #stacking the data with each run
-  DATA = rbind(DATA,preData) 
+  #DATA = rbind(DATA,preData)
+  DATA = rbind(preData,preData)
   
   #Print outputs;
   print(o)
