@@ -34,20 +34,25 @@ nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
 
 #Randomization and setting clear design points. 
+if(DENS == -1)
+{
 DENS_MIN = 0.4;
 DENS_MAX = 0.7;
-DENS = DENS_MIN + (DENS_MAX-DENS_MIN)*runif(1);
+DENS = runif(1, DENS_MIN, DENS_MAX);
 FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+}
+
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
-source('src/.gen_RES_CONS_PAT.R')
-source('src/.gen_RC.R')
+
 
 FIRM = .gen_RES_CONS_PAT(FIRM);
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
-FIRM$COSTING_SYSTEM$RCC = .gen_RCC(FIRM, unitsize, nonunitsize);
 
+#FIRM = .gen_RCC(FIRM, unitsize, nonunitsize);
+
+FIRM = .gen_RCC_DISP2(FIRM, unitsize, nonunitsize);
 
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")

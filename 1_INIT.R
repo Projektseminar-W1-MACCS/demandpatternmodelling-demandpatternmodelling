@@ -10,10 +10,10 @@
   DATA = data.frame()
   
   
-  NUMB_PRO =         50      #INPUT independent Variable - Number of products 
-  NUMB_RES  =        50      #INPUT independent variable - Number of factors
+  NUMB_PRO =         50     #INPUT independent Variable - Number of products 
+  NUMB_RES  =        50    #INPUT independent variable - Number of factors
 
-  SIM_NUMB =         10     #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         200     #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
   TC =               1000000 #Total costs
 
@@ -30,13 +30,13 @@
   dec_CD=            1       # =
   
   
-  CP = c(30) #Cost Pools
-  COR = c(0) #Correlation between resources
-  RC_VAR =  c(0.55) #Resource cost variation 
+  CP = c(1,2,4,6,8,10,12,14,16,18,20) #Cost Pools
+  COR = c(0.6) #Correlation between resources
+  RC_VAR =  c(-1) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
   Error = c(0) #Measurement error
   NUMB_Error = c(1) #Number of errornoues links
-  DENS = c(0.6) #Number of links between products and resources (sharing)
+  DENS = c(-1) #Number of links between products and resources (sharing)
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
@@ -78,18 +78,19 @@ for (nn in 1:SIM_NUMB) {
   
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
-  
-  FIRM = MAP_RES_CP_SIZE_RANDOM(FIRM) #Building the cost pools
-  
-  
+
+  FIRM = MAP_RES_CP_SIZE_MISC(FIRM) #Building the cost pools
+
+
   FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
+  
+  
   
   
   ## Calculating the estimated product costs
   FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
 
-  
-  ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+    ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
   EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
   MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
   MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
@@ -100,13 +101,14 @@ for (nn in 1:SIM_NUMB) {
   preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
-  
+
   #preData_p = .datalogging()
-  #colnames(DATA) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
-  #                   'NUMB_PRO', 'NUMB_RES' ,'EUCD','MPE','MSE')  
+  colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
+                     'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
   
   #stacking the data with each run
-  DATA = rbind(DATA,preData) 
+  DATA = rbind(DATA,preData)
+  #DATA = rbind(preData,preData)
   
   #Print outputs;
   print(o)
