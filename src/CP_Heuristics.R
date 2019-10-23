@@ -794,7 +794,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF<-function(FIRM){
    
    
    
-} #fully implemented
+} #fully implemented but not like in Ananad- this requires another heuristic
 
 MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    
@@ -920,6 +920,239 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    
    return(FIRM)
 } #fully implemented
+
+MAP_RES_CP_SIZE_CORREL_MISC_ANAND2<-function(FIRM){
+   
+   
+   #### SOURCE ####
+   CP = FIRM$COSTING_SYSTEM$CP
+   RCC= FIRM$COSTING_SYSTEM$RCC
+   RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp #taking the p
+   MISCPOOLSIZE = 0.25 * TC
+   CC = 0.4#as in Anand et al. 2019
+   RCCn= length(RCC)
+   
+   ####SIZE RULE####
+   ####pre allocation, one pool left open
+   if (CP > 2){
+      RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
+      RC_to_ACP<-list()
+      ACP_pre1<-vector(mode ='numeric', length = (CP-1))    #rep(0,(CP-1))
+      for (i in 1:(CP-1)){ # assign the biggest Resource -1  each to one activity pool #last is msic
+         
+         ACP_pre1[i]<-RCCs$x[i] 
+         RC_to_ACP[[i]]<-RCCs$ix[i]
+         
+      }
+      already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
+      not_assigned <- setdiff(c(1:RCCn),already_assigned)
+      #correlative assignment only if there are more than one resource in not_assigned
+      if (NUMB_RES > CP){
+         ####CORRELATION RULE####
+         
+         #### BUILDIUNG OF CORRELATION MATRIX ####
+         
+         ##Create empty matrix that shows correlation between assigned and unassigned resources
+         RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
+         
+         ##fill empty matrix with correlations
+         for (i in 1:length(already_assigned)){
+            for (j in 1:ncol(RES_CONS_PAT)){
+               
+               RC_Correl[i,j] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
+               
+            }
+         }
+         
+         
+         colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PAT)))#changing the column names to the resource number
+         RC_Correl = matrix(RC_Correl[,-already_assigned], ncol = length(not_assigned)) #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
+         colnames(RC_Correl) = paste(not_assigned) #change resources names back 
+         
+         mean(RC_to_ACP_cor$cor)
+         
+         #### CREATING A LIST THAT SHOWS THE ALLOCATION OF RESOURCES TO COST POOLS---------------------
+         
+         #Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
+         #Sorting the RC_Correl Matrix by high correlations
+         
+         RC_to_ACP_cor <- which(RC_Correl>=sort(RC_Correl, decreasing = T)[ncol(RC_Correl)*nrow(RC_Correl)], arr.ind = T)#list of length of size of RC_Correl
+         RC_to_ACP_cor = data.frame(RC_to_ACP_cor) #transform it into a dataframe
+         RC_Correl_V = as.vector(RC_Correl)  #transform correlations into vector
+         RC_to_ACP_cor$cor = RC_Correl_V     #append vector to correl dataframe, so each correlation for every CP/Res combination gets a row
+         RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),]   #sort the df by dreasing correlations
+         RC_to_ACP_cor = RC_to_ACP_cor[!duplicated(RC_to_ACP_cor$col, fromLast = FALSE),] #drop all duplicate resources, so you have the highest correlations left
+         
+         RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$col, decreasing = FALSE),]     # sort it by decreasing resource so resource numbers can get changed into the not assigned ones
+         
+         for (i in RC_to_ACP_cor$col){
+            
+            RC_to_ACP_cor$col[i] =  colnames(RC_Correl)[i]           #change the resource names, according to the ones that are not yet assigned
+         }
+         
+         RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),] #sort it again by decreasing correlation so the biggest correlations are assigned first
+         
+         
+         
+         
+         #### ALLOCATING RESOURCES TO COST POOLS AND TAKING INTO ACCOUNT THE MISCPOOLSIZE------------------
+         ##It is possible and allowed that more than one resource is assigned to one cost pool
+         ACP_pre2<-vector(mode='numeric', length = CP-1)
+         i=1
+         # while until the misc pool has a cost share of MISCPOOLSIZE
+         while (RC_to_ACP_cor$cor[i] > CC && i <= (length(RC_to_ACP_cor$col)-1)) {
+            
+            RC_to_ACP[[RC_to_ACP_cor$row[i]]] = c(RC_to_ACP[[RC_to_ACP_cor$row[i]]],as.integer(RC_to_ACP_cor$col[i]))
+            ACP_pre2[[RC_to_ACP_cor$row[i]]] = sum(ACP_pre2[[RC_to_ACP_cor$row[i]]],RCC[as.integer(RC_to_ACP_cor$col[i])])
+            not_assigned = as.integer(RC_to_ACP_cor$col[i+1:(length(RC_to_ACP_cor$col)-i)])
+            i = i+1
+         }
+         
+         ###MISCPOOL RULE####
+         
+         #Appending 
+         RC_to_ACP_misc =list(not_assigned)
+         RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
+         
+         
+         #Adding the misc pool value to ACP
+         ACP_misc = sum(RCC[not_assigned])
+         ACP = append((ACP_pre1 + ACP_pre2),ACP_misc)
+         
+      } else{
+         
+         RC_to_ACP_misc =list(not_assigned)
+         RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
+         
+         
+         #Adding the misc pool value to ACP
+         ACP_misc = sum(RCC[not_assigned])
+         ACP = append(ACP_pre1,ACP_misc)
+         
+      }
+      
+   }else if (CP == 1){
+      
+      ACP = sum(RCC)
+      RC_to_ACP = list(c(1:FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES))
+      
+   }else if(CP==2){
+      
+      RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
+      RC_to_ACP<-list()
+      ACP_pre1<-vector(mode ='numeric', length = (CP-1))    #rep(0,(CP-1))
+      for (i in 1:(CP-1)){ # assign the biggest Resource -1  each to one activity pool #last is msic
+         
+         ACP_pre1[i]<-RCCs$x[i] 
+         RC_to_ACP[[i]]<-RCCs$ix[i]
+         
+      }
+      already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
+      not_assigned <- setdiff(c(1:RCCn),already_assigned)
+      #correlative assignment only if there are more than one resource in not_assigned
+      if (NUMB_RES > CP){
+         ####CORRELATION RULE####
+         
+         #### BUILDIUNG OF CORRELATION MATRIX ####
+         
+         ##Create empty matrix that shows correlation between assigned and unassigned resources
+         RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
+         
+         ##fill empty matrix with correlations
+         for (i in 1:length(already_assigned)){
+            for (j in 1:ncol(RES_CONS_PAT)){
+               
+               RC_Correl[i,j] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
+               
+            }
+         }
+         
+         
+         colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PAT)))#changing the column names to the resource number
+         RC_Correl = matrix(RC_Correl[,-already_assigned], ncol = length(not_assigned)) #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
+         colnames(RC_Correl) = paste(not_assigned) #change resources names back 
+         
+         
+         
+         #### CREATING A LIST THAT SHOWS THE ALLOCATION OF RESOURCES TO COST POOLS---------------------
+         
+         #Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
+         #Sorting the RC_Correl Matrix by high correlations
+         
+         RC_to_ACP_cor <- which(RC_Correl>=sort(RC_Correl, decreasing = T)[ncol(RC_Correl)*nrow(RC_Correl)], arr.ind = T)#list of length of size of RC_Correl
+         RC_to_ACP_cor = data.frame(RC_to_ACP_cor) #transform it into a dataframe
+         RC_Correl_V = as.vector(RC_Correl)  #transform correlations into vector
+         RC_to_ACP_cor$cor = RC_Correl_V     #append vector to correl dataframe, so each correlation for every CP/Res combination gets a row
+         RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),]   #sort the df by dreasing correlations
+         RC_to_ACP_cor = RC_to_ACP_cor[!duplicated(RC_to_ACP_cor$col, fromLast = FALSE),] #drop all duplicate resources, so you have the highest correlations left
+         
+         RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$col, decreasing = FALSE),]     # sort it by decreasing resource so resource numbers can get changed into the not assigned ones
+         
+         for (i in RC_to_ACP_cor$col){
+            
+            RC_to_ACP_cor$col[i] =  colnames(RC_Correl)[i]           #change the resource names, according to the ones that are not yet assigned
+         }
+         
+         RC_to_ACP_cor = RC_to_ACP_cor[order(RC_to_ACP_cor$cor, decreasing = TRUE),] #sort it again by decreasing correlation so the biggest correlations are assigned first
+         
+         
+         
+         
+         #### ALLOCATING RESOURCES TO COST POOLS AND TAKING INTO ACCOUNT THE MISCPOOLSIZE------------------
+         ##It is possible and allowed that more than one resource is assigned to one cost pool
+         ACP_pre2<-vector(mode='numeric', length = CP-1)
+         i=1
+         # while until the misc pool has a cost share of MISCPOOLSIZE
+         while (sum(RCC)-sum(RCC[already_assigned])-sum(RCC[as.numeric(RC_to_ACP_cor$col[c(1:i)])])> MISCPOOLSIZE) {
+            
+            RC_to_ACP[[RC_to_ACP_cor$row[i]]] = c(RC_to_ACP[[RC_to_ACP_cor$row[i]]],as.integer(RC_to_ACP_cor$col[i]))
+            ACP_pre2[[RC_to_ACP_cor$row[i]]] = sum(ACP_pre2[[RC_to_ACP_cor$row[i]]],RCC[as.integer(RC_to_ACP_cor$col[i])])
+            not_assigned = as.integer(RC_to_ACP_cor$col[i+1:(length(RC_to_ACP_cor$col)-i)])
+            i = i+1
+         }
+         
+         ###MISCPOOL RULE####
+         
+         #Appending 
+         RC_to_ACP_misc =list(not_assigned)
+         RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
+         
+         
+         #Adding the misc pool value to ACP
+         ACP_misc = sum(RCC[not_assigned])
+         ACP = append((ACP_pre1 + ACP_pre2),ACP_misc)
+         
+      } else{
+         
+         RC_to_ACP_misc =list(not_assigned)
+         RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
+         
+         
+         #Adding the misc pool value to ACP
+         ACP_misc = sum(RCC[not_assigned])
+         ACP = append(ACP_pre1,ACP_misc)
+         
+      }
+      
+      
+      
+      
+   }
+   
+   
+   #### SOURCING ####  
+   
+   FIRM$COSTING_SYSTEM$ACP = ACP
+   FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
+   
+   return(FIRM)
+} #fully implemented
+
+
+
+
+
+
 
 ####### other CP Mapping Heuristics#####
 
