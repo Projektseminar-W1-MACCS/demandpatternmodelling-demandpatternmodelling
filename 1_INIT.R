@@ -130,3 +130,5 @@ for (nn in 1:SIM_NUMB) {
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
+error_calc = aggregate(DATA,list(DATA$CP),mean)
+plot(error_calc$MAPE,type = 'l')
