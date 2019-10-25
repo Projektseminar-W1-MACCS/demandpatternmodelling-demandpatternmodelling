@@ -30,7 +30,7 @@
   dec_CD=            1       # =
   
   
-  CP = c(6) #Cost Pools
+  CP = c(1,2,4,6,8,10,12,14,16,18,20) #Cost Pools
   COR = c(0.6) #Correlation between resources
   RC_VAR =  c(-1) #Resource cost variation 
   Q_VAR = c(1) #Demand variation
@@ -79,7 +79,7 @@ for (nn in 1:SIM_NUMB) {
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
 
-  FIRM = MAP_RES_CP_SIZE_RANDOM_MISC(FIRM) #Building the cost pools
+  FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM) #Building the cost pools
 
 
   FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
