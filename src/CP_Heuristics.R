@@ -1,9 +1,9 @@
-################################################
+#################### INTRO ############################
 # COST POOL BUILDING HEURISTICS
 # The algorithms orientate to 
 # Balakrishnan, Hansen, Labro 2011
 # Anand, Balakrishnan, Labro 2019
-################################################
+##################### CODES ###########################
 
 ### BALAKRISHNAN et al. 2011
 
@@ -796,6 +796,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF2<-function(FIRM){
          RC_to_ACP[[i]]<-RCCs$ix[i]
          
       }
+     
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(c(1:RCCn),already_assigned)
       
@@ -823,7 +824,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF2<-function(FIRM){
          RC_Correl = matrix(RC_Correl[,-already_assigned], ncol = length(not_assigned)) #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
          colnames(RC_Correl) = paste(not_assigned) #change resources names back
          
-         
+
          #### CREATING A LIST THAT SHOWS THE ALLOCATION OF RESOURCES TO COST POOLS---------------------
          
          #Assign resources to ACPs based on the correlation as long as there are more resources unassigned than the Miscpoolsize
@@ -916,7 +917,6 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF2<-function(FIRM){
       RC_to_ACP = list(c(1:FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES))
    }
    ###SOURCING####  
-   
    
    
    FIRM$COSTING_SYSTEM$ACP = ACP
