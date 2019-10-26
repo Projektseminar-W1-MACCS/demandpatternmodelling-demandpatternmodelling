@@ -153,7 +153,7 @@ return(FIRM)
     
     for (i in ((DISP1)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES) #nonunitsize+1 (34+1)
     {
-      RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i - 1)];
+      RES_CONS_PAT[,i] <- (COR2 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i - 1)];
     }
     
     ## ====================== STEP 1.b DENSITY ========================= 
