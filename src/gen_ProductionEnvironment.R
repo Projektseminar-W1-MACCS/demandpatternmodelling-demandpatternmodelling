@@ -16,7 +16,8 @@ gen_ProductionEnvironment <- function(FIRM) {
 #units = 10^3
 # preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1) #pre Demand is buildup as a log normal distribution
 preDemand = as.integer(runif(1, 10,40))
-FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for each product
+#FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for each product
+FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand*units) #ceiled realized demand for each product
 
 # it is possible that the sum(units) >= units !
 
@@ -53,7 +54,7 @@ FIRM = .gen_RES_CONS_PAT_DISP(FIRM);
 
 #FIRM = .gen_RCC(FIRM, unitsize, nonunitsize);
 
-FIRM = .gen_RCC_DISP2(FIRM, unitsize, nonunitsize);
+FIRM = .gen_RCC_DISP2(FIRM);
 
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")

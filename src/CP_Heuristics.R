@@ -639,7 +639,6 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
 
 MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    
-   
    #### SOURCE ####
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -724,7 +723,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
          ACP_pre2<-vector(mode='numeric', length = CP-1)
          i=1
          # while until the misc pool has a cost share of MISCPOOLSIZE
-         while (sum(RCC)-sum(RCC[already_assigned])-sum(RCC[as.numeric(RC_to_ACP_cor$col[c(1:i)])])> (MISCPOOLSIZE-RCC[as.integer(RC_to_ACP_cor$col[i])]) && RC_to_ACP_cor$cor[i]>= CC) {
+         while (sum(RCC)-sum(RCC[already_assigned])-sum(RCC[as.numeric(RC_to_ACP_cor$col[c(1:i)])])> (MISCPOOLSIZE-RCC[as.integer(RC_to_ACP_cor$col[i])]) && RC_to_ACP_cor$cor[i]> CC) {
             
             RC_to_ACP[[RC_to_ACP_cor$row[i]]] = c(RC_to_ACP[[RC_to_ACP_cor$row[i]]],as.integer(RC_to_ACP_cor$col[i]))
             ACP_pre2[[RC_to_ACP_cor$row[i]]] = sum(ACP_pre2[[RC_to_ACP_cor$row[i]]],RCC[as.integer(RC_to_ACP_cor$col[i])])
@@ -940,13 +939,14 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND<-function(FIRM){
    MISCPOOLSIZE = 0.25 * TC
    CC = 0.4 #as in Anand et al. 2019
    
+   CP = 20
    
    
    if (CP > 1){
       
       if(NUMB_RES>CP){
          
-         CP = 20
+         
          
          RCCn =length(RCC)
          already_assigned<- vector(mode = 'numeric', length = RCCn)          #transforms the list into a vector with all resources that are already assigned
@@ -956,44 +956,69 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND<-function(FIRM){
          ACP<-vector(mode ='numeric', length = CP)    #rep(0,(CP-1))
          
          
-         for (i in 1:CP){               # assign the biggest Resource -1  each to one activity pool
-            
-            ACP[i]<-max(RCC[not_assigned])
-            RC_to_ACP[[i]]<-which(RCC == max(RCC[not_assigned]))        #could not work if some of the resources have exactly the same values
-            
-            already_assigned[which.max(RCC[not_assigned])] <- which.max(RCC[not_assigned]) 
-            not_assigned <- not_assigned[-unlist(RC_to_ACP)]
          
-         
-            while(length(not_assigned)> length(i:CP)){
+         for (i in 1:CP){               # assign the biggest Resource to an activity pool
+            
+            if(length(not_assigned)> length(i:CP)){
+               
+               #ACP[i]<-max(RCC[not_assigned])
+               RC_to_ACP[[i]]<- not_assigned[which.max(RCC[not_assigned])]  #may not work if some of the resources have exactly the same values
+               
+               #already_assigned[i] = RC_to_ACP[i]
+               not_assigned = setdiff(c(1:RCCn),unlist(RC_to_ACP))
                
                RC_Correl = cor(RES_CONS_PAT[,RC_to_ACP[[i]]],RES_CONS_PAT)
                colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PAT)))#changing the column names to the resource number
-               RC_Correl = matrix(RC_Correl[,-already_assigned], ncol = length(not_assigned)) #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
+               RC_Correl = matrix(RC_Correl[,not_assigned],ncol = length(not_assigned))
+               #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
                colnames(RC_Correl) = paste(not_assigned)
                RC_Correl = data.frame(sort(RC_Correl,decreasing = TRUE, index.return = TRUE))
-            
-               x=1      
-               while (RC_Correl$x[x] >= CC) {
                
+               x =1
+               
+               while(RC_Correl$x[x] >= CC){
+                  
                   RC_to_ACP[[i]] = c(RC_to_ACP[[i]],RC_Correl$ix[x])
-                  ACP[i] = sum(ACP[i],RCC[RC_Correl$ix[x]])
-                  not_assigned = not_assigned[-which(not_assigned == RC_Correl$ix[x])]
+                  #ACP[i] = sum(ACP[i],RCC[RC_Correl$ix[x]])
+                  not_assigned = not_assigned[-RC_Correl$ix[x]]
+                  #already_assigned[RC_Correl$ix[x]] = c(already_assigned[RC_Correl$ix[x]],RC_Correl$ix[x])
                   x=x+1
+                  
+               }
                
-               }   
-               
-               
-            }
+               #print(RC_to_ACP[i])
+               not_assigned = setdiff(c(1:RCCn),unlist(RC_to_ACP))
             
+            }else if(length(not_assigned)== length(1:CP)){
+               
+               RC_to_ACP[[i]] =c(not_assigned[i])
+      
+            }
+         
+            not_assigned = setdiff(c(1:RCCn),unlist(RC_to_ACP))   
+         
+         if(i == CP) {
+               
+               RC_to_ACP[[i]] =c(not_assigned)
+               
+         }
+          
+            
+               
          }
          
-         RCC
          
-         max(RCC[not_assigned])
+         ACP<-vector(mode ='numeric', length = CP)
          
-         
+         for (i in 1:length(RC_to_ACP)){
             
+            ACP[i] = sum(RCC[unlist(RC_to_ACP[i])])
+            
+         }
+      sum(ACP)
+      unlist(RC_to_ACP)
+      RCC
+      setdiff(c(1:RCCn), unlist(RC_to_ACP))
       }else{
             
             RC_to_ACP = list()

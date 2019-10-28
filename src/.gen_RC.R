@@ -130,7 +130,7 @@ r_MIN<-r_MIN+(r1_MAX-r_MIN)*0.025   #0.025?
 #Initalize Values
 RCC<-vector(mode="numeric")
 r_MAX<-vector(mode="numeric")
-temp1_ADD<-vector(mode="numeric")
+temp1_ADD<-vector(mode="numeric", length = DISP1-1)
 temp1_ADD[1]<-0
 
 
@@ -186,10 +186,11 @@ RCC = RCC$RCC
 #### sourcing
 FIRM$COSTING_SYSTEM$RCC = RCC
 
-#browser()
-
+plot(sort(RCC))
 
 return(FIRM)
 
 }
+
+
 
