@@ -675,7 +675,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
          
          ##fill empty matrix with correlations
          
-         RC_Correl = cor(RES_CONS_PATp,RES_CONS_PATp)
+         #RC_Correl = cor(RES_CONS_PATp,RES_CONS_PATp)
          
          # for (i in 1:length(already_assigned)){
          #    for (j in 1:ncol(RES_CONS_PAT)){

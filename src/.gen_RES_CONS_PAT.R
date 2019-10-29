@@ -145,17 +145,17 @@ return(FIRM)
     # Correlation of the remaining resources
     COR2 <- runif(1, -0.2, 0.8);
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
+    DISP1=10
     
-    
-    
-    for (i in 1:(DISP1+1)) #unitsize+1
+    #browser()
+    for (i in 1:(DISP1)) #unitsize+1
     {
-      RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i-1)];
+      RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i)];
     }
     
     for (i in ((DISP1+1)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES) #nonunitsize+1 (34+1)
     {
-      RES_CONS_PAT[,i] <- (COR2 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i-1)];
+      RES_CONS_PAT[,i] <- (COR2 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i)];
     }
     
     ## ====================== STEP 1.b DENSITY =========================
