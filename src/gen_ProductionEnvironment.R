@@ -47,7 +47,7 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
 
 
-FIRM = .gen_RES_CONS_PAT_DISP(FIRM);
+FIRM = .gen_RES_CONS_PAT_DISP3(FIRM);
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
