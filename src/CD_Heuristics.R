@@ -20,7 +20,7 @@ ACT_CONS_PAT<-matrix(0,nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,ncol = length
 
 for (i in 1:length(RC_ACP_index)){
     
-## exception handler if ACP[i] has only one RCP
+## exception handler if there is only one resource in ACP[[i]] take this resource as the driver
 # in original version not needed, this is due to basic implementation of Rs function rowSums
 if(length(RC_ACP_index[[i]])==1){
   ACT_CONS_PAT[,i]<-RES_CONS_PAT[,RC_ACP_index[[i]]]
@@ -30,7 +30,6 @@ if(length(RC_ACP_index[[i]])==1){
   RC_order<-sort(RCC, decreasing=TRUE)
       
   RC_ACP_index[[i]]<-RC_ACP_index[[i]][order(match(RC_ACP_index[[i]],RC_order))]
-      
   RES_CONS_PAT_temp<-RES_CONS_PAT[,RC_ACP_index[[i]]] # subsetting for resources used in this ACP and ordering
   # ACs<-sort(colSums(RES_CONS_PAT_temp),decreasing = TRUE,index.return=TRUE)
   ACT_CONS_PAT[,i]<-RES_CONS_PAT_temp[,1] #use the largest Rescource as a driver

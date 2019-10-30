@@ -147,6 +147,7 @@ return(FIRM)
     COR2 <- runif(1, -0.2, 0.8);
     
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
+    
     DISP1=10
     
     #browser()

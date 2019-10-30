@@ -127,9 +127,9 @@ for (nn in 1:SIM_NUMB) {
 
 #### ====================================== OUTPUT WRITING ===================================
             
-#output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
-#write.csv(DATA, file = output)
-#print("Cost System Design FILE has been written")
+output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+write.csv(DATA, file = output)
+print("Cost System Design FILE has been written")
 error_calc = aggregate(DATA,list(DATA$CP),mean)
 plot(error_calc$MAPE,type = 'l', col = 'red')
 anand = c(0.408178730154443,0.63464246924526,0.54423136086352,0.47682867446847,0.418860485256461,0.368152448970775,0.331885153793231,0.302320958278188,0.286287201845503,0.26994012860598,0.25161881342756)
