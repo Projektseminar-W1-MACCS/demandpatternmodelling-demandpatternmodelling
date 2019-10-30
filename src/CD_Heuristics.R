@@ -43,7 +43,7 @@ if(length(RC_ACP_index[[i]])==1){
     err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*length(RC_ACP_index),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
     ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
     ACT_CONS_PAT = ACT_CONS_PAT/colSums(ACT_CONS_PAT)
-  }    
+  }
 ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
  }
 

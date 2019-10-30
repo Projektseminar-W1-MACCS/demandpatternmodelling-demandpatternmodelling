@@ -140,10 +140,12 @@ return(FIRM)
     
     # Correlation of the top [DISP1] resources
     COR1 <- runif(1, -0.2, 0.8);
+    
     sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
     
     # Correlation of the remaining resources
     COR2 <- runif(1, -0.2, 0.8);
+    
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
     DISP1=10
     
@@ -162,7 +164,7 @@ return(FIRM)
     
     res_cons_pat_b_pre = runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
     ## 1/0 DENSITY
-    res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > FIRM$PRODUCTION_ENVIRONMENT$DENS, 0,1),
+    res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre < FIRM$PRODUCTION_ENVIRONMENT$DENS, 1,0),
                                 FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
       
     RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
@@ -188,7 +190,7 @@ return(FIRM)
     # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
     # in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; Substantiation of this hidden formalization remains unclear. 
     
-    PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   #every product need at least one resource
+    PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   #every product need at least one resource (exclude column one??)
     RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   #every resource needs to be used at least once
     BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         #first resource needs to be in every product ->why?
     

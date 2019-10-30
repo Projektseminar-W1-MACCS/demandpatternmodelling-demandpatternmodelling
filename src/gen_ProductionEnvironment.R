@@ -13,11 +13,14 @@ gen_ProductionEnvironment <- function(FIRM) {
 
 ## ====================== STEP 1 REALIZED DEMAND GENERATION ========================= 
 
-#units = 10^3
-# preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1) #pre Demand is buildup as a log normal distribution
+units = 10^3
+#preDemand = rlnorm(NUMB_PRO, meanlog = 1, sdlog = 1) #pre Demand is buildup as a log normal distribution
 preDemand = as.integer(runif(1, 10,40))
+
+
 #FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for each product
 FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand*units) #ceiled realized demand for each product
+#FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling((preDemand/sum(preDemand))*units) #ceiled realized demand for each product
 
 # it is possible that the sum(units) >= units !
 
@@ -47,7 +50,7 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 ## ====================== STEP 2.b Determining the density (DENS)  =========================
 
 
-FIRM = .gen_RES_CONS_PAT_DISP3(FIRM);
+FIRM = .gen_RES_CONS_PAT_DISP(FIRM);
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
