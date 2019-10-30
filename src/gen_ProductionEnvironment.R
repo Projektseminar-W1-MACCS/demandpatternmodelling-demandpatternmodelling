@@ -14,10 +14,15 @@ gen_ProductionEnvironment <- function(FIRM) {
 ## ====================== STEP 1 REALIZED DEMAND GENERATION ========================= 
 
 units = 10^3
+<<<<<<< HEAD
 #preDemand = rlnorm(NUMB_PRO, meanlog = 1, sdlog = 1) #pre Demand is buildup as a log normal distribution
 preDemand = as.integer(runif(1, 10,40))
 
 
+=======
+# preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1) #pre Demand is buildup as a log normal distribution
+preDemand = as.integer(runif(1,10,40))
+>>>>>>> 49851857eaad21e986c99fce46fdc26e66e72257
 #FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for each product
 FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand*units) #ceiled realized demand for each product
 #FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling((preDemand/sum(preDemand))*units) #ceiled realized demand for each product

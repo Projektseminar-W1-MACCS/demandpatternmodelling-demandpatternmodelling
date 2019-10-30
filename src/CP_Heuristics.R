@@ -674,8 +674,13 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
          #RC_Correl = matrix(nrow = length(already_assigned), ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)#empty matrix for correlations between assigned and not assigned resources
          
          ##fill empty matrix with correlations
+<<<<<<< HEAD
          
          RC_Correl = cor(RES_CONS_PATp,RES_CONS_PATp)
+=======
+        
+         RC_Correl = cor(RES_CONS_PAT,RES_CONS_PAT)
+>>>>>>> 49851857eaad21e986c99fce46fdc26e66e72257
          
          # for (i in 1:length(already_assigned)){
          #    for (j in 1:ncol(RES_CONS_PAT)){
@@ -938,7 +943,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND<-function(FIRM){
    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
-   RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+   RES_CONS_PAT = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
    MISCPOOLSIZE = 0.25 * TC
    CC = 0.4 #as in Anand et al. 2019
    

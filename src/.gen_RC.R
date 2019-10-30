@@ -116,12 +116,11 @@ DISP1 = 10
 TC=FIRM$COSTING_SYSTEM$TC
 NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
 
-
 # Step 1
 r_MIN<-((1-DISP2)*TC)/(NUMB_RES-DISP1) 
 
 #Step 2
-r1_MAX<-(DISP2*TC)-(DISP1-1)*r_MIN
+r1_MAX<-(DISP2*TC)-((DISP1-1)*r_MIN)
 
 # Step 3
 r_MIN<-r_MIN+(r1_MAX-r_MIN)*0.025   #0.025?
@@ -189,6 +188,8 @@ FIRM$COSTING_SYSTEM$RCC = RCC
 
 
 
+
+# '''' checked and compared with Anand et al. 2019 - 30/10/2019
 
 return(FIRM)
 
