@@ -674,7 +674,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
          
          ##fill empty matrix with correlations
 
-         RC_Correl = cor(RES_CONS_PATp,RES_CONS_PATp)
+         RC_Correl = cor(RES_CONS_PAT,RES_CONS_PAT)
 
          
          # for (i in 1:length(already_assigned)){
@@ -1181,7 +1181,7 @@ MAP_CP_CORREL_MISC<-function(FIRM){
    CP = FIRM$COSTING_SYSTEM$CP
    RCC = FIRM$COSTING_SYSTEM$RCC
    RCCn= length(RCC)
-   PEARSONCORR<-cor(RES_CONS_PATp,RES_CONS_PATp)
+   PEARSONCORR<-cor(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp,FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)
    
    RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sorted Resource cost vector
    

@@ -39,7 +39,19 @@
    # browser()
     # Benchmark product costs
     FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND #BENCHMARK PRODUCT COSTS (TOTAL)
-   
+    
+    
+    #PCB = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%(RCC/TRU)*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+    
+    #PCB = PCB*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+    
+    
+    
+    #PCB = vector(mode ='numeric')
+    
+    #PCB = RES_CONS_PATp%*%RCC
+    
+    #FIRM$COSTING_SYSTEM$PCB = PCB
     #check1 = sum(PC_B); % sum must be 10^6
     # RES_CONS_PATp is essential for further cost allocation.
     

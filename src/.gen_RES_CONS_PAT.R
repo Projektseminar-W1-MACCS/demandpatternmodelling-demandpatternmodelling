@@ -165,7 +165,7 @@ return(FIRM)
     
     res_cons_pat_b_pre = runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
     ## 1/0 DENSITY
-    res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre < FIRM$PRODUCTION_ENVIRONMENT$DENS, 1,0),
+    res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > FIRM$PRODUCTION_ENVIRONMENT$DENS, 0,1),
                                 FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
       
     RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
