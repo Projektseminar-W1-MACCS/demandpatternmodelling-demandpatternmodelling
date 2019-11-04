@@ -32,11 +32,14 @@
   
   CP = c(1,2,4,6,8,10,12,14,16,18,20) #Cost Pools
   COR = c(0.6) #Correlation between resources
-  RC_VAR =  c(-1) #Resource cost variation 
+  RC_VAR =  c(-1) #Resource cost variation --> base for DISP2
   Q_VAR = c(1) #Demand variation
   Error = c(0) #Measurement error
   NUMB_Error = c(1) #Number of errornoues links
   DENS = c(-1) #Number of links between products and resources (sharing)
+  CC = 0.4   #Correlation Cutoff for correlative assignement in CP HEURISTICS
+  MISCPOOLSIZE = 0.25   #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
+  DISP1 = 10
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
@@ -65,8 +68,10 @@
   FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
   FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
   FIRM$COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
-  FIRM$COSTING_SYSTEM$TC = TC 
-
+  FIRM$COSTING_SYSTEM$TC = TC
+  FIRM$COSTING_SYSTEM$CC = CC
+  FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
+  FIRM$COSTING_SYSTEM$DISP1 = DISP1
               
 nn=1 # necessary for repeating the SIM_NUMB loop
 #### ============================== SIMULATION ======================================
@@ -79,7 +84,7 @@ for (nn in 1:SIM_NUMB) {
   FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
   
 
-  FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND2(FIRM) #Building the cost pools
+  FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2(FIRM) #Building the cost pools
 
 
   FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
@@ -132,5 +137,5 @@ write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
 error_calc = aggregate(DATA,list(DATA$CP),mean)
 plot(error_calc$MAPE,type = 'l', col = 'red')
-anand = c(0.408178730154443,0.63464246924526,0.54423136086352,0.47682867446847,0.418860485256461,0.368152448970775,0.331885153793231,0.302320958278188,0.286287201845503,0.26994012860598,0.25161881342756)
+anand = c(0.408178730154443,0.63464246924526,0.543089795284711,0.468102003818463,0.403717569223322,0.345894562750941,0.296934854546178,0.255757345353485,0.222036055728074,0.194743491502757,0.165722532244197)
 lines(anand,type ='l', col ='blue')
