@@ -3,6 +3,7 @@
 #############################################################
 
 
+
 ## ======================================INPUT MASK============================================================
   FIRM = list()
   FIRM$PRODUCTION_ENVIRONMENT = list()
@@ -135,7 +136,7 @@ for (nn in 1:SIM_NUMB) {
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
-error_calc = aggregate(DATA,list(DATA$CP),mean)
-plot(error_calc$MAPE,type = 'l', col = 'red')
-anand = c(0.408178730154443,0.63464246924526,0.543089795284711,0.468102003818463,0.403717569223322,0.345894562750941,0.296934854546178,0.255757345353485,0.222036055728074,0.194743491502757,0.165722532244197)
-lines(anand,type ='l', col ='blue')
+# error_calc = aggregate(DATA,list(DATA$CP),mean)
+# plot(error_calc$MAPE,type = 'l', col = 'red')
+# anand = c(0.408178730154443,0.63464246924526,0.543089795284711,0.468102003818463,0.403717569223322,0.345894562750941,0.296934854546178,0.255757345353485,0.222036055728074,0.194743491502757,0.165722532244197)
+# lines(anand,type ='l', col ='blue')
