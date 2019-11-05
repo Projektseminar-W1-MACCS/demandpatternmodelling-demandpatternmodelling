@@ -349,6 +349,10 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
    return(FIRM)
 }#fully implemented
 
+
+
+
+#### ANAND et al. 2019;
 MAP_RES_CP_SIZE_MISC<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
    CP = FIRM$COSTING_SYSTEM$CP
@@ -361,37 +365,37 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
    
    
    if (CP > 1){
-   #### Find the largest RCC (resource costs) for one cost pool each####
-   RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sort resource costs 
-   
-   
-   for (i in 1:(CP-1)){               # assign the biggest RCC each to one cost pool
+      #### Find the largest RCC (resource costs) for one cost pool each####
+      RCCs<-sort(RCC,decreasing = TRUE,index.return=TRUE)   # sort resource costs 
       
-      ACP_pre1[i]<-RCCs$x[i]
-      RC_to_ACP[[i]]<-RCCs$ix[i]
       
-   }
-   
-  
-   
-   ####---- Assign remaining RC to Misc Pool ----####
-   
-   not_assigned = vector(mode = 'numeric')
-   not_assigned = setdiff(c(1:RCCn),unlist(RC_to_ACP))
-   
-   
-   ACP_misc = sum(RCC[not_assigned])
-   RC_to_ACP_misc = list(not_assigned)
-   
-   
-   ACP = vector(mode='numeric')
-   ACP<-append(ACP_pre1, ACP_misc)
+      for (i in 1:(CP-1)){               # assign the biggest RCC each to one cost pool
+         
+         ACP_pre1[i]<-RCCs$x[i]
+         RC_to_ACP[[i]]<-RCCs$ix[i]
+         
+      }
+      
+      
+      
+      ####---- Assign remaining RC to Misc Pool ----####
+      
+      not_assigned = vector(mode = 'numeric')
+      not_assigned = setdiff(c(1:RCCn),unlist(RC_to_ACP))
+      
+      
+      ACP_misc = sum(RCC[not_assigned])
+      RC_to_ACP_misc = list(not_assigned)
+      
+      
+      ACP = vector(mode='numeric')
+      ACP<-append(ACP_pre1, ACP_misc)
       #RC_to_ACP = vector(mode="numeric")
-   
-   # Bringing the pre index vectors RC_to_ACP_pre together
-   
-   RC_to_ACP = append(RC_to_ACP, RC_to_ACP_misc)
-   
+      
+      # Bringing the pre index vectors RC_to_ACP_pre together
+      
+      RC_to_ACP = append(RC_to_ACP, RC_to_ACP_misc)
+      
    }else if (CP ==1){
       ACP = sum(RCC)
       RC_to_ACP = list(c(1:NUMB_RES))
@@ -403,10 +407,7 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
    
    return(FIRM)
    
-} #fully implemented ANAND p==0
-
-
-#### ANAND et al. 2019;
+} # ANAND p==0
 
 MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    #### SOURCE ####
@@ -531,7 +532,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
    return(FIRM)
-} #with misc pool and both conditions (MISCpool AND CC) ANAND p==1
+} # ANAND p==1 / with misc pool and both conditions (MISCpool AND CC)
 
 MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####
@@ -629,7 +630,7 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
    return(FIRM)
    
    
-} #fully implemented  ANAND p==2
+} #ANAND p==2
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
    
@@ -860,7 +861,10 @@ MAP_CP_CORREL_MISC<-function(FIRM){
    
    return(FIRM)
    
-} #OLE ANAND p==1
+} # ANAND p==1 / OLE
+
+
+
 
 #### Other Heuristics
 MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){

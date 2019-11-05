@@ -167,7 +167,7 @@ return(FIRM)
     ## 1/0 DENSITY
     res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > FIRM$PRODUCTION_ENVIRONMENT$DENS, 0,1),
                                 FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
-      
+    
     RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
     
     FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
@@ -185,7 +185,6 @@ return(FIRM)
     TCU <- colSums(RES_CONS_PAT_TOTAL)
     ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
     RES_CONS_PATp <- sweep((RES_CONS_PAT_TOTAL),2,TCU,"/") #Absolute matrix to relative matrix
-    
     ## ===================== EXCPETION HANDLER ====================
     
     # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
