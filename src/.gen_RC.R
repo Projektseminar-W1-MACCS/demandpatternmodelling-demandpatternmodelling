@@ -45,7 +45,7 @@
 
 }
 
-.gen_RCC_DISP_ANAND <- function(FIRM,unitsize,nonunitsize){
+.gen_RCC_Anand <- function(FIRM,unitsize,nonunitsize){
 
   if(RC_VAR == -1)
   {
@@ -55,8 +55,7 @@
    # FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
-DISP1 = 10
-#DISP2 =0.7
+DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
 TC=FIRM$COSTING_SYSTEM$TC
 NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
 

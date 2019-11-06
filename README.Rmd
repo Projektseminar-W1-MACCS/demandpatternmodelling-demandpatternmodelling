@@ -1,10 +1,10 @@
 ---
 title: "Cost System Design Model Documentation"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=10))
 ```
 
 ## 1. Introduction
@@ -14,11 +14,10 @@ However, further heuristics, as well as  adaptions to the Programming Language R
 
 The overall objective of this replication model is  first to create a fictional firm (including it's production environment), measrue the production costs of each product (Benachmark Product Costs), secondly build a costing system to calculate again the product costs using different heuristics to e.g. allocate resource costs to pools or choose a cost-driver (Estimated Product Costs) and eventually compare these two measures to compute the error.
 
-## 2. Overview 
+In the following pages this documentation will go along the models structure (Figure 1) and explain the basic logic behind single functions and structures of the code. Overall objective is to describe the models logic as well as the implementation in R. 
+<br>
 
-This documentation is split into two parts. The first parts gives an overview of the model's structure and influencing parameters (Input and Output). The second part provides a more detailed description of the code. 
-
-## 2.1 Working with the model in RStudio
+## 2. Working with the model in RStudio
 
 RStudio is an open source and free to use software which provides an integrated development environment (IDE) for the Programming Language R.
 
@@ -28,7 +27,7 @@ The Programming Language R itself must be downloaded and installed separatly: ht
 
 Furthermore the model works with the following library packages which provide functions for e.g. plotting or analysing data. These libraries are installes by running the follwing code in the 0_preparing_project.R file. This needs to be done before running the model itself. 
 
-
+<br>
 ```{r library packages, include= TRUE, eval = FALSE}
 install.packages(c(
   "dplyr",
@@ -40,23 +39,26 @@ install.packages(c(
 
 Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr")
 lapply(Packages, library, character.only = TRUE)
+
 ```
 
+<br>
 
-## 2.2 Model Overview
+## 3. Model Overview (0_preparing_project.R)
 
 The model contains of 9 R-Script files which can be seen in the following model overview. The 0_preparing_project.R file is the starting point for running the model. There, all other files are sourced and so their functions called.
 
-![Cost System Design Model Overview](C:\Users\cms9023\Documents\CostSystemDesignSim\Modeloverview.png)
+![Figure 1: Cost System Design Model Overview](C:\Users\cms9023\Documents\CostSystemDesignSim\Modeloverview.png)
+<br>
 
-## 2.3 Model Initialization
+## 4. Model Initialization (1_INIT.R)
 
 The 1_INIT.R file loads all input parameters which are set by the modeller. These will later define the circumstances and limitations for the modelled Production Environment and Costing System. 
 First step is to create an empty firm with its subsets Production Environment and Costing System. The FIRM variable is basically just a list that contains all necessary information that are need throughout the varius functions.  
 The DATA variable is an empty dataframe which gets filled with the measures that go into the output file.
-
-```{r Input Parameters}
-  ## ======================================INPUT MASK============================================================
+<br>
+```{r Input Parameters, tidy=TRUE, tidy.opts=list(width.cutoff=10)}
+  ## ======================================INPUT MASK======================================================
   FIRM = list()                           
   FIRM$PRODUCTION_ENVIRONMENT = list()
   FIRM$COSTING_SYSTEM = list()
@@ -91,19 +93,20 @@ The DATA variable is an empty dataframe which gets filled with the measures that
   NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = 0.4                                  #Correlation Cutoff for correlative assignement in CP HEURISTICS
-  MISCPOOLSIZE = 0.25                       #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
+  MISCPOOLSIZE = 0.25                       #share of total costs that are supposed to go into the miscpool 
   DISP1 = 10                                #No. of the biggest resources that have a DISP2 share of the total costs
   
-## ======================================END OF INPUT MASK===================================================== 
+## ======================================END OF INPUT MASK=========================================
 ```
 
 
-The simulation is then run for every combination of the input parameters and the number of simulation that is set with SIM_NUMB. To do this the model loops over every input variable and creates a number of firms (SIM_NUMBs) for every combination of those. 
+The simulation is then run for every combination of the input parameters and the number of simulation that is set with SIM_NUMB. To do this the model loops over every input variable and creates a number of firms (SIM_NUMBs) for every combination of those. As an example you can see in the above code, that this model simulates over different number of cost pools.
+<br>
 ```{r for loops for code running, eval = FALSE}
             set.seed(seed) #Reproducability
             o=1 # First design point
             
-## ====================================== DESIGN OF EXPERIMENTS ================================================== 
+## ====================================== DESIGN OF EXPERIMENTS ===================================
 ## EVIRONMENTAL FACTORS [] 
   for (ix_CP in seq_along(CP)) {
      for (ix_COR in seq_along(COR)) {
@@ -118,10 +121,11 @@ The simulation is then run for every combination of the input parameters and the
 ```
 
 
-For every created firm the variable is mapped into the FIRM list. By calling this list in every other R-Script file of the model the code gets access to all there contained variables. This ensures that always the same values are used and provides an easy possibility to map created variables back into the FIRM.
+For every created firm the variable is mapped into the FIRM list. By calling this list in every R-Script file of the model, the code gets access to all there contained variables. This ensures that always the same values are used and provides an easy possibility to map created variables back into the FIRM.
+<br>
 
-```{r Mapping created variables to the FIRM}
- ## ====================== PREDETERMINING AND PREALLOCATION  =========================          
+```{r Mapping created variables to the FIRM, eval = FALSE}
+ ## ====================== PREDETERMINING AND PREALLOCATION  ========================          
     
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]   
     FIRM$PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
@@ -138,12 +142,13 @@ For every created firm the variable is mapped into the FIRM list. By calling thi
     FIRM$COSTING_SYSTEM$DISP1 = DISP1
 ```
 
-The simulation is now run for the defined number of SIM_NUMB. As shown in the model overview the model splits into two parts. 
+The simulation is now run for the defined number of simulations in SIM_NUMB. As shown in the model overview the production environment and the costing system (consisting of the chosen Cost Pool Allocation heuristic and the driver seltion heuristic) are generated. . To change the used heuristics only the called functions need to be changed. The below example currently calculates with a Size based correlation cutoff heuristic for building the cost pools and a big pool heuristic for selecting the driver. Since the costing system heuristics are working with some of the generated output parameter from the production environment (e.g. RCC, RES_CONS_PAT), the production environment is generated first.
+<br>
 
 ```{r Running the simulation, eval = FALSE}
 
    nn=1 # necessary for repeating the SIM_NUMB loop
-  #### ============================== SIMULATION ======================================
+  #### ============================== SIMULATION =====================================
   for (nn in 1:SIM_NUMB) {
     
     #print(FIRM$COSTING_SYSTEM$CP)  
@@ -157,11 +162,144 @@ The simulation is now run for the defined number of SIM_NUMB. As shown in the mo
   
   
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
+
+```
+<br>
+
+## 5. Generating the Production Environment (gen_ProductionEnviroment.R)
+
+<br>
+The R-Script File gen_ProductionEnvironment.R builds the Production Environment by calling its sub-functions to generate the demand function, the resource-consumption-matrix, the resource cost vector (RCC) and the benchmark product costs. 
+
+Here, the Density is defined as well. 
+The Density can be fixly determined by the modeller in the input parameter or (if it is set there to -1) it is chosen from a uniform distribution U[DENS_MIN, DENS_MAX]. The Density (Sparsity) defines approximately how many zeros are in the RES_CONS_PAT (e.g DENS = 0.6 means that roughly 40% of the elements in RES_CONS_PAT are zero). Therefore the Density has a major influence on how eqaul and well distributed the resource consumption is among the products. 
+
+```{r}
+#Randomization and setting clear design points. 
+if(DENS == -1)
+{
+DENS_MIN = 0.4;
+DENS_MAX = 0.7;
+DENS = runif(1, DENS_MIN, DENS_MAX);
+FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+}
+
+
+## ================= STEP 2 Building Demand, RES_CONS_PAT RCC and Benchmark Product Costs  ==============
+
+
+
+FIRM = .gen_Demand_Anand(FIRM);
+
+FIRM = .gen_RES_CONS_PAT_Anand(FIRM);
+
+FIRM = .gen_RCC_Anand(FIRM);
+
+FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
+```
+
+### 5.1. Generating the Demand Vector (.gen_Q.R)
+
+The first sub-function and output parameter which is set by the production environment is the demand function. Here, for the first time it becomes possible for the modeller to have an influence on the output, without changing the input parameters, by changing how the demand vector is build.
+
+The demand vector defines the production quantity of each product. It therefore is a vector with the length of number of products (NUMB_PRO). 
+
+Since there are now multiple ways of generating the demand, the R-Script file .gen_Q.R contains different functions which each create a different demand vector. 
+Below is the code that generates a demand vector similar to Anands. It draws random values from a uniform distribution between 10 and 40 and then brings it down to a total number of 1000 units and distributes the volumes for each product on this overall quantity.
+
+Each element in the vector is then the production quantity for the respective product.
+
+Since there is a relatively small margin (between 10 and 40) for each product quantity it results that the demand vector is evenly distributed. Meaning that the here simulated firm sells from each of its product approximately the same amount. 
+
+```{r Generating the Demand function}
+NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
+  
+  units = 10^3
+
+  preDemand = as.integer(runif(NUMB_PRO,10,40))
+  
+  DEMAND = ceiling((preDemand/sum(preDemand))*units) #ceiled realized demand for each product
+  
+  FIRM$PRODUCTION_ENVIRONMENT$DEMAND = DEMAND
+```
+
+### 5.2. Generating the resource consumption matrix (.gen_RES_CONS_PAT.R)
+
+The second component of the production environment is the randomly created resource consumption matrix, which is basically a matrix[i,j] which elements are the amount of resources[j] consumed to produce one element of a product[i]. An example is shown below.
+
+```{r, eval = TRUE, echo = FALSE}
+res_cons_pat = matrix(c(3,5,6,2,8,7,6,3,1,0,9,12,0,5,3),ncol = 5, nrow = 3)
+print(res_cons_pat)
+```
+Each row stands for the resource consumption for one product while each column shows the resource consumption for this peticular resource ampong the products.
+For example, the production of one unit product 1 needs six units of resource 3. 
+Therefore, in this case a resource consumption matrix of the size NUMB_PRO*NUMB_RES is needed. 
+The resource consumption needs to satisfy some correlation parameters, that create a specific similarity among products and resources. Also, the density must be satisfied, as well as the constraint that all resources are used in the products a least once and every product needs at least one resource. 
+Additionally, there is the assumption that one resource (in this case the first) goes into every product. 
+
+The procedure for the construction of the resource consumption matrix can be seen below. 
+<br>
+
+#### 5.2.1. Baseline RES_CONS_PAT
+
+```{r RES_CONS_PAT 1, eval = FALSE}
+ ## ====================== STEP 1 BASELINE NORM ========================= 
+  
+  repeat    {
+    
+    BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
+    
+    RES_CONS_PATpre = matrix(rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,mean=0,sd=1), 
+                             FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)                            #random pre matrix, as Baseline
+    
+    RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE) #empy matrix, that is going to be filled 
+
+```
+
+BASE is the first resource in the resource consumption matrix, that is used in every product and therefore is built seperatly. 
+Then the RES_CONS_PATpre is build, a matrix with the same size of the RES_CONS_PAT filled with random values. 
+Also an empty RES_CONS_PAT is generated which is going to be filled throughout the process.
+<br>
+
+#### 5.2.2. Correlation constraints
+
+Next step is filling the yet empty matrix while satisfying the correlation constraints. The matrix is split into two parts based on the input variable DISP1 which defines the number of big resources that account for a DISP2 (value between 0 and 1) share of total costs (TC). In this case DISP1 is set to 10, meaning that the 10 biggest resources account for 40% (when DISP2 =0.4) of the total costs. The matrix is therefore split columnwise into the first 1:DISP1 big resources and the remaining DISP1+1:NUMB_RES small resources. 
+
+There are two correlations, one for the big resources and one for the small resources, meaning that the big resources correlate among themselves with approximately COR1 and the small resources with COR2 respectively. 
+The correlations are drawn form a uniform distribution with boundaries set by the modeller. 
+
+```{r RES_CONS_PAT 2, eval = FALSE}
+## ====================== STEP 1.a CORRELATION ========================= 
+    # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
+    # Rows Products Colums Resources
+    
+    # Correlation of the top [DISP1] resources
+    COR1 <- runif(1, -0.2, 0.8);
+    
+    sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
+    
+    # Correlation of the remaining resources
+    COR2 <- runif(1, -0.2, 0.8);
+    
+    sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
+    
+    DISP1= FIRM$PRODUCTION_ENVIRONMENT$DISP1
     
     
+    for (i in 1:(DISP1)) #unitsize+1
+    {
+      RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i)];
+    }
     
-    
-    ## Calculating the estimated product costs
+    for (i in ((DISP1+1)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES) #nonunitsize+1 (34+1)
+    {
+      RES_CONS_PAT[,i] <- (COR2 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i)];
+    }
+```
+
+
+```{r INIT, eval = FALSE, include = FALSE}
+ ## Calculating the estimated product costs
     FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
   
       ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
@@ -201,6 +339,5 @@ The simulation is now run for the defined number of SIM_NUMB. As shown in the mo
     }
   }
 }
-
 ```
 

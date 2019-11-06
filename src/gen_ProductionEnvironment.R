@@ -5,10 +5,6 @@
 
 gen_ProductionEnvironment <- function(FIRM) {
 
-  #  if vary_demand==0 
- #  DEMAND_BASE = lognrnd(1,VOL_VAR,NUMB_PRO,1);
- #  else
- #  rng('shuffle') 
 
 ## ====================== STEP 1  Determining the ACTIVITY STRUCTURE =========================
 
@@ -22,9 +18,8 @@ FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNI
 unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
 
+
 ## ====================== STEP 1.b Determining the density (DENS)  =========================
-
-
 
 #Randomization and setting clear design points. 
 if(DENS == -1)
@@ -32,26 +27,28 @@ if(DENS == -1)
 DENS_MIN = 0.4;
 DENS_MAX = 0.7;
 DENS = runif(1, DENS_MIN, DENS_MAX);
-
+FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 }
 
-FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
+## ====================== STEP 2 Building Demand, RES_CONS_PAT RCC and Benchmark Product Costs  =========================
 
 
 
 FIRM = .gen_Demand_Anand(FIRM);
 
-FIRM = .gen_RES_CONS_PAT_DISP(FIRM);
+FIRM = .gen_RES_CONS_PAT_Anand(FIRM);
 
+FIRM = .gen_RCC_Anand(FIRM);
+
+FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
 
 #FIRM = .gen_RCC_KGM(FIRM, unitsize, nonunitsize);
 
-FIRM = .gen_RCC_DISP_ANAND(FIRM);
 
-FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 
 

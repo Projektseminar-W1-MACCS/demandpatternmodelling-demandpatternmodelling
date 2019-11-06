@@ -118,7 +118,7 @@ return(FIRM)
 
 }
 
-.gen_RES_CONS_PAT_DISP <- function(FIRM) {
+.gen_RES_CONS_PAT_Anand <- function(FIRM) {
   
   ## ====================== STEP 1 BASELINE NORM ========================= 
   
@@ -148,9 +148,9 @@ return(FIRM)
     
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
     
-    DISP1= FIRM$COSTING_SYSTEM$DISP1
+    DISP1= FIRM$PRODUCTION_ENVIRONMENT$DISP1
     
-    #browser()
+    
     for (i in 1:(DISP1)) #unitsize+1
     {
       RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i)];
