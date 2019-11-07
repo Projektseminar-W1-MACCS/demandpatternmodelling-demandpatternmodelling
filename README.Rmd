@@ -380,7 +380,7 @@ These are caluclated and stored in the **RCC** vector. As well as for the resour
 Analogous to the resource consumption matrix the resource costs vector consists of two parts: The costs for the big resources (1:**DISP1**) and the small resources (**DISP1**+1:**NUMB_RES**). As already described in *5.2.2.*, the big resources account for a **DISP2** share of the total costs. First step is therefore to draw **DISP2** for a uniform distribution U[**DISP2_MIN**, *DIPS2_MAX*] (under the condition that **DISP2** is not set by the model in the input file). 
 
 After that, boundaries for the minimum allowable costs (r_MIN) and maximum allowable costs (r_MAX) for the big resources are set. 
-Noting that the sum of the small resources must be equal **(1-DISP2) * TC**. In addition with the condition, that the costwise smallest of the big resources is larger or equal to the costwise biggest of the small resources. Therefore the minimum allowable costs for the big resources is the 
+Noting that the sum of the small resources must be equal **(1-DISP2) * TC**. In addition, the costwise smallest of the big resources must be larger or equal to the costwise biggest of the small resources. Therefore the minimum allowable costs for the big resources is the average costs per small resource of **(1-DISP2)*TC** (see Step 1).
 
 ```{r Generating RCC Big Resources}
   if(RC_VAR == -1)
