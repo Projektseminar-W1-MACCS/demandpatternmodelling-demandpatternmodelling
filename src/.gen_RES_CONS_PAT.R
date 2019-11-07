@@ -180,11 +180,12 @@ return(FIRM)
     RES_CONS_PAT[,1] <- (BASE)
     RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
     ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
-    RES_CONS_PAT_TOTAL <- RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+    RES_CONS_PAT_TOTAL <- RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND     #does this needs to be a matrix multiplication?
     ##CALCULATING TCU
     TCU <- colSums(RES_CONS_PAT_TOTAL)
     ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
     RES_CONS_PATp <- sweep((RES_CONS_PAT_TOTAL),2,TCU,"/") #Absolute matrix to relative matrix
+    
     ## ===================== EXCPETION HANDLER ====================
     
     # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
