@@ -34,6 +34,7 @@ source('src/.gen_RC.R')
 source('src/CP_Heuristics.R')
 source('src/CD_Heuristics.R')
 source('src/.gen_COST_CONS_PAT.R')
+source('src/.gen_Q.R')
 
 source("1_INIT.R")
 

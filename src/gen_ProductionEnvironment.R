@@ -5,33 +5,21 @@
 
 gen_ProductionEnvironment <- function(FIRM) {
 
-  #  if vary_demand==0 
- #  DEMAND_BASE = lognrnd(1,VOL_VAR,NUMB_PRO,1);
- #  else
- #  rng('shuffle') 
 
-
-## ====================== STEP 1 REALIZED DEMAND GENERATION ========================= 
-
-units = 10^3
-preDemand = rlnorm(NUMB_PRO, meanlog = 0, sdlog = 0.1) #pre Demand is buildup as a log normal distribution
-FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling(preDemand/sum(preDemand)*units) #ceiled realized demand for each product
-
-# it is possible that the sum(units) >= units !
-
-## ====================== STEP 2  Determining the ACTIVITY STRUCTURE =========================
+## ====================== STEP 1  Determining the ACTIVITY STRUCTURE =========================
 
 UNITLEVEL_ACT_SHARE_MIN = 0.3
 UNITLEVEL_ACT_SHARE_MAX = 0.7
 FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1) #random activity share between lower and upper bounds
 #print(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE)
 
-## =================== STEP 2.1 Determining the amount of cost categories =================
+## =================== STEP 1.a Determining the amount of cost categories =================
 
 unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
 
-## ====================== STEP 2.b Determining the density (DENS)  =========================
+
+## ====================== STEP 1.b Determining the density (DENS)  =========================
 
 #Randomization and setting clear design points. 
 if(DENS == -1)
@@ -42,20 +30,25 @@ DENS = runif(1, DENS_MIN, DENS_MAX);
 FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 }
 
-## ====================== STEP 2.b Determining the density (DENS)  =========================
+
+## ====================== STEP 2 Building Demand, RES_CONS_PAT RCC and Benchmark Product Costs  =========================
 
 
-FIRM = .gen_RES_CONS_PAT(FIRM);
+
+FIRM = .gen_Demand_Anand(FIRM);
+
+FIRM = .gen_RES_CONS_PAT_Anand(FIRM);
+
+FIRM = .gen_RCC_Anand(FIRM);
+
+FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
 
-#FIRM = .gen_RCC(FIRM, unitsize, nonunitsize);
-
-FIRM = .gen_RCC_DISP2(FIRM, unitsize, nonunitsize);
+#FIRM = .gen_RCC_KGM(FIRM, unitsize, nonunitsize);
 
 
-FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 
 
