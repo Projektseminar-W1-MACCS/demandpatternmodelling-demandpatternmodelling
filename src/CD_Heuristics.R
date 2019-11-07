@@ -53,12 +53,6 @@ FIRM$COSTING_SYSTEM$ACP_index_choosen
 return(FIRM)
 }
 
-
-
-
-
-
-
 MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
   ACP_index_choosen<-vector(mode="numeric")
