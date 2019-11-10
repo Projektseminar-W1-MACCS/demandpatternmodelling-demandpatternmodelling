@@ -27,7 +27,7 @@
 # 1 - Start
 ##############################
 
-## PRODUCTION ENVIRONMENT GENERATION
+## SOURCE THIS FILE FOR EXECUTION
 source('src/gen_ProductionEnvironment.R')
 source('src/.gen_RES_CONS_PAT.R')
 source('src/.gen_RC.R')
