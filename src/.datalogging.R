@@ -19,6 +19,7 @@
   DESIGN <- vector ()
   PCb <- vector()
   PCh <- vector()
+  Q <- vector()
   
   
   
@@ -40,11 +41,9 @@
   APE = abs((FIRM$COSTING_SYSTEM$PCH - FIRM$COSTING_SYSTEM$PCB))/FIRM$COSTING_SYSTEM$PCB
   PCb[PRODUCT] = FIRM$COSTING_SYSTEM$PCB
   PCh[PRODUCT] = FIRM$COSTING_SYSTEM$PCH
+  Q[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$DEMAND
   
-  
-  
-  browser()
-  DATApre = data.frame(o,nn,PRODUCT,PCb,PCh,PE,APE,DENS,Q_VAR,RCC_VAR,CP,Error,NUMB_Error,CC,MISCPOOLSIZE) # construct the dataframe 
+  DATApre = data.frame(o,nn,PRODUCT,PCb,PCh,Q,PE,APE,DENS,Q_VAR,RCC_VAR,CP,Error,NUMB_Error,CC,MISCPOOLSIZE) # construct the dataframe 
   
   DATAp = rbind(DATAp,DATApre) #put it together
   

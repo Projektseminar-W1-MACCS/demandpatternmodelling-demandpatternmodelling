@@ -19,8 +19,8 @@
 
   TC =               1000000                #Total costs
 
-  ProductOutput=     1                      #Zero = no tracking
-  set_pe_constant=   1                      #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
+  Product_level_output =     1              #Zero = no tracking
+  set_pe_constant=   0                      #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
   set_cs_constant=   0                      #Control Variable 
   vary_demand =      0                      #Control Variable
   
@@ -32,7 +32,7 @@
   dec_CD=            1                      # =
   
   
-  CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
+  CP = c(1,2,4,6,8,10)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(1)                              #Demand variation
@@ -116,16 +116,18 @@
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
-    #stacking the data with each run
+   
+    
+    
+     #stacking the data with each run
     DATA = rbind(DATA,preData)
-    #DATA = rbind(preData,preData)
-    DATAp = .datalogging(o,nn,FIRM,DATAp)
+    
+    
+    
+    
+    # TRACKING THE PRODUCT LEVEL WHEN NEEDED
+    if (Product_level_output==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
       
-    
-    
-    
-    
-    
     
     
     #Print outputs;
@@ -152,8 +154,10 @@ output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
 
-
+if (Product_level_output==1)
+{
 output = paste("output/CSDp_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATAp, file = output)
 print("Cost System Design Product FILE has been written")
+}
 
