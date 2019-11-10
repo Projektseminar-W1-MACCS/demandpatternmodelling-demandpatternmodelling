@@ -9,6 +9,7 @@
   FIRM$PRODUCTION_ENVIRONMENT = list()
   FIRM$COSTING_SYSTEM = list()
   DATA = data.frame()
+  DATAp = data.frame()
   
   
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
@@ -116,10 +117,17 @@
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
-    
     #stacking the data with each run
     DATA = rbind(DATA,preData)
     #DATA = rbind(preData,preData)
+    DATAp = .datalogging(o,nn,FIRM,DATAp)
+      
+    
+    
+    
+    
+    
+    
     
     #Print outputs;
     print(o)
