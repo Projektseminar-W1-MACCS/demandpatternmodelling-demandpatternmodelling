@@ -151,3 +151,9 @@
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
+
+
+output = paste("output/CSDp_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+write.csv(DATAp, file = output)
+print("Cost System Design Product FILE has been written")
+
