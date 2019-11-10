@@ -43,15 +43,13 @@ FIRM = .gen_RCC_Anand(FIRM);
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
+
+
+
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
 
 
 #FIRM = .gen_RCC_KGM(FIRM, unitsize, nonunitsize);
-
-
-
-
-
 
 
 
@@ -76,6 +74,10 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
  #  CORAP_pre=max(RES_CONS_PATp)-min(RES_CONS_PATp);
  #  CHECK.CORAP=mean(CORAP_pre)*100;  
  #  
+
+
+
+
 return(FIRM)
 
 

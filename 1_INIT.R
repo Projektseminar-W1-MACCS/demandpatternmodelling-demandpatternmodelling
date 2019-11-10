@@ -9,6 +9,7 @@
   FIRM$PRODUCTION_ENVIRONMENT = list()
   FIRM$COSTING_SYSTEM = list()
   DATA = data.frame()
+  DATAp = data.frame()
   
   
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
@@ -39,8 +40,8 @@
   NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
-  MISCPOOLSIZE = c(0.25)                       #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
-  DISP1 = c(10)                                #No. of the biggest resources that have a DISP2 share of the total costs
+  MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
+  DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
@@ -86,6 +87,7 @@
     #print(FIRM$COSTING_SYSTEM$CP)  
     #print(FIRM$COSTING_SYSTEM$Error)  
     
+    ####   !!!!! Normalerweise könnten wir Select-Case nutzen um die verschiedenen Heuristiken besser auszuwählen..  !!!! ####
     
     FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
 
@@ -95,17 +97,15 @@
   
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
     
-    
-    
-    
     ## Calculating the estimated product costs
-    FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
+    
+    FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12
   
-      ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+    ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
-  
+    
     
     
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
@@ -116,10 +116,17 @@
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
-    
     #stacking the data with each run
     DATA = rbind(DATA,preData)
     #DATA = rbind(preData,preData)
+    DATAp = .datalogging(o,nn,FIRM,DATAp)
+      
+    
+    
+    
+    
+    
+    
     
     #Print outputs;
     print(o)
