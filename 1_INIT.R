@@ -15,15 +15,13 @@
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
 
-  SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         200                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
   TC =               1000000                #Total costs
 
-  ProductOutput=     1                      #Zero = no tracking
-  set_pe_constant=   1                      #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
-  set_cs_constant=   0                      #Control Variable 
-  vary_demand =      0                      #Control Variable
-  
+  ProductOutput=     1                      #Control Variable -  Zero = no tracking of the product level
+  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+
   dec_ERROR=         1                      #Control Variable - 
   seed=              13                     #Control Variable -
   
@@ -32,7 +30,7 @@
   dec_CD=            1                      # =
   
   
-  CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
+  CP = c(2)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(1)                              #Demand variation
@@ -89,10 +87,10 @@
     
     ####   !!!!! Normalerweise könnten wir Select-Case nutzen um die verschiedenen Heuristiken besser auszuwählen..  !!!! ####
     
-    FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
+    FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
 
   
-    FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2(FIRM) #Building the cost pools
+    FIRM = MAP_RES_CP_RANDOM(FIRM) #Building the cost pools
   
   
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
@@ -151,3 +149,8 @@
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
+
+output = paste("output/CSDp_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+write.csv(DATAp, file = output)
+print("Cost System Design PRODUCT COST FILE has been written")
+

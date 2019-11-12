@@ -1,19 +1,19 @@
-#############################################################
-# PRODUCTION ENVIRONMENT GENERATION V 0.01
-# 
-#############################################################
-
-gen_ProductionEnvironment <- function(FIRM) {
+## PRODUCTION ENVIRONMENT GENERATION V 1.01
 
 
-## ====================== STEP 1  Determining the ACTIVITY STRUCTURE =========================
+gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
+
+
+## ====================== Set constant or vary =========
+if (set_PE_constant==1) {set.seed(13)} 
+## ====================== STEP 1  Determining the activities =========================
 
 UNITLEVEL_ACT_SHARE_MIN = 0.3
 UNITLEVEL_ACT_SHARE_MAX = 0.7
 FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1) #random activity share between lower and upper bounds
 #print(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE)
 
-## =================== STEP 1.a Determining the amount of cost categories =================
+## ====================== STEP 1.a Determining the amount of cost categories =================
 
 unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
@@ -31,7 +31,7 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 }
 
 
-## ====================== STEP 2 Building Demand, RES_CONS_PAT RCC and Benchmark Product Costs  =========================
+## ====================== '' STEP 2 Building Demand, RES_CONS_PAT, RCC and PCB '' =========================
 
 
 
@@ -44,6 +44,18 @@ FIRM = .gen_RCC_Anand(FIRM);
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 
+
+
+
+
+
+if (set_PE_constant==1) {set.seed(Sys.time())} # This removes the seed of the firm allowing random cost system design
+
+
+
+
+
+return(FIRM)
 
 
 #RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
@@ -78,8 +90,9 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 
 
-return(FIRM)
+
+ 
 
 
-  } # Function end
+ } # Function end
 
