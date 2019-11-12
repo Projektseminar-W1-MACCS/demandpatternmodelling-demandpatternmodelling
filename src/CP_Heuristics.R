@@ -1,11 +1,11 @@
-#################### INTRO ############################
+## INTRO ##
 # COST POOL BUILDING HEURISTICS
 # The algorithms orientate to 
 # Balakrishnan, Hansen, Labro 2011
 # Anand, Balakrishnan, Labro 2019
-##################### CODES ###########################
 
-### BALAKRISHNAN et al. 2011
+
+## BALAKRISHNAN et al. 2011
 
 MAP_RES_CP_RANDOM<-function(FIRM){
 #### RANDOM ALLOCATION OF RESOURCES TO COST POOLS #### 
@@ -352,7 +352,7 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
 
 
 
-#### ANAND et al. 2019;
+## ANAND et al. 2019;
 MAP_RES_CP_SIZE_MISC<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
    CP = FIRM$COSTING_SYSTEM$CP
@@ -866,7 +866,7 @@ MAP_CP_CORREL_MISC<-function(FIRM){
 
 
 
-#### Other Heuristics
+### Other Heuristics
 MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
 
   
@@ -1662,9 +1662,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
    
 }# like anands currel cutoff with misc pool (one by one in correl assignment)
 
-
-
-####### other CP Mapping Heuristics#####
+## other CP Mapping Heuristics
 
 #MAP_RES_CP_SIZE_CORREL_MISC
 #Correlation not one by one, but by maximizing the overall correlation

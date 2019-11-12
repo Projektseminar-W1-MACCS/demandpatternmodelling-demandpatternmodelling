@@ -15,24 +15,22 @@
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
 
-  SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         200                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
   TC =               1000000                #Total costs
 
-  Product_level_output =     1              #Zero = no tracking
-  set_pe_constant=   0                      #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
-  set_cs_constant=   0                      #Control Variable 
-  vary_demand =      0                      #Control Variable
-  
+
+  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
+  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+
   dec_ERROR=         1                      #Control Variable - 
-  seed=              13                     #Control Variable -
-  
+
   #dec_DC=           0                      # = no direct costs 
   dec_CP=            1                      # =
   dec_CD=            1                      # =
   
   
-  CP = c(2,4,6,8,10)       #No. of Cost Pools
+  CP = c(10)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(1)                              #Demand variation
@@ -45,7 +43,7 @@
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
-            set.seed(seed) #Reproducability
+            set.seed(13) #Reproducability
             o=1 # First design point
             
 ## ====================================== DESIGN OF EXPERIMENTS ================================================== 
@@ -89,10 +87,10 @@
     
     ####   !!!!! Normalerweise könnten wir Select-Case nutzen um die verschiedenen Heuristiken besser auszuwählen..  !!!! ####
     
-    FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
+    FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
 
   
-    FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2(FIRM) #Building the cost pools
+    FIRM = MAP_RES_CP_RANDOM(FIRM) #Building the cost pools
   
   
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
@@ -105,7 +103,7 @@
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
-    
+   
     
     
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
@@ -117,23 +115,16 @@
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
    
-    
-    
-     #stacking the data with each run
+    #stacking the data with each run
     DATA = rbind(DATA,preData)
-    
-    
-    
-    
+       
     # TRACKING THE PRODUCT LEVEL WHEN NEEDED
-    if (Product_level_output==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
-      
-    
-    
+    if (ProductCostOutput==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
+   
     #Print outputs;
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
-    print((MAPE))
+    print((EUCD))
     
     o=o+1 #Counting for the total number of runs
   }
@@ -154,10 +145,9 @@ output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
 
-if (Product_level_output==1)
+if (ProductCostOutput==1)
 {
-output = paste("output/CSDp_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
-write.csv(DATAp, file = output)
-print("Cost System Design Product FILE has been written")
+  output = paste("output/ProductCost_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+  write.csv(DATAp, file = output)
+  print("Product costs FILE has been written")
 }
-
