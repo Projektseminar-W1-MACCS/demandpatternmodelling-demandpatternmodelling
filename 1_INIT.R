@@ -19,6 +19,7 @@
 
   TC =               1000000                #Total costs
 
+
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
   set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
 
@@ -33,7 +34,7 @@
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(1)                              #Demand variation
-  Error = c(0)                              #Measurement error
+  Error = c(0.5)                              #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
@@ -113,19 +114,13 @@
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
+   
     #stacking the data with each run
     DATA = rbind(DATA,preData)
-    #DATA = rbind(preData,preData)
- 
-    
-    
-    
+       
     # TRACKING THE PRODUCT LEVEL WHEN NEEDED
     if (ProductCostOutput==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
-    
-    
-    
-    
+   
     #Print outputs;
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
