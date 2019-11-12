@@ -1,6 +1,4 @@
-####
-
-####
+######## BUILDING A REALIZED DEMAND VECTOR ########
 
 .gen_Demand_Anand <- function(FIRM){
   
@@ -22,11 +20,11 @@
 
 
 .gen_Demand <- function(FIRM){
-  
+  # This has been used in the Mertens (2020) for modeling dispersed realized demand
   Q_VAR = FIRM$PRODUCTION_ENVIRONMENT$Q_VAR
   
   units = 10^3
-  preDemand = rlnorm(NUMB_PRO, meanlog = 1, sdlog = Q_VAR) #pre Demand is buildup as a log normal distribution 
+  preDemand = rlnorm(NUMB_PRO, meanlog = 1, sdlog = Q_VAR) #preDemand is buildup as a -> LogNormal Distribution 
   FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling((preDemand/sum(preDemand))*units)
 
   # rlnorm = disperion = 0.5 
