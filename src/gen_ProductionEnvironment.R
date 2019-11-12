@@ -49,7 +49,7 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 
 
-if (set_PE_constant==1) {set.seed(Sys.time())} # This removes the seed of the firm allowing random cost system design
+if (set_PE_constant==1) {set.seed(NULL)} # This removes the seed of the firm allowing random cost system design
 
 
 

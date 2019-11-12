@@ -19,18 +19,17 @@
 
   TC =               1000000                #Total costs
 
-  ProductCostOutput=     1                      #Control Variable -  Zero = no tracking of the product level
+  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
   set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
 
   dec_ERROR=         1                      #Control Variable - 
-  seed=              13                     #Control Variable -
-  
+
   #dec_DC=           0                      # = no direct costs 
   dec_CP=            1                      # =
   dec_CD=            1                      # =
   
   
-  CP = c(2)       #No. of Cost Pools
+  CP = c(10)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(1)                              #Demand variation
@@ -43,7 +42,7 @@
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
-            set.seed(seed) #Reproducability
+            set.seed(13) #Reproducability
             o=1 # First design point
             
 ## ====================================== DESIGN OF EXPERIMENTS ================================================== 
@@ -103,7 +102,7 @@
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
-    
+   
     
     
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
@@ -130,7 +129,7 @@
     #Print outputs;
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
-    print((MAPE))
+    print((EUCD))
     
     o=o+1 #Counting for the total number of runs
   }
@@ -153,7 +152,7 @@ print("Cost System Design FILE has been written")
 
 if (ProductCostOutput==1)
 {
-  output = paste("output/CSDp_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+  output = paste("output/ProductCost_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
   write.csv(DATAp, file = output)
-  print("Cost System Design Product FILE has been written")
+  print("Product costs FILE has been written")
 }

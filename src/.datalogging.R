@@ -47,7 +47,7 @@
   
   DATAp = rbind(DATAp,DATApre) #put it together
   
-  retrn(DATAp)
+  return(DATAp)
 }
 
 
