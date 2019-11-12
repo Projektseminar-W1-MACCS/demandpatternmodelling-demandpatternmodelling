@@ -19,7 +19,7 @@
 
   TC =               1000000                #Total costs
 
-  ProductOutput=     1                      #Control Variable -  Zero = no tracking of the product level
+  ProductCostOutput=     1                      #Control Variable -  Zero = no tracking of the product level
   set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
 
   dec_ERROR=         1                      #Control Variable - 
@@ -150,7 +150,9 @@ output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
 
-output = paste("output/CSDp_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
-write.csv(DATAp, file = output)
-print("Cost System Design PRODUCT COST FILE has been written")
-
+if (ProductCostOutput==1)
+{
+  output = paste("output/CSDp_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+  write.csv(DATAp, file = output)
+  print("Cost System Design Product FILE has been written")
+}
