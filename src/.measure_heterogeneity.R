@@ -2,7 +2,7 @@
 # HETEROGENEITY MEASURE OF MATRICES
 ################################################
 
-.heterogeneity<-function(FIRM)
+.measure_heterogeneity<-function(FIRM)
 {
   
   
