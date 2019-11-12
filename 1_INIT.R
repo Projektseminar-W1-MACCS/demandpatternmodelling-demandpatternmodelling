@@ -117,11 +117,12 @@
     #stacking the data with each run
     DATA = rbind(DATA,preData)
     #DATA = rbind(preData,preData)
-    DATAp = .datalogging(o,nn,FIRM,DATAp)
-      
+ 
     
     
     
+    # TRACKING THE PRODUCT LEVEL WHEN NEEDED
+    if (ProductCostOutput==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
     
     
     
