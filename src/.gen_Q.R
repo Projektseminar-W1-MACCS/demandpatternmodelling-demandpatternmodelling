@@ -1,4 +1,4 @@
-######## BUILDING A REALIZED DEMAND VECTOR ########
+## BUILDING A REALIZED DEMAND VECTOR ##
 
 .gen_Demand_Anand <- function(FIRM){
   
