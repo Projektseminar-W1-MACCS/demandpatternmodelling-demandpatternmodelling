@@ -1,4 +1,4 @@
-#### BUILDING A RESOURCE COST VECTOR ####
+## BUILDING A RESOURCE COST VECTOR ##
 
 
 # Building variable / fix costs Mertens (2020)
