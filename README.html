@@ -384,9 +384,7 @@ summary {
   &quot;tidyr&quot;,
   &quot;rmarkdown&quot;,
   &quot;ggplot2&quot;
-
 ))
-
 Packages &lt;- c(&quot;dplyr&quot;, &quot;ggplot2&quot;, &quot;rmarkdown&quot;, &quot;tidyr&quot;)
 lapply(Packages, library, character.only = TRUE)</code></pre>
 <p><br> </p>
@@ -409,11 +407,8 @@ The <strong>DATA</strong> variable is an empty dataframe which gets filled with 
   
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-
   SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
-
   TC =               1000000                #Total costs
-
   ProductOutput=     1                      #Zero = no tracking
   set_pe_constant=   1                      #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
   set_cs_constant=   0                      #Control Variable 
@@ -481,19 +476,12 @@ The <strong>DATA</strong> variable is an empty dataframe which gets filled with 
     
     
     FIRM = gen_ProductionEnvironment(FIRM) #Generate Production Environment with RES_CONS_PAT
-
   
     FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2(FIRM) #Building the cost pools
   
   
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool</code></pre>
-<p><br></p>
-<div style="page-break-after: always;"></div>
-</div>
-<div id="generating-the-production-environment-gen_productionenviroment.r" class="section level2">
-<h2>5. Generating the Production Environment (gen_ProductionEnviroment.R)</h2>
-<p><br> The R-Script File gen_ProductionEnvironment.R builds the Production Environment by calling its sub-functions to generate the demand function, the resource-consumption-matrix, the resource cost vector (<strong>RCC</strong>) and the benchmark product costs.</p>
-<p>Here, the Density is defined as well. The Density can be fixly determined by the modeler in the input parameter or (if it is set there to -1) it is chosen from a uniform distribution U[<strong>DENS_MIN</strong>, <strong>DENS_MAX</strong>]. The Density (Sparsity) defines approximately how many zeros are in the <strong>RES_CONS_PAT</strong> (e.g <strong>DENS</strong> = 0.6 means that roughly 40% of the elements in <strong>RES_CONS_PAT</strong> are zero). Therefore the Density has a major influence on how eqaul and well distributed the resource consumption is among the products.</p>
+<p><br>  ## 5. Generating the Production Environment (gen_ProductionEnviroment.R) <br> The R-Script File gen_ProductionEnvironment.R builds the Production Environment by calling its sub-functions to generate the demand function, the resource-consumption-matrix, the resource cost vector (<strong>RCC</strong>) and the benchmark product costs. Here, the Density is defined as well. The Density can be fixly determined by the modeler in the input parameter or (if it is set there to -1) it is chosen from a uniform distribution U[<strong>DENS_MIN</strong>, <strong>DENS_MAX</strong>]. The Density (Sparsity) defines approximately how many zeros are in the <strong>RES_CONS_PAT</strong> (e.g <strong>DENS</strong> = 0.6 means that roughly 40% of the elements in <strong>RES_CONS_PAT</strong> are zero). Therefore the Density has a major influence on how eqaul and well distributed the resource consumption is among the products.</p>
 <pre class="r"><code>#Randomization and setting clear design points. 
 if(DENS == -1)
 {
@@ -502,30 +490,17 @@ DENS_MAX = 0.7;
 DENS = runif(1, DENS_MIN, DENS_MAX);
 FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 }
-
-
 ## ================= STEP 2 Building Demand, RES_CONS_PAT RCC and Benchmark Product Costs  ==============
-
-
-
 FIRM = .gen_Demand_Anand(FIRM);
-
 FIRM = .gen_RES_CONS_PAT_Anand(FIRM);
-
 FIRM = .gen_RCC_Anand(FIRM);
-
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = &quot;ANAND&quot;)</code></pre>
 <div id="generating-the-demand-vector-.gen_q.r" class="section level3">
 <h3>5.1. Generating the Demand Vector (.gen_Q.R)</h3>
-<p>The first sub-function and output parameter which is set by the production environment is the demand function. Here, for the first time it becomes possible for the modeler to have an influence on the output, without changing the input parameters, by changing how the demand vector is build.</p>
-<p>The demand vector defines the production quantity of each product. It therefore is a vector with the length of number of products (<strong>NUMB_PRO</strong>).</p>
-<p>Since there are now multiple ways of generating the demand, the R-Script file .gen_Q.R contains different functions which each create a different demand vector. Below is the code that generates a demand vector similar to Anands. It draws random values from a uniform distribution between 10 and 40 and then brings it down to a total number of 1000 units and distributes the volumes for each product on this overall quantity.</p>
-<p>Each element in the vector is then the production quantity for the respective product.</p>
-<p>Since there is a relatively small margin (between 10 and 40) for each product quantity it results that the demand vector is evenly distributed. Meaning that the here simulated firm sells from each of its product approximately the same amount.</p>
+<p>The first sub-function and output parameter which is set by the production environment is the demand function. Here, for the first time it becomes possible for the modeler to have an influence on the output, without changing the input parameters, by changing how the demand vector is build. The demand vector defines the production quantity of each product. It therefore is a vector with the length of number of products (<strong>NUMB_PRO</strong>). Since there are now multiple ways of generating the demand, the R-Script file .gen_Q.R contains different functions which each create a different demand vector. Below is the code that generates a demand vector similar to Anands. It draws random values from a uniform distribution between 10 and 40 and then brings it down to a total number of 1000 units and distributes the volumes for each product on this overall quantity. Each element in the vector is then the production quantity for the respective product. Since there is a relatively small margin (between 10 and 40) for each product quantity it results that the demand vector is evenly distributed. Meaning that the here simulated firm sells from each of its product approximately the same amount.</p>
 <pre class="r"><code>NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
   
   units = 10^3
-
   preDemand = as.integer(runif(NUMB_PRO,10,40))
   
   DEMAND = ceiling((preDemand/sum(preDemand))*units) #ceiled realized demand for each product
@@ -539,10 +514,7 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = &quot;ANAND&quot;)</code></pre>
 ## [1,]    3    2    6    0    0
 ## [2,]    5    8    3    9    5
 ## [3,]    6    7    1   12    3</code></pre>
-<p>Each row stands for the resource consumption for one product while each column shows the resource consumption for this peticular resource ampong the products. For example, the production of one unit product 1 needs six units of resource 3. Therefore, in this case a resource consumption matrix of the size <strong>NUMB_PRO</strong> * <strong>NUMB_RES</strong> is needed. The resource consumption needs to satisfy some correlation parameters, that create a specific similarity among products and resources. Also, the density must be satisfied, as well as the constraint that all resources are used in the products a least once and every product needs at least one resource. Additionally, there is the assumption that one resource (in this case the first) goes into every product.</p>
-<p>The heuristic for the construction of the resource consumption matrix developed by Balakrishnan, Hansen, and Labro (2011) is desctribed in the following sections. <br></p>
-<div id="baseline-res_cons_pat" class="section level4">
-<h4>5.2.1. Baseline RES_CONS_PAT</h4>
+<p>Each row stands for the resource consumption for one product while each column shows the resource consumption for this peticular resource ampong the products. For example, the production of one unit product 1 needs six units of resource 3. Therefore, in this case a resource consumption matrix of the size <strong>NUMB_PRO</strong> * <strong>NUMB_RES</strong> is needed. The resource consumption needs to satisfy some correlation parameters, that create a specific similarity among products and resources. Also, the density must be satisfied, as well as the constraint that all resources are used in the products a least once and every product needs at least one resource. Additionally, there is the assumption that one resource (in this case the first) goes into every product. The heuristic for the construction of the resource consumption matrix developed by Balakrishnan, Hansen, and Labro (2011) is desctribed in the following sections. <br> #### 5.2.1. Baseline RES_CONS_PAT</p>
 <pre class="r"><code> ## ====================== STEP 1 BASELINE NORM ========================= 
   
   repeat    {
@@ -553,13 +525,7 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = &quot;ANAND&quot;)</code></pre>
                              FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)                            #random pre matrix, as Baseline
     
     RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE) #empy matrix, that is going to be filled </code></pre>
-<p><strong>BASE</strong> is the first resource in the resource consumption matrix (therefore first column), that is used in every product and therefore is built seperatly. Then the <strong>RES_CONS_PATpre</strong> is build, a matrix with the same size of the <strong>RES_CONS_PAT</strong> filled with random values. Also an empty <strong>RES_CONS_PAT</strong> is generated which is going to be filled throughout the process. <br></p>
-</div>
-<div id="correlation-constraints" class="section level4">
-<h4>5.2.2. Correlation constraints</h4>
-<p>Next step is filling the yet empty matrix while satisfying the correlation constraints. The matrix is split into two parts based on the input variable <strong>DISP1</strong> which defines the number of big resources that account for a <strong>DISP2</strong> (value between 0 and 1) share of total costs (TC). In this case <strong>DISP1</strong> is set to 10, meaning that the 10 biggest resources account for 40% (when DISP2 =0.4) of the total costs. The matrix is therefore split columnwise into the first 1:DISP1 big resources and the remaining DISP1+1:NUMB_RES small resources.</p>
-<p>There are two correlations, one for the big resources and one for the small resources, meaning that the big resources correlate among themselves and with the <strong>BASE</strong> with approximately a correlation of COR1 as the small resources correlate among themselves and the <strong>BASE</strong> with a correlation of <strong>COR2</strong> respectively. The correlations are drawn form a uniform distribution with boundaries set by the modeler. Based on the correlations a squared constant is computed. These squared constants approaches to equal one, the smaller the respective correlation is. With these two parameters the first version of the <strong>RES_CONS_PAT</strong> can be build. For that, the random values in each column from <strong>RES_CONS_PATpre</strong> are multiplied with the squared constant and then added up with a product of the respective correlation and the <strong>BASE.</strong> Subsequently, the higher the correlation, the greater is the influence of the <strong>BASE</strong> on the peticular element and the smaller the random value from <strong>RES_CONS_PAT_pre.</strong> Again, this process is done two times: for the 1-DISP1 resurces and again for the remaining resources (columns). Resulting is a resource consumption matrix in the desired size satisfying the correlation constraints.</p>
-<p>The implementation of this calculation in R is shown in the next window.</p>
+<p><strong>BASE</strong> is the first resource in the resource consumption matrix (therefore first column), that is used in every product and therefore is built seperatly. Then the <strong>RES_CONS_PATpre</strong> is build, a matrix with the same size of the <strong>RES_CONS_PAT</strong> filled with random values. Also an empty <strong>RES_CONS_PAT</strong> is generated which is going to be filled throughout the process. <br> #### 5.2.2. Correlation constraints Next step is filling the yet empty matrix while satisfying the correlation constraints. The matrix is split into two parts based on the input variable <strong>DISP1</strong> which defines the number of big resources that account for a <strong>DISP2</strong> (value between 0 and 1) share of total costs (TC). In this case <strong>DISP1</strong> is set to 10, meaning that the 10 biggest resources account for 40% (when DISP2 =0.4) of the total costs. The matrix is therefore split columnwise into the first 1:DISP1 big resources and the remaining DISP1+1:NUMB_RES small resources. There are two correlations, one for the big resources and one for the small resources, meaning that the big resources correlate among themselves and with the <strong>BASE</strong> with approximately a correlation of COR1 as the small resources correlate among themselves and the <strong>BASE</strong> with a correlation of <strong>COR2</strong> respectively. The correlations are drawn form a uniform distribution with boundaries set by the modeler. Based on the correlations a squared constant is computed. These squared constants approaches to equal one, the smaller the respective correlation is. With these two parameters the first version of the <strong>RES_CONS_PAT</strong> can be build. For that, the random values in each column from <strong>RES_CONS_PATpre</strong> are multiplied with the squared constant and then added up with a product of the respective correlation and the <strong>BASE.</strong> Subsequently, the higher the correlation, the greater is the influence of the <strong>BASE</strong> on the peticular element and the smaller the random value from <strong>RES_CONS_PAT_pre.</strong> Again, this process is done two times: for the 1-DISP1 resurces and again for the remaining resources (columns). Resulting is a resource consumption matrix in the desired size satisfying the correlation constraints. The implementation of this calculation in R is shown in the next window.</p>
 <pre class="r"><code>## ====================== STEP 1.a CORRELATION ========================= 
     # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
     # Rows Products Colums Resources
@@ -586,7 +552,6 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = &quot;ANAND&quot;)</code></pre>
     {
       RES_CONS_PAT[,i] &lt;- (COR2 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i)];
     }</code></pre>
-</div>
 <div id="includcing-the-densitiy" class="section level4">
 <h4>5.2.3. Includcing the densitiy</h4>
 <p>The already computed density is now included in the resource consumption matrix. Since the density is a value between 0 and 1, a matrix of the size of the resource consumption matrix is generated consisting of randomized values with the same boundaries (called <strong>res_cons_pat_b_pre</strong>). Every element in this matrix is then compared with the density. If the element is larger then the density, this element is set to 0, otherwise to 1. For instance, if the density is 0.6 and one element of <strong>res_const_pat_b_pre</strong> is 0.7 and another is 0.4. The latter element is set to 1 while the first one is set to 0. This results in a matrix consisting of zeros and ones. By multiplying this matrix with the first version of the <strong>RES_CONS_PAT</strong>, zeros are punched into it and creates a <strong>RES_CONS_PAT</strong> with the desired density.</p>
@@ -603,8 +568,7 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = &quot;ANAND&quot;)</code></pre>
 </div>
 <div id="ceiling-and-scaling" class="section level4">
 <h4>5.2.4. Ceiling and Scaling</h4>
-<p>The <strong>BASE</strong> is now added to the <strong>RES_CONS_PAT</strong> making it the first column and therefore first resource in this matrix. The last step is to multiply the absoule values of each element with 10 and ceiling it. The elements now describe the resource consumption for the production of exactly one unit of every product. By multiplying it with the generated demand vector the total resource consumption matrix is computed displying the resources need to produce the desired demand quantity of each product (<strong>RES_CONS_PAT_TOTAL</strong>).</p>
-<p>The column sums from <strong>RES_CONS_PAT_TOTAL</strong> are therefore the the total amount of units of every resource needed to produce the demand quantity (<strong>TCU</strong>). With this information one can compute a relative resource consumption matrix containing the share of each resource that is needed to produce a product (<strong>RES_CONS_PATp</strong>).</p>
+<p>The <strong>BASE</strong> is now added to the <strong>RES_CONS_PAT</strong> making it the first column and therefore first resource in this matrix. The last step is to multiply the absoule values of each element with 10 and ceiling it. The elements now describe the resource consumption for the production of exactly one unit of every product. By multiplying it with the generated demand vector the total resource consumption matrix is computed displying the resources need to produce the desired demand quantity of each product (<strong>RES_CONS_PAT_TOTAL</strong>). The column sums from <strong>RES_CONS_PAT_TOTAL</strong> are therefore the the total amount of units of every resource needed to produce the demand quantity (<strong>TCU</strong>). With this information one can compute a relative resource consumption matrix containing the share of each resource that is needed to produce a product (<strong>RES_CONS_PATp</strong>).</p>
 <pre class="r"><code>## ====================== STEP 1.c Ceiling and Scaling ============= 
     
     # take absolute value of X and Z and scale by 10 and round them
@@ -645,10 +609,7 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = &quot;ANAND&quot;)</code></pre>
 </div>
 <div id="generating-the-resource-costs-.gen_rc.r" class="section level3">
 <h3>5.3. Generating the resource costs (.gen_RC.R)</h3>
-<p>With the generated demand vector and the resoruce consumption matrix, information about the desired production quantity of each product and the consumption of the underlying reosurces are available. For calculating the actual costs of this production environment only the costs of the resources itself are missing.</p>
-<p>These are caluclated and stored in the <strong>RCC</strong> vector. As well as for the resource consumption matrix and the demand vector different ways exist to generate this environmental factor, depending on which assumptions are made. Here, the heuristic from Anand is used, to create a good replication of his model.</p>
-<p>Analogous to the resource consumption matrix the resource costs vector consists of two parts: The costs for the big resources (1:<strong>DISP1</strong>) and the small resources (<strong>DISP1</strong>+1:<strong>NUMB_RES</strong>). As already described in <em>5.2.2.</em>, the big resources account for a <strong>DISP2</strong> share of the total costs. First step is therefore to draw <strong>DISP2</strong> for a uniform distribution U[<strong>DISP2_MIN</strong>, <em>DIPS2_MAX</em>] (under the condition that <strong>DISP2</strong> is not set by the model in the input file).</p>
-<p>After that, boundaries for the minimum allowable costs (r_MIN) and maximum allowable costs (r_MAX) for the big resources are set. Noting that the sum of the small resources must be equal <strong>(1-DISP2) * TC</strong>. In addition with the condition, that the costwise smallest of the big resources is larger or equal to the costwise biggest of the small resources. Therefore the minimum allowable costs for the big resources is the</p>
+<p>With the generated demand vector and the resoruce consumption matrix, information about the desired production quantity of each product and the consumption of the underlying reosurces are available. For calculating the actual costs of this production environment only the costs of the resources itself are missing. These are caluclated and stored in the <strong>RCC</strong> vector. As well as for the resource consumption matrix and the demand vector different ways exist to generate this environmental factor, depending on which assumptions are made. Here, the heuristic from Anand is used, to create a good replication of his model. Analogous to the resource consumption matrix the resource costs vector consists of two parts: The costs for the big resources (1:<strong>DISP1</strong>) and the small resources (<strong>DISP1</strong>+1:<strong>NUMB_RES</strong>). As already described in <em>5.2.2.</em>, the big resources account for a <strong>DISP2</strong> share of the total costs. First step is therefore to draw <strong>DISP2</strong> for a uniform distribution U[<strong>DISP2_MIN</strong>, <em>DIPS2_MAX</em>] (under the condition that <strong>DISP2</strong> is not set by the model in the input file). After that, boundaries for the minimum allowable costs (r_MIN) and maximum allowable costs (r_MAX) for the big resources are set. Noting that the sum of the small resources must be equal <strong>(1-DISP2) * TC</strong>. In addition, the costwise smallest of the big resources must be larger or equal to the costwise biggest of the small resources. Therefore the minimum allowable costs for the big resources is the average costs per small resource of **(1-DISP2)*TC** (see Step 1).</p>
 <pre class="r"><code>  if(RC_VAR == -1)
   {
     DISP2_MIN = 0.4
@@ -660,24 +621,18 @@ FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = &quot;ANAND&quot;)</code></pre>
 DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
 TC=FIRM$COSTING_SYSTEM$TC
 NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
-
 # Step 1
 r_MIN&lt;-((1-DISP2)*TC)/(NUMB_RES-DISP1) 
-
 #Step 2
 r1_MAX&lt;-(DISP2*TC)-((DISP1-1)*r_MIN)
-
 # Step 3
 r_MIN&lt;-r_MIN+(r1_MAX-r_MIN)*0.025   #0.025?
-
 ## Step 4
 #Initalize Values
 RCC&lt;-vector(mode=&quot;numeric&quot;)
 r_MAX&lt;-vector(mode=&quot;numeric&quot;)
 temp1_ADD&lt;-vector(mode=&quot;numeric&quot;, length = DISP1-1)
 temp1_ADD[1]&lt;-0
-
-
 for (i in 1:(DISP1-1)) {
   
   r_MAX[i]&lt;-(DISP2*TC-sum(temp1_ADD))-(DISP1-i)*r_MIN
@@ -687,10 +642,8 @@ for (i in 1:(DISP1-1)) {
   
   
 }
-
 ## The final element is computed to ensure that the total rescource cost is exactly DISP2*TC
 RCC&lt;-c(RCC,DISP2*TC-sum(temp1_ADD))
-
 ## Move the biggest resource to the front
 largest_RC&lt;-sort(RCC,decreasing = TRUE,index.return=TRUE)$ix[1]
 RCC&lt;-c(RCC[largest_RC],RCC[-largest_RC])</code></pre>

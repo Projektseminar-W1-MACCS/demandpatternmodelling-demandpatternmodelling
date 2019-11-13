@@ -435,8 +435,9 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(c(1:RCCn),already_assigned)
       #correlative assignment only if there are more than one resource in not_assigned
+      ####CORRELATION RULE####
       if (NUMB_RES > CP){
-         ####CORRELATION RULE####
+   
          
          #### BUILDIUNG OF CORRELATION MATRIX ####
          
@@ -496,7 +497,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
             i = i+1
          }
          
-         ###MISCPOOL RULE####
+   ###MISCPOOL RULE####
          
          #Appending 
          RC_to_ACP_misc =list(not_assigned)

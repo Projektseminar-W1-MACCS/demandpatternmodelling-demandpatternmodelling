@@ -52,7 +52,6 @@
   
 }
 
-#
 .gen_RCC_Anand <- function(FIRM, unitsize, nonunitsize) {
   if (RC_VAR == -1)
   {
