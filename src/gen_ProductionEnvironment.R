@@ -6,6 +6,8 @@ gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
 
 ## ====================== Set constant or vary =========
 if (set_PE_constant==1) {set.seed(13)} 
+   
+   
 ## ====================== STEP 1  Determining the activities =========================
 
 UNITLEVEL_ACT_SHARE_MIN = 0.3
@@ -42,9 +44,6 @@ FIRM = .gen_RES_CONS_PAT_Anand(FIRM);
 FIRM = .gen_RCC_Anand(FIRM);
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
-
-
-
 
 
 

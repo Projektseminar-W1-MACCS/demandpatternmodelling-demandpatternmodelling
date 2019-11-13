@@ -45,8 +45,6 @@
     
     #PCB = PCB*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
     
-    
-    
     #PCB = vector(mode ='numeric')
     
     #PCB = RES_CONS_PATp%*%RCC
@@ -56,9 +54,6 @@
     # RES_CONS_PATp is essential for further cost allocation.
     
     #RES_CONS_PATp = as.data.frame(scale(RES_CONS_PAT, center=FALSE, scale=colSums(RES_CONS_PAT)))
-    
-    
-    
     
     
   }else if(COST_APPROACH=="BALA"){

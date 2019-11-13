@@ -12,7 +12,6 @@
   
   FIRM$PRODUCTION_ENVIRONMENT$DEMAND = DEMAND
   
-  
   # it is possible that the sum(units) >= units !
   
   return(FIRM)

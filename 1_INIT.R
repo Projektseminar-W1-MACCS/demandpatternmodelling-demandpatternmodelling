@@ -30,11 +30,11 @@
   dec_CD=            1                      # =
   
   
-  CP = c(10)       #No. of Cost Pools
+  CP = c(1,2,4,6,8,10,12,14)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
-  Q_VAR = c(1)                              #Demand variation
-  Error = c(0.5)                              #Measurement error
+  Q_VAR = c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                              #Demand variation
+  Error = c(0.5)                            #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
