@@ -53,16 +53,19 @@
 }
 
 .gen_RCC_Anand <- function(FIRM, unitsize, nonunitsize) {
+  
+  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
+  
   if (RC_VAR == -1)
   {
     DISP2_MIN = 0.4
     DISP2_MAX = 0.7
     DISP2 = runif(1, DISP2_MIN, DISP2_MAX)
     #DISP2 = RC_VAR
-    # FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
   DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
+  DISP1 =10
   TC = FIRM$COSTING_SYSTEM$TC
   NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
   
@@ -132,17 +135,19 @@
   
   # sum(RC)
   RCCs <- sort(RCC, decreasing = TRUE, index.return = TRUE)
-  RCC <-
-    list(
-      RCC = RCC,
-      CHECK = list(
-        cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
-        cost_topTEN = sum(RCCs$x[1:10]) / TC,
-        DISP1 = DISP1,
-        DISP2 = DISP2,
-        RC_VAR = RC_VAR
-      )
-    )
+  
+  # RCC <-
+  #   list(
+  #     RCC = RCC,
+  #     CHECK = list(
+  #       cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
+  #       cost_topTEN = sum(RCCs$x[1:10]) / TC,
+  #       DISP1 = DISP1,
+  #       DISP2 = DISP2,
+  #       RC_VAR = RC_VAR
+  #     )
+  #   )
+  
   RCC = RCC$RCC
   #### sourcing
   FIRM$COSTING_SYSTEM$RCC = RCC

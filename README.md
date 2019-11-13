@@ -1,13 +1,14 @@
-1. Introduction
----------------
+Cost System Design Model Documentation
+================
+
+## 1\. Introduction
 
 This readme file provides an overview of the underlying Cost System
 Design Model written in R. The model is mostly based on the numerical
 framework on Cost System Design proposed by Anand, V., R. Balakrishnan,
 and E. Labro (2019). The code and documentation for Anand’s et al. model
-can be found under
-<a href="http://vicanand.weebly.com/abl_jmar_code.html" class="uri">http://vicanand.weebly.com/abl_jmar_code.html</a>.
-Goal with this model was to replicate Anand’s model and produce the same
+can be found under <http://vicanand.weebly.com/abl_jmar_code.html>. Goal
+with this model was to replicate Anand’s model and produce the same
 results using the same overall logic. However, further heuristics, as
 well as adaptions to the Programming Language R distinguish this models
 Sytnax from its predecessor’s. It also contains further improvements and
@@ -26,18 +27,16 @@ structure (Figure 1) and explain the basic logic behind single functions
 and structures of the code. Overall objective is to describe the models
 logic as well as the implementation in R. <br>
 
-2. Working with the model in RStudio
-------------------------------------
+## 2\. Working with the model in RStudio
 
 RStudio is an open source and free to use software which provides an
 integrated development environment (IDE) for the Programming Language R.
 
 Rstudio can be downloaded here :
-<a href="https://rstudio.com/products/rstudio/download/#download" class="uri">https://rstudio.com/products/rstudio/download/#download</a>
+<https://rstudio.com/products/rstudio/download/#download>
 
 The Programming Language R itself must be downloaded and installed
-separatly:
-<a href="https://cran.rstudio.com/" class="uri">https://cran.rstudio.com/</a>
+separatly: <https://cran.rstudio.com/>
 
 Furthermore the model works with the following library packages which
 provide functions for e.g. plotting or analysing data. These libraries
@@ -58,10 +57,9 @@ Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr")
 lapply(Packages, library, character.only = TRUE)
 ```
 
-<br>
+<br> 
 
-3. Model Overview (0\_preparing\_project.R)
--------------------------------------------
+## 3\. Model Overview (0\_preparing\_project.R)
 
 The model contains of 9 R-Script files which can be seen in the
 following model overview. The 0\_preparing\_project.R file is the
@@ -69,11 +67,10 @@ starting point for running the model. There, all other files are sourced
 and so their functions called.
 
 ![Figure 1: Cost System Design Model
-Overview](C:\Users\cms9023\Documents\CostSystemDesignSim\Modeloverview.png)
-<br>
+Overview](C:\\Users\\cms9023\\Documents\\CostSystemDesignSim\\Modeloverview.png?raw=true)
+<br> 
 
-4. Model Initialization (1\_INIT.R)
------------------------------------
+## 4\. Model Initialization (1\_INIT.R)
 
 The 1\_INIT.R file loads all input parameters which are set by the
 modeler. These will later define the circumstances and limitations for
@@ -201,7 +198,7 @@ environment is generated first. <br>
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
 ```
 
-<br> \#\# 5. Generating the Production Environment
+<br>  \#\# 5. Generating the Production Environment
 (gen\_ProductionEnviroment.R) <br> The R-Script File
 gen\_ProductionEnvironment.R builds the Production Environment by
 calling its sub-functions to generate the demand function, the
@@ -287,7 +284,9 @@ one resource. Additionally, there is the assumption that one resource
 (in this case the first) goes into every product. The heuristic for the
 construction of the resource consumption matrix developed by
 Balakrishnan, Hansen, and Labro (2011) is desctribed in the following
-sections. <br> \#\#\#\# 5.2.1. Baseline RES\_CONS\_PAT
+sections. <br>
+
+#### 5.2.1. Baseline RES\_CONS\_PAT
 
 ``` r
  ## ====================== STEP 1 BASELINE NORM ========================= 
@@ -307,7 +306,10 @@ sections. <br> \#\#\#\# 5.2.1. Baseline RES\_CONS\_PAT
 built seperatly. Then the **RES\_CONS\_PATpre** is build, a matrix with
 the same size of the **RES\_CONS\_PAT** filled with random values. Also
 an empty **RES\_CONS\_PAT** is generated which is going to be filled
-throughout the process. <br> \#\#\#\# 5.2.2. Correlation constraints
+throughout the process. <br>
+
+#### 5.2.2. Correlation constraints
+
 Next step is filling the yet empty matrix while satisfying the
 correlation constraints. The matrix is split into two parts based on the
 input variable **DISP1** which defines the number of big resources that
@@ -473,13 +475,31 @@ the small resources (**DISP1**+1:**NUMB\_RES**). As already described in
 costs. First step is therefore to draw **DISP2** for a uniform
 distribution U\[**DISP2\_MIN**, *DIPS2\_MAX*\] (under the condition that
 **DISP2** is not set by the model in the input file). After that,
-boundaries for the minimum allowable costs (r\_MIN) and maximum
-allowable costs (r\_MAX) for the big resources are set. Noting that the
-sum of the small resources must be equal **(1-DISP2) \* TC**. In
+boundaries for the minimum allowable costs (**r\_MIN**) and maximum
+allowable costs (**r\_MAX**) for the big resources are set. Noting that
+the sum of the small resources must be equal **(1-DISP2) \* TC**. In
 addition, the costwise smallest of the big resources must be larger or
 equal to the costwise biggest of the small resources. Therefore the
 minimum allowable costs for the big resources is the average costs per
-small resource of \*\*(1-DISP2)\*TC\*\* (see Step 1).
+small resource of \*\*(1-DISP2)\*TC** (see Step 1). With that
+information the maximum allowable costs (**r1\_MAX**) for the largest of
+the big resources can be computed. This is basically the difference of
+the DISP2 share of total costs and the sum of the remaining big
+resources if each one of them has costs of **r\_MIN\*\* (see Step 2). As
+a third step r\_MIN is now recalculated and upwards adjusted by 2.5% of
+the difference of r1\_MAX and the previous r\_MIN. This enables a higher
+variation of small resources.
+
+Now, \[DISP1-1\] big resources are generated by randomly drawing a value
+from a uniform distribution U\[r\_Max,r\_MIN\]. r\_MAX is regenerated
+for every drawn resource, since it needs to be adjusted downwards to not
+exceed the total costs.
+
+The last remaing big resource is computed as the difference between the
+**DISP2** share of total costs and the sum of the already generated big
+resources. Finally, the most valuable resource is moved to the front of
+the **RCC** vector. The R implementation for these steps is shown in the
+below code chunk.
 
 ``` r
   if(RC_VAR == -1)
@@ -520,3 +540,104 @@ RCC<-c(RCC,DISP2*TC-sum(temp1_ADD))
 largest_RC<-sort(RCC,decreasing = TRUE,index.return=TRUE)$ix[1]
 RCC<-c(RCC[largest_RC],RCC[-largest_RC])
 ```
+
+<br>
+
+The just created RCC vector only contains the DISP1 (e.g. 10) big
+resources. The following steps describe the building of the small
+resurces. First step is to create a vector with the length of the small
+resources **(NUMB\_RES - DISP1)** and fill it with randomized numbers,
+which are then normalized and spread over the remaining costs
+\*\*(1-DISP2) \*TC\*\*.
+
+The next step ensures that none of the small resources is larger than a
+big reosurce. For that an overage is calculated, which is dedcuted from
+the small resource (if it is larger than the smallest big resource) and
+then appended to another resource in the small recource vector
+(**RC\_small**). This process results in a vector containing all small
+resources’ costs while satisfying the size constraints. Eventually, the
+two vectors **RCC** and **RC\_small** are appended to eachother to
+create a **RCC** vector with the length of **NUMB\_RES** containing big
+and small resources. This vector is mapped to the **FIRM**.
+
+``` r
+ #### Generate Small Rescources ####
+  
+  RC_small <-
+    runif(length((length(RCC) + 1):NUMB_RES), min = 0.05, max =
+            0.95)
+  RC_small <- RC_small / sum(RC_small) #normalize
+  RC_small <- RC_small * (1 - DISP2) * TC
+  
+  
+  ## Some Checks ##
+  # Sum of first DISP1 resources not correct.
+  # if(min(RC)> ((1-DISP2)*TC)/(NUMB_RES-DISP1)){
+  
+  while (max(RC_small) - min(RCC) > 1.0) {
+    RC_small <- sort(RC_small, decreasing = TRUE)
+    min_bigRes <- min(RCC)
+    for (i in 1:(length(RC_small))) {
+      overage <- max(c(RC_small[i] - min_bigRes , 0))
+      RC_small[i] <- RC_small[i] - overage
+      RC_small[length(RC_small) - i + 1] <- RC_small[length(RC_small) - i + 1] + overage
+    }
+  }
+  
+  
+  # Step 6 Schuffle small rescources
+  RC_small <- RC_small[sample(length(RC_small))]
+  RCC <- c(RCC, RC_small)
+  
+  # sum(RC)
+  RCCs <- sort(RCC, decreasing = TRUE, index.return = TRUE)
+  RCC <-
+    list(
+      RCC = RCC,
+      CHECK = list(
+        cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
+        cost_topTEN = sum(RCCs$x[1:10]) / TC,
+        DISP1 = DISP1,
+        DISP2 = DISP2,
+        RC_VAR = RC_VAR
+      )
+    )
+  RCC = RCC$RCC
+  #### sourcing
+  FIRM$COSTING_SYSTEM$RCC = RCC
+```
+
+### 5.3. Generating the Benchmark Product Costs
+
+With the Demand vector, the resource consumption matrix and the resource
+cost vector it is now possible to calculate the benchmark product costs,
+which are the actual production costs per product. For this, the total
+demand of every resource (**TRU** vector), which are basically the
+column sums of the total resource consumption matrix
+(RES\_CONS\_PAT\_total) is computed. By dividing the RCC Vector through
+total demand of every resource, the RCU vector is generated. This vector
+therefore contains the costs one unit of each resource. The benchmark
+costs are now calculated by multiplying the resource consumption for
+every product with the respective resource costs that are needed and the
+number of units that need to be produced (demand), resulting in a vector
+of actual costs per product (**PCB**)
+
+<br>
+
+The Benchmark costs are one of the two measures that are required to
+calculate the error of an costing system. The other is the estimated
+product costs, based on the costing system heuristics, which are
+explained in the following paragraphs.
+
+``` r
+    TRU = FIRM$PRODUCTION_ENVIRONMENT$TRU
+    
+    # RES_CONS_PAT Anand et al. 2019
+    
+    RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
+    
+    # Benchmark product costs
+    FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND #BENCHMARK PRODUCT COSTS (TOTAL)
+```
+
+## 6\. Generating the costing system
