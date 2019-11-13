@@ -67,7 +67,7 @@ starting point for running the model. There, all other files are sourced
 and so their functions called.
 
 ![Figure 1: Cost System Design Model
-Overview](C:\\Users\\cms9023\\Documents\\CostSystemDesignSim\\Modeloverview.png?raw=true)
+Overview](C:/Users/cms9023/Documents/CostSystemDesignSim/Modeloverview.png)
 <br> 
 
 ## 4\. Model Initialization (1\_INIT.R)
