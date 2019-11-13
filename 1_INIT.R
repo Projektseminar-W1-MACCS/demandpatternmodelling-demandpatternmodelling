@@ -46,7 +46,7 @@
             set.seed(13) #Reproducability
             o=1 # First design point
             
-## ====================================== DESIGN OF EXPERIMENTS ================================================== 
+## ======================================DESIGN OF EXPERIMENTS ================================================== 
 ## EVIRONMENTAL FACTORS [] 
   for (ix_CP in seq_along(CP)) {
      for (ix_COR in seq_along(COR)) {
@@ -139,7 +139,7 @@
   }
 }
 
-#### ====================================== OUTPUT WRITING ===================================
+#### ====================================OUTPUT WRITING ===================================
             
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
 write.csv(DATA, file = output)
