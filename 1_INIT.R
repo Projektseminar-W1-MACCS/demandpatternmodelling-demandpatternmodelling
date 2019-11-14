@@ -145,6 +145,9 @@ output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
 
+calc_error = aggregate(DATA,list(DATA$CP),mean)
+plot(calc_error$MAPE,type ='l')
+
 if (ProductCostOutput==1)
 {
   output = paste("output/ProductCost_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
