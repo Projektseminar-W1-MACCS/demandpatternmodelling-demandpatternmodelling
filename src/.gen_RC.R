@@ -136,17 +136,17 @@
   # sum(RC)
   RCCs <- sort(RCC, decreasing = TRUE, index.return = TRUE)
   
-  # RCC <-
-  #   list(
-  #     RCC = RCC,
-  #     CHECK = list(
-  #       cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
-  #       cost_topTEN = sum(RCCs$x[1:10]) / TC,
-  #       DISP1 = DISP1,
-  #       DISP2 = DISP2,
-  #       RC_VAR = RC_VAR
-  #     )
-  #   )
+  RCC <-
+    list(
+      RCC = RCC,
+      CHECK = list(
+        cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
+        cost_topTEN = sum(RCCs$x[1:10]) / TC,
+        DISP1 = DISP1,
+        DISP2 = DISP2,
+        RC_VAR = RC_VAR
+      )
+    )
   
   RCC = RCC$RCC
   #### sourcing

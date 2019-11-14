@@ -607,7 +607,7 @@ and small resources. This vector is mapped to the **FIRM**.
   FIRM$COSTING_SYSTEM$RCC = RCC
 ```
 
-### 5.3. Generating the Benchmark Product Costs
+### 5.3. Generating the Benchmark Product Cost (.gen\_COST\_CONS\_PAT.R)
 
 With the Demand vector, the resource consumption matrix and the resource
 cost vector it is now possible to calculate the benchmark product costs,
@@ -641,3 +641,104 @@ explained in the following paragraphs.
 ```
 
 ## 6\. Generating the costing system
+
+As the number of cost pools is already defined by the modeler, the next
+step is to allocate resource to the cost pools and after that, select a
+driver for each cost pool. These two steps are the main components of
+the costing system. The outcome of the costing system is an activity
+consumption matrix similar to the resource consumption matrix (with a
+differnt size though), with the difference, that the elements do not
+display the exact consumption but the estimated consumption based on the
+allocation of resources to cost pools and the driver selection.
+
+\#\#\#6.1. Allocating resources to cost pools (CP\_Heuristics.R)
+
+There are different methods and heuristics that can be used to allocate
+cost pools into one or more cost pools. Again, due to replication
+reasons, this model mainly uses heuristics defined by Anand et al. He
+distinguishes between the following:
+
+  - Size Miscellaneous Assignment (**MAP\_RES\_CP\_SIZE\_MISC**)
+  - Size Correlation Miscellaneous Assignment
+    (**MAP\_RES\_CP\_SIZE\_CORREL\_MISC\_ANAND**)
+  - Size Random Miscellaneous Assignment
+    (**MAP\_RES\_CP\_SIZE\_RANDOM\_MISC**)
+  - Size Correlation Cut\_Off Miscellaneous Assignment
+    (**MAP\_RES\_CP\_SIZE\_CORREL\_CUTOFF\_MISC\_ANAND**)
+
+(There exist a lot more heuristics, with different characteristics.
+Also, it is easy to think of furter heuristics and shape them as one
+wishes. Limitations to more sophisticated heuristics are missing
+information that are required for the use of it.)
+
+The heuristics names already describe the basic steps, respectively.
+Outcome of these heuristics are two lists, stating which resources are
+in which cost pool (**RC\_to\_ACP**) and depciting the costwise size of
+each cost pool (sum of the resources’ costs) (**ACP**).
+
+##### 6.1.1. Size Miscellaneous Assignment (MAP\_RES\_CP\_SIZE\_MISC)
+
+Given a list of cost pools, with the length C, this heuristic assignes
+the costwise biggest resources to the (C-1) cost pools and therefore
+lefts one open. This remaining cost pool (called miscellaneous pool) is
+then filled with the remaining unassigned resources.
+
+##### 6.1.2. Size Correlation Miscellaneous Assignment (MAP\_RES\_CP\_SIZE\_CORREL\_MISC\_ANAND)
+
+As in the first heuristc, this heuristc also seeds the (C-1) cost pools
+with the largest resources. Then it computes the correlation between
+every assigned resource and every not assigned resource. By iterating
+through these correlations it identifies the overall highest correlation
+and assigns the corresponding resource to the pool, that contains the
+counterpart resource of the correlation. This process is repeated until,
+either the costwise size of the remaining resources is equal or smaller
+than the defined **MISCPOOLSIZE** or the correlation is smaller than the
+desired Cut-Off (**CC**). Every then, still not assigned resource is
+therefore assigned to the miscellaneous pool. This heuristic also
+ensures that the miscellaneous pool has at least one non-zero.
+
+##### 6.1.3. Size Random Miscellaneous Assignment (MAP\_RES\_CP\_SIZE\_RANDOM\_MISC)
+
+This heuristic seeds (C-1) pools with the largest resources. It then
+assigns unassigned resources randomly to the (C-1) cost pools until the
+costwise site of the remaining resources is equal or smaller than the
+defined **MISCPOOLSIZE**. The remaining resources are then assigned to
+the miscellaneous pool. As in the other heuristics, this one also
+ensures that every cots pool contains at least one non-zero resource.
+
+##### 6.1.4. Size Correlation Cut\_Off Miscellaneous Assignment (MAP\_RES\_CP\_SIZE\_CORREL\_CUTOFF\_MISC\_ANAND)
+
+This last heuristic loops over the cost pools and assigns the largest of
+the unassigned resources to the respective cost pool. It then computes
+the correlation between the just assigned resource (in this case the
+seed resource) and the other not assigned resources, and assigns them
+unitl the correlation between the seed resource and the respective
+resource is smaller then the defined Cut-Off (**CC**), the costwise size
+of the remaining unassigned resources is equal or smaller than the
+defined **MISCPOOLSIZE** or the number of remaining unassigned resources
+is equal to the remaining, still epmty cost pools. If the latter is the
+case every remaining resource is randomly assigned to one of the empty
+cost pools. If the miscellaneous pool condition is met, the unassigned
+resources are assigned to one of the empty cost pools each and the last
+cost pool is filled with the, after that still remaining unassigned
+resources. If the correlation condition is met, the loop starts again,
+assigns the largest resource to the next cost pool, computes the
+correlations, and so on. In any case this heuristic ensures, that every
+cost pool has at least one non-zero resource.
+
+## 7\. Cost Pool Driver Selection (CD\_Heuristics.R)
+
+With the information about, which resources are in each cost pool and
+the thus resulting worth of each cost pool and resource it is now
+required to choose a driver for every cost pool. This is done with the
+big pool heuristic, which Anand et al. uses as well (he also describes
+an indexed methods, however this is not implemented in the model
+currently).
+
+The Big Pool method basically uses the largest resource in each cost
+pool as the driver. It therefore sorts the resources in RC\_to\_ACP by
+their size and takes the first one as the driver of the respective cost
+pool. The relative consumption (from **RES\_CONS\_PATp**) of this driver
+resource then becomes a column of the activity consumption matrix (which
+has the size \*\*NUMB\_PRO\*CP**). By multiplying this, the estimated
+cost vector (**PCH\*\*) is calcualted.

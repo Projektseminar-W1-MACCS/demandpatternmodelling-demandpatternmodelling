@@ -633,7 +633,7 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
    
 } #ANAND p==2
 
-MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
+MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
    
    
    
@@ -1535,7 +1535,7 @@ MAP_RES_CP_SIZE_CORREL_RAND_MISC<-function(FIRM){
    return(FIRM)
 } #with miscpool and trying to minimize it by random assignment
 
-MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
+MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
    
    
    
