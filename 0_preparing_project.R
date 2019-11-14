@@ -39,8 +39,3 @@ source('src/.datalogging.R')
 
 
 source("1_INIT.R")
-
-#test
-
-
-
