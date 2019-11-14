@@ -8,7 +8,7 @@
 
   preDemand = as.integer(runif(NUMB_PRO,10,40))
   
-  DEMAND = ceiling((preDemand/sum(preDemand))*units) #ceiled realized demand for each product
+  DEMAND = ceiling((preDemand/sum(preDemand))*units) #normalizing it #ceiled realized demand for each product
   
   FIRM$PRODUCTION_ENVIRONMENT$DEMAND = DEMAND
   

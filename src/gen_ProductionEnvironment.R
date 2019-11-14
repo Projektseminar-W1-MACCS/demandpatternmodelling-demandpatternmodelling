@@ -37,7 +37,7 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 
 
 
-FIRM = .gen_Demand_Anand(FIRM);
+FIRM = .gen_Demand_Anand(FIRM); #gen_Demand_Anand and gen_Demand
 
 FIRM = .gen_RES_CONS_PAT_Anand(FIRM);
 

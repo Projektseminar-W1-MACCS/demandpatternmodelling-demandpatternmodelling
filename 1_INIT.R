@@ -20,8 +20,8 @@
   TC =               1000000                #Total costs
 
 
-  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
-  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+  ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
+  set_PE_constant=   0                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
 
   dec_ERROR=         1                      #Control Variable - 
 
@@ -30,10 +30,10 @@
   dec_CD=            1                      # =
   
   
-  CP = c(1,2,4,6,8,10,12,14)       #No. of Cost Pools
+  CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
-  Q_VAR = c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                              #Demand variation
+  Q_VAR = c(-1)                              #Demand variation
   Error = c(0.5)                            #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
@@ -90,7 +90,7 @@
     FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
 
   
-    FIRM = MAP_RES_CP_RANDOM(FIRM) #Building the cost pools
+    FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM) #Building the cost pools
   
   
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
