@@ -128,7 +128,7 @@ see in the above code, that this model simulates over different number
 of cost pools. <br>
 
 ``` r
-            set.seed(seed) #Reproducability
+            set.seed(13) #Reproducability
             o=1 # First design point
             
 ## ====================================== DESIGN OF EXPERIMENTS ===================================
@@ -742,3 +742,69 @@ pool. The relative consumption (from **RES\_CONS\_PATp**) of this driver
 resource then becomes a column of the activity consumption matrix (which
 has the size \*\*NUMB\_PRO\*CP**). By multiplying this, the estimated
 cost vector (**PCH\*\*) is calcualted.
+
+## 8\. Calculating the error and producing the output (1\_INIT.R)
+
+This model applys three different error measures to measure the
+difference between **PCB** and **PCH**:
+
+*EUCD - square root of mean squared error *MAPE - mean absolute
+percentage error \*MSE - mean squared error
+
+Each of them are calculated differently and therefore may show different
+results.
+
+``` r
+ ## Calculating the estimated product costs
+    FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
+  
+      ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+    EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
+    MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
+    MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
+```
+
+Eventually and output file is prduced which contains necessary model
+parametes that were applied within the peticular run of the model as
+well as the calculated error methods.
+
+``` r
+#### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
+    preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
+                         FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
+  
+    #preData_p = .datalogging()
+    colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
+                       'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
+   
+    #stacking the data with each run
+    DATA = rbind(DATA,preData)
+       
+    # TRACKING THE PRODUCT LEVEL WHEN NEEDED
+    if (ProductCostOutput==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
+   
+    #Print outputs;
+    print(o)
+    print(FIRM$COSTING_SYSTEM$CP)
+    print((EUCD))
+    
+    o=o+1 #Counting for the total number of runs
+  }
+                  }
+                }
+              }  
+            }  
+          }
+        }
+      }
+    }
+  }
+}
+
+#### ====================================== OUTPUT WRITING ===================================
+            
+output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+write.csv(DATA, file = output)
+print("Cost System Design FILE has been written")
+```
