@@ -1,10 +1,12 @@
 ---
 title: "Cost System Design Model Documentation"
 output: github_document
+    
+geometry: margin = 1in
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+knitr::opts_chunk$set(echo = TRUE,eval = FALSE, tidy = TRUE, tidy.opts = list(blank = TRUE, width.cutoff = 50))
 ```
 
 ## 1. Introduction
@@ -28,7 +30,7 @@ The Programming Language R itself must be downloaded and installed separatly: ht
 Furthermore the model works with the following library packages which provide functions for e.g. plotting or analysing data. These libraries are installes by running the follwing code in the 0_preparing_project.R file. This needs to be done before running the model itself. 
 
 <br>
-```{r library packages, include= TRUE, eval = FALSE}
+```{r library packages, include= TRUE}
 install.packages(c(
   "dplyr",
   "tidyr",
@@ -56,7 +58,7 @@ The 1_INIT.R file loads all input parameters which are set by the modeler. These
 First step is to create an empty firm with its subsets Production Environment and Costing System. The **FIRM** variable is basically just a list that contains all necessary information that are need throughout the varius functions.  
 The **DATA** variable is an empty dataframe which gets filled with the measures that go into the output file.
 <br>
-```{r Input Parameters, tidy=TRUE, tidy.opts=list(width.cutoff=10)}
+```{r Input Parameters}
   ## ======================================INPUT MASK======================================================
   FIRM = list()                           
   FIRM$PRODUCTION_ENVIRONMENT = list()
@@ -98,7 +100,7 @@ The **DATA** variable is an empty dataframe which gets filled with the measures 
 
 The simulation is then run for every combination of the input parameters and the number of simulation that is set with **SIM_NUMB.** To do this the model loops over every input variable and creates a number of firms (**SIM_NUMBs**) for every combination of those. As an example you can see in the above code, that this model simulates over different number of cost pools.
 <br>
-```{r for loops for code running, eval = FALSE}
+```{r for loops for code running}
             set.seed(13) #Reproducability
             o=1 # First design point
             
@@ -114,10 +116,11 @@ The simulation is then run for every combination of the input parameters and the
                    for(ix_CC in seq_along(CC)){
                      for(ix_MISCPOOLSIZE in seq_along(MISCPOOLSIZE)){
                        for(ix_DISP1 in seq_along(DISP1)){
+                         
 ```
 For every created firm the variable is mapped into the **FIRM** list. By calling this list in every R-Script file of the model, the code gets access to all there contained variables. This ensures that always the same values are used and provides an easy possibility to map created variables back into the **FIRM.**
 <br>
-```{r Mapping created variables to the FIRM, eval = FALSE}
+```{r Mapping created variables to the FIRM}
  ## ====================== PREDETERMINING AND PREALLOCATION  ========================          
     
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]   
@@ -136,7 +139,7 @@ For every created firm the variable is mapped into the **FIRM** list. By calling
 ```
 The simulation is now run for the defined number of simulations in **SIM_NUMB.** As shown in the model overview the production environment and the costing system (consisting of the chosen Cost Pool Allocation heuristic and the driver seltion heuristic) are generated. . To change the used heuristics only the called functions need to be changed. The below example currently calculates with a Size based correlation cutoff heuristic for building the cost pools and a big pool heuristic for selecting the driver. Since the costing system heuristics are working with some of the generated output parameter from the production environment (e.g. **RCC**, **RES_CONS_PAT**), the production environment is generated first.
 <br>
-```{r Running the simulation, eval = FALSE}
+```{r Running the simulation}
    nn=1 # necessary for repeating the SIM_NUMB loop
   #### ============================== SIMULATION =====================================
   for (nn in 1:SIM_NUMB) {
@@ -151,6 +154,7 @@ The simulation is now run for the defined number of simulations in **SIM_NUMB.**
   
   
     FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
+    
 ```
 <br>
 \newpage
@@ -159,7 +163,7 @@ The simulation is now run for the defined number of simulations in **SIM_NUMB.**
 The R-Script File gen_ProductionEnvironment.R builds the Production Environment by calling its sub-functions to generate the demand function, the resource-consumption-matrix, the resource cost vector (**RCC**) and the benchmark product costs. 
 Here, the Density is defined as well. 
 The Density can be fixly determined by the modeler in the input parameter or (if it is set there to -1) it is chosen from a uniform distribution U[**DENS_MIN**, **DENS_MAX**]. The Density (Sparsity) defines approximately how many zeros are in the **RES_CONS_PAT** (e.g **DENS** = 0.6 means that roughly 40% of the elements in **RES_CONS_PAT** are zero). Therefore the Density has a major influence on how eqaul and well distributed the resource consumption is among the products. 
-```{r}
+```{r, production environment}
 #Randomization and setting clear design points. 
 if(DENS == -1)
 {
@@ -212,12 +216,21 @@ The heuristic for the construction of the resource consumption matrix developed 
   repeat    {
     
     BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
+
+    RES_CONS_PATpre = matrix(
+                        rnorm(
+                          FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*
+                            FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,mean=0,sd=1), 
+                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, 
+                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)     #random pre matrix, as Baseline
     
-    RES_CONS_PATpre = matrix(rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,mean=0,sd=1), 
-                             FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)                            #random pre matrix, as Baseline
-    
-    RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE) #empy matrix, that is going to be filled 
+    RES_CONS_PAT = matrix(0, 
+                          nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, 
+                          ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, 
+                          byrow = TRUE) #empy matrix, that is going to be filled 
 ```
+
+
 **BASE** is the first resource in the resource consumption matrix (therefore first column), that is used in every product and therefore is built seperatly. 
 Then the **RES_CONS_PATpre** is build, a matrix with the same size of the **RES_CONS_PAT** filled with random values. 
 Also an empty **RES_CONS_PAT** is generated which is going to be filled throughout the process.
@@ -230,6 +243,7 @@ The correlations are drawn form a uniform distribution with boundaries set by th
 Based on the correlations a squared constant is computed. These squared constants approaches to equal one, the smaller the respective correlation is. 
 With these two parameters the first version of the **RES_CONS_PAT** can be build. For that, the random values in each column from **RES_CONS_PATpre** are multiplied with the squared constant and then added up with a product of the respective correlation and the **BASE.** Subsequently, the higher the correlation, the greater is the influence of the **BASE** on the peticular element and the smaller the random value from **RES_CONS_PAT_pre.** Again, this process is done two times: for the 1-DISP1 resurces and again for the remaining resources (columns). Resulting is a resource consumption matrix in the desired size satisfying the correlation constraints.
 The implementation of this calculation in R is shown in the next window. 
+
 ```{r RES_CONS_PAT 2, eval = FALSE}
 ## ====================== STEP 1.a CORRELATION ========================= 
     # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
@@ -298,14 +312,22 @@ To prevent, that some of the constraints are not met, the program now checks fir
 ```{r Exception Handler, eval = FALSE}
 ## ===================== EXCPETION HANDLER ====================
     
-    # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
-    # in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; Substantiation of this hidden formalization remains unclear. 
+    # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 
+    # It is important the the first RES_CONS_PAT column has no zeros
+    # in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; 
+    # Substantiation of this hidden formalization remains unclear.
+
+    #every product need at least one resource (exclude column one??)
+    PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   
+    #every resource needs to be used at least once
+    RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   
+    #first resource needs to be in every product ->why?
+    BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         
     
-    PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   #every product need at least one resource (exclude column one??)
-    RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   #every resource needs to be used at least once
-    BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         #first resource needs to be in every product ->why?
-    
-    if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE) #discard the matrix if one of these conditions is not met
+    #discard the matrix if one of these conditions is not met
+    if(PRO_ZEROS==FALSE 
+       & RES_ZEROS==FALSE 
+       & BASE_ZEROS==FALSE) 
     {
       break
     }
@@ -320,6 +342,7 @@ To prevent, that some of the constraints are not met, the program now checks fir
 With the generated demand vector and the resoruce consumption matrix, information about the desired production quantity of each product and the consumption of the underlying reosurces are available. For calculating the actual costs of this production environment only the costs of the resources itself are missing. 
 These are caluclated and stored in the **RCC** vector. As well as for the resource consumption matrix and the demand vector different ways exist to generate this environmental factor, depending on which assumptions are made. Here, the heuristic from Anand is used, to create a good replication of his model. 
 Analogous to the resource consumption matrix the resource costs vector consists of two parts: The costs for the big resources (1:**DISP1**) and the small resources (**DISP1**+1:**NUMB_RES**). As already described in *5.2.2.*, the big resources account for a **DISP2** share of the total costs. First step is therefore to draw **DISP2** for a uniform distribution U[**DISP2_MIN**, *DIPS2_MAX*] (under the condition that **DISP2** is not set by the model in the input file). 
+
 After that, boundaries for the minimum allowable costs (**r_MIN**) and maximum allowable costs (**r_MAX**) for the big resources are set. 
 Noting that the sum of the small resources must be equal **(1-DISP2) * TC**. In addition, the costwise smallest of the big resources must be larger or equal to the costwise biggest of the small resources. Therefore the minimum allowable costs for the big resources is the average costs per small resource of **(1-DISP2)*TC** (see Step 1).
 With that information the maximum allowable costs (**r1_MAX**) for the largest of the big resources can be computed. This is basically the difference of the DISP2 share of total costs and the sum of the remaining big resources if each one of them has costs of **r_MIN** (see Step 2).
@@ -367,6 +390,7 @@ RCC<-c(RCC,DISP2*TC-sum(temp1_ADD))
 ## Move the biggest resource to the front
 largest_RC<-sort(RCC,decreasing = TRUE,index.return=TRUE)$ix[1]
 RCC<-c(RCC[largest_RC],RCC[-largest_RC])
+
 ```
 
 <br>
@@ -429,25 +453,31 @@ Eventually, the two vectors **RCC** and **RC_small** are appended to eachother t
 
 ### 5.3. Generating the Benchmark Product Cost (.gen_COST_CONS_PAT.R)
 
-With the Demand vector, the resource consumption matrix and the resource cost vector it is now possible to calculate the benchmark product costs, which are the actual production costs per product. 
+With the Demand vector, the resource consumption matrix and the resource cost vector it is now possible to calculate the benchmark product costs, which are the actual production costs per product.
 For this, the total demand of every resource (**TRU** vector), which are basically the column sums of the total resource consumption matrix (RES_CONS_PAT_total) is computed.
-By dividing the RCC Vector through total demand of every resource, the RCU vector is generated. This vector therefore contains the costs one unit of each resource.
-The benchmark costs are now calculated by multiplying the resource consumption for every product with the respective resource costs that are needed and the number of units that need to be produced (demand), resulting in a vector of actual costs per product (**PCB**)
 
+By dividing the RCC Vector through total demand of every resource, the RCU vector is generated. This vector therefore contains the costs one unit of each resource.
+
+The benchmark costs are now calculated by multiplying the resource consumption for every product with the respective resource costs that are needed and the number of units that need to be produced (demand), resulting in a vector of actual costs per product (**PCB**)
 
 <br>
 
 The Benchmark costs are one of the two measures that are required to calculate the error of an costing system. The other is the estimated product costs, based on the costing system heuristics, which are explained in the following paragraphs. 
+
 
 ```{r Calculating benchmark product costs}
     TRU = FIRM$PRODUCTION_ENVIRONMENT$TRU
     
     # RES_CONS_PAT Anand et al. 2019
     
-    RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
+    #BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) 
+    #BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
+    RCU<- FIRM$COSTING_SYSTEM$RCC/TRU 
     
-    # Benchmark product costs
-    FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND #BENCHMARK PRODUCT COSTS (TOTAL)
+    #BENCHMARK PRODUCT COSTS (TOTAL)
+    FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
+                                %*%RCU
+                                *FIRM$PRODUCTION_ENVIRONMENT$DEMAND 
 ```
 
 ## 6. Generating the costing system
@@ -489,21 +519,21 @@ This last heuristic loops over the cost pools and assigns the largest of the una
 
 With the information about, which resources are in each cost pool and the thus resulting worth of each cost pool and resource it is now required to choose a driver for every cost pool. This is done with the big pool heuristic, which Anand et al. uses as well (he also describes an indexed methods, however this is not implemented in the model currently).
 
-The Big Pool method basically uses the largest resource in each cost pool as the driver. It therefore sorts the resources in RC_to_ACP by their size and takes the first one as the driver of the respective cost pool. The relative consumption (from **RES_CONS_PATp**) of this driver resource then becomes a column of the activity consumption matrix (which has the size **NUMB_PRO*CP**). By multiplying this, the estimated cost vector (**PCH**) is calcualted.
+The Big Pool method basically uses the largest resource in each cost pool as the driver. It therefore sorts the resources in RC_to_ACP by their size and takes the first one as the driver of the respective cost pool. The relative consumption (from **RES_CONS_PATp**) of this driver resource then becomes a column of the activity consumption matrix (which has the size **NUMB_PROxCP** ). By multiplying this, the estimated cost vector ( **PCH** ) is calcualted.
 
 
 ## 8. Calculating the error and producing the output (1_INIT.R)
 
 This model applys three different error measures to measure the difference between **PCB** and **PCH**: 
 
-*EUCD - square root of mean squared error
-*MAPE - mean absolute percentage error
-*MSE - mean squared error
+* EUCD - square root of mean squared error
+* MAPE - mean absolute percentage error
+* MSE - mean squared error
 
 Each of them are calculated differently and therefore may show different results. 
 
 
-```{r INIT error measure and output file creation, eval = FALSE}
+```{r INIT error measure and output file creation}
  ## Calculating the estimated product costs
     FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
   
@@ -514,13 +544,24 @@ Each of them are calculated differently and therefore may show different results
   
 ```
 
-Eventually and output file is prduced which contains necessary model parametes that were applied within the peticular run of the model as well as the calculated error methods.
+Eventually an output file is prduced which contains necessary model parametes that were applied within the peticular run of the model as well as the calculated error methods.
 
-```{r creating output file, eval = FALSE}
+```{r creating output file}
 #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
-    preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
-                         FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
-                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
+    preData = data.frame(o,
+                         nn,
+                         FIRM$COSTING_SYSTEM$CP,
+                         FIRM$COSTING_SYSTEM$RC_VAR, 
+                         FIRM$COSTING_SYSTEM$NUMB_Error, 
+                         FIRM$COSTING_SYSTEM$Error,
+                         FIRM$PRODUCTION_ENVIRONMENT$DENS, 
+                         FIRM$PRODUCTION_ENVIRONMENT$COR, 
+                         FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, 
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
+                         EUCD,
+                         MAPE,
+                         MSE)
   
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 

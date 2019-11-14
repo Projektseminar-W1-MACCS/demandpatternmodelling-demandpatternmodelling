@@ -47,12 +47,7 @@ model itself.
 <br>
 
 ``` r
-install.packages(c(
-  "dplyr",
-  "tidyr",
-  "rmarkdown",
-  "ggplot2"
-))
+install.packages(c("dplyr", "tidyr", "rmarkdown", "ggplot2"))
 Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr")
 lapply(Packages, library, character.only = TRUE)
 ```
@@ -82,42 +77,45 @@ The **DATA** variable is an empty dataframe which gets filled with the
 measures that go into the output file. <br>
 
 ``` r
-  ## ======================================INPUT MASK======================================================
-  FIRM = list()                           
-  FIRM$PRODUCTION_ENVIRONMENT = list()
-  FIRM$COSTING_SYSTEM = list()
-  DATA = data.frame()
-  
-  
-  NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
-  NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-  SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
-  TC =               1000000                #Total costs
-  ProductOutput=     1                      #Zero = no tracking
-  set_pe_constant=   1                      #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
-  set_cs_constant=   0                      #Control Variable 
-  vary_demand =      0                      #Control Variable
-  
-  dec_ERROR=         1                      #Control Variable - 
-  seed=              13                     #Control Variable -
-  
-  #dec_DC=           0                      # = no direct costs 
-  dec_CP=            1                      # =
-  dec_CD=            1                      # =
-  
-  
-  CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
-  COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
-  Q_VAR = c(1)                              #Demand variation
-  Error = c(0)                              #Measurement error
-  NUMB_Error = c(1)                         #Number of errornoues links
-  DENS = c(-1)                              #Number of links between products and resources (sharing)
-  CC = 0.4                                  #Correlation Cutoff for correlative assignement in CP HEURISTICS
-  MISCPOOLSIZE = 0.25                       #share of total costs that are supposed to go into the miscpool 
-  DISP1 = 10                                #No. of the biggest resources that have a DISP2 share of the total costs
-  
-## ======================================END OF INPUT MASK=========================================
+## ======================================INPUT
+## MASK======================================================
+FIRM = list()
+FIRM$PRODUCTION_ENVIRONMENT = list()
+FIRM$COSTING_SYSTEM = list()
+DATA = data.frame()
+
+
+NUMB_PRO = 50  #INPUT independent Variable - Number of products 
+NUMB_RES = 50  #INPUT independent variable - Number of factors
+SIM_NUMB = 200  #Control Variable - Number of Simulations for every single environment (standard: 30)     
+TC = 1e+06  #Total costs
+ProductOutput = 1  #Zero = no tracking
+set_pe_constant = 1  #Control Variable -  Decide if Simulation is reproducible {1} or random {0}
+set_cs_constant = 0  #Control Variable 
+vary_demand = 0  #Control Variable
+
+dec_ERROR = 1  #Control Variable - 
+seed = 13  #Control Variable -
+
+# dec_DC= 0 # = no direct costs
+dec_CP = 1  # =
+dec_CD = 1  # =
+
+
+CP = c(1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20)  #No. of Cost Pools
+COR = c(0.6)  #Correlation between resources
+RC_VAR = c(-1)  #Resource cost variation --> base for DISP2
+Q_VAR = c(1)  #Demand variation
+Error = c(0)  #Measurement error
+NUMB_Error = c(1)  #Number of errornoues links
+DENS = c(-1)  #Number of links between products and resources (sharing)
+CC = 0.4  #Correlation Cutoff for correlative assignement in CP HEURISTICS
+MISCPOOLSIZE = 0.25  #share of total costs that are supposed to go into the miscpool 
+DISP1 = 10  #No. of the biggest resources that have a DISP2 share of the total costs
+
+## ======================================END OF
+## INPUT
+## MASK=========================================
 ```
 
 The simulation is then run for every combination of the input parameters
@@ -152,21 +150,22 @@ same values are used and provides an easy possibility to map created
 variables back into the **FIRM.** <br>
 
 ``` r
- ## ====================== PREDETERMINING AND PREALLOCATION  ========================          
-    
-    FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]   
-    FIRM$PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
-    FIRM$PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
-    FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
-    FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
-    FIRM$COSTING_SYSTEM$CP = CP[ix_CP]
-    FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
-    FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
-    FIRM$COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
-    FIRM$COSTING_SYSTEM$TC = TC
-    FIRM$COSTING_SYSTEM$CC = CC
-    FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
-    FIRM$COSTING_SYSTEM$DISP1 = DISP1
+## ====================== PREDETERMINING AND
+## PREALLOCATION ========================
+
+FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]
+FIRM$PRODUCTION_ENVIRONMENT$COR = COR[ix_COR]
+FIRM$PRODUCTION_ENVIRONMENT$Q_VAR = Q_VAR[ix_Q_VAR]
+FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
+FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
+FIRM$COSTING_SYSTEM$CP = CP[ix_CP]
+FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
+FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
+FIRM$COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
+FIRM$COSTING_SYSTEM$TC = TC
+FIRM$COSTING_SYSTEM$CC = CC
+FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
+FIRM$COSTING_SYSTEM$DISP1 = DISP1
 ```
 
 The simulation is now run for the defined number of simulations in
@@ -213,19 +212,20 @@ zero). Therefore the Density has a major influence on how eqaul and well
 distributed the resource consumption is among the products.
 
 ``` r
-#Randomization and setting clear design points. 
-if(DENS == -1)
-{
-DENS_MIN = 0.4;
-DENS_MAX = 0.7;
-DENS = runif(1, DENS_MIN, DENS_MAX);
-FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+# Randomization and setting clear design points.
+if (DENS == -1) {
+    DENS_MIN = 0.4
+    DENS_MAX = 0.7
+    DENS = runif(1, DENS_MIN, DENS_MAX)
+    FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 }
-## ================= STEP 2 Building Demand, RES_CONS_PAT RCC and Benchmark Product Costs  ==============
-FIRM = .gen_Demand_Anand(FIRM);
-FIRM = .gen_RES_CONS_PAT_Anand(FIRM);
-FIRM = .gen_RCC_Anand(FIRM);
-FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
+## ================= STEP 2 Building Demand,
+## RES_CONS_PAT RCC and Benchmark Product Costs
+## ==============
+FIRM = .gen_Demand_Anand(FIRM)
+FIRM = .gen_RES_CONS_PAT_Anand(FIRM)
+FIRM = .gen_RCC_Anand(FIRM)
+FIRM = .genCOST_CONS_PAT(FIRM, COST_APPROACH = "ANAND")
 ```
 
 ### 5.1. Generating the Demand Vector (.gen\_Q.R)
@@ -250,13 +250,13 @@ firm sells from each of its product approximately the same amount.
 
 ``` r
 NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
-  
-  units = 10^3
-  preDemand = as.integer(runif(NUMB_PRO,10,40))
-  
-  DEMAND = ceiling((preDemand/sum(preDemand))*units) #ceiled realized demand for each product
-  
-  FIRM$PRODUCTION_ENVIRONMENT$DEMAND = DEMAND
+
+units = 10^3
+preDemand = as.integer(runif(NUMB_PRO, 10, 40))
+
+DEMAND = ceiling((preDemand/sum(preDemand)) * units)  #ceiled realized demand for each product
+
+FIRM$PRODUCTION_ENVIRONMENT$DEMAND = DEMAND
 ```
 
 ### 5.2. Generating the resource consumption matrix (.gen\_RES\_CONS\_PAT.R)
@@ -294,11 +294,18 @@ sections. <br>
   repeat    {
     
     BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
+
+    RES_CONS_PATpre = matrix(
+                        rnorm(
+                          FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*
+                            FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,mean=0,sd=1), 
+                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, 
+                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)     #random pre matrix, as Baseline
     
-    RES_CONS_PATpre = matrix(rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,mean=0,sd=1), 
-                             FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)                            #random pre matrix, as Baseline
-    
-    RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, byrow = TRUE) #empy matrix, that is going to be filled 
+    RES_CONS_PAT = matrix(0, 
+                          nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, 
+                          ncol = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES, 
+                          byrow = TRUE) #empy matrix, that is going to be filled 
 ```
 
 **BASE** is the first resource in the resource consumption matrix
@@ -384,16 +391,19 @@ punched into it and creates a **RES\_CONS\_PAT** with the desired
 density.
 
 ``` r
- ## ====================== STEP 1.b DENSITY =========================
-    
-    res_cons_pat_b_pre = runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
-    ## 1/0 DENSITY
-    res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > FIRM$PRODUCTION_ENVIRONMENT$DENS, 0,1),
-                                FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
-    
-    RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
-    
-    FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
+## ====================== STEP 1.b DENSITY
+## =========================
+
+res_cons_pat_b_pre = runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO * 
+    FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
+## 1/0 DENSITY
+res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > 
+    FIRM$PRODUCTION_ENVIRONMENT$DENS, 0, 1), FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, 
+    FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
+
+RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
+
+FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
 ```
 
 #### 5.2.4. Ceiling and Scaling
@@ -413,19 +423,22 @@ containing the share of each resource that is needed to produce a
 product (**RES\_CONS\_PATp**).
 
 ``` r
-## ====================== STEP 1.c Ceiling and Scaling ============= 
-    
-    # take absolute value of X and Z and scale by 10 and round them
-    # Anand et al. 2019
-    ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS
-    RES_CONS_PAT[,1] <- (BASE)
-    RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
-    ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
-    RES_CONS_PAT_TOTAL <- RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
-    ##CALCULATING TCU
-    TCU <- colSums(RES_CONS_PAT_TOTAL)
-    ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
-    RES_CONS_PATp <- sweep((RES_CONS_PAT_TOTAL),2,TCU,"/") #Absolute matrix to relative matrix
+## ====================== STEP 1.c Ceiling and
+## Scaling =============
+
+# take absolute value of X and Z and scale by 10
+# and round them Anand et al. 2019 INDIVIDUAL
+# REQUIREMENTS OF THE PRODUCTS
+RES_CONS_PAT[, 1] <- (BASE)
+RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
+## INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
+RES_CONS_PAT_TOTAL <- RES_CONS_PAT * FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+## CALCULATING TCU
+TCU <- colSums(RES_CONS_PAT_TOTAL)
+## INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD
+## / TRU (Currently like this in Anand et al. 2019)
+RES_CONS_PATp <- sweep((RES_CONS_PAT_TOTAL), 2, TCU, 
+    "/")  #Absolute matrix to relative matrix
 ```
 
 #### 5.2.5. Exception Handler
@@ -440,14 +453,22 @@ discarded and build again.
 ``` r
 ## ===================== EXCPETION HANDLER ====================
     
-    # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
-    # in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; Substantiation of this hidden formalization remains unclear. 
+    # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 
+    # It is important the the first RES_CONS_PAT column has no zeros
+    # in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; 
+    # Substantiation of this hidden formalization remains unclear.
+
+    #every product need at least one resource (exclude column one??)
+    PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   
+    #every resource needs to be used at least once
+    RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   
+    #first resource needs to be in every product ->why?
+    BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         
     
-    PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   #every product need at least one resource (exclude column one??)
-    RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   #every resource needs to be used at least once
-    BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         #first resource needs to be in every product ->why?
-    
-    if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE) #discard the matrix if one of these conditions is not met
+    #discard the matrix if one of these conditions is not met
+    if(PRO_ZEROS==FALSE 
+       & RES_ZEROS==FALSE 
+       & BASE_ZEROS==FALSE) 
     {
       break
     }
@@ -474,21 +495,22 @@ the small resources (**DISP1**+1:**NUMB\_RES**). As already described in
 *5.2.2.*, the big resources account for a **DISP2** share of the total
 costs. First step is therefore to draw **DISP2** for a uniform
 distribution U\[**DISP2\_MIN**, *DIPS2\_MAX*\] (under the condition that
-**DISP2** is not set by the model in the input file). After that,
-boundaries for the minimum allowable costs (**r\_MIN**) and maximum
-allowable costs (**r\_MAX**) for the big resources are set. Noting that
-the sum of the small resources must be equal **(1-DISP2) \* TC**. In
-addition, the costwise smallest of the big resources must be larger or
-equal to the costwise biggest of the small resources. Therefore the
-minimum allowable costs for the big resources is the average costs per
-small resource of \*\*(1-DISP2)\*TC** (see Step 1). With that
-information the maximum allowable costs (**r1\_MAX**) for the largest of
-the big resources can be computed. This is basically the difference of
-the DISP2 share of total costs and the sum of the remaining big
-resources if each one of them has costs of **r\_MIN\*\* (see Step 2). As
-a third step r\_MIN is now recalculated and upwards adjusted by 2.5% of
-the difference of r1\_MAX and the previous r\_MIN. This enables a higher
-variation of small resources.
+**DISP2** is not set by the model in the input file).
+
+After that, boundaries for the minimum allowable costs (**r\_MIN**) and
+maximum allowable costs (**r\_MAX**) for the big resources are set.
+Noting that the sum of the small resources must be equal **(1-DISP2) \*
+TC**. In addition, the costwise smallest of the big resources must be
+larger or equal to the costwise biggest of the small resources.
+Therefore the minimum allowable costs for the big resources is the
+average costs per small resource of \*\*(1-DISP2)\*TC** (see Step 1).
+With that information the maximum allowable costs (**r1\_MAX**) for the
+largest of the big resources can be computed. This is basically the
+difference of the DISP2 share of total costs and the sum of the
+remaining big resources if each one of them has costs of **r\_MIN\*\*
+(see Step 2). As a third step r\_MIN is now recalculated and upwards
+adjusted by 2.5% of the difference of r1\_MAX and the previous r\_MIN.
+This enables a higher variation of small resources.
 
 Now, \[DISP1-1\] big resources are generated by randomly drawing a value
 from a uniform distribution U\[r\_Max,r\_MIN\]. r\_MAX is regenerated
@@ -561,50 +583,43 @@ create a **RCC** vector with the length of **NUMB\_RES** containing big
 and small resources. This vector is mapped to the **FIRM**.
 
 ``` r
- #### Generate Small Rescources ####
-  
-  RC_small <-
-    runif(length((length(RCC) + 1):NUMB_RES), min = 0.05, max =
-            0.95)
-  RC_small <- RC_small / sum(RC_small) #normalize
-  RC_small <- RC_small * (1 - DISP2) * TC
-  
-  
-  ## Some Checks ##
-  # Sum of first DISP1 resources not correct.
-  # if(min(RC)> ((1-DISP2)*TC)/(NUMB_RES-DISP1)){
-  
-  while (max(RC_small) - min(RCC) > 1.0) {
+#### Generate Small Rescources ####
+
+RC_small <- runif(length((length(RCC) + 1):NUMB_RES), 
+    min = 0.05, max = 0.95)
+RC_small <- RC_small/sum(RC_small)  #normalize
+RC_small <- RC_small * (1 - DISP2) * TC
+
+
+## Some Checks ## Sum of first DISP1 resources not
+## correct.  if(min(RC)>
+## ((1-DISP2)*TC)/(NUMB_RES-DISP1)){
+
+while (max(RC_small) - min(RCC) > 1) {
     RC_small <- sort(RC_small, decreasing = TRUE)
     min_bigRes <- min(RCC)
     for (i in 1:(length(RC_small))) {
-      overage <- max(c(RC_small[i] - min_bigRes , 0))
-      RC_small[i] <- RC_small[i] - overage
-      RC_small[length(RC_small) - i + 1] <- RC_small[length(RC_small) - i + 1] + overage
+        overage <- max(c(RC_small[i] - min_bigRes, 
+            0))
+        RC_small[i] <- RC_small[i] - overage
+        RC_small[length(RC_small) - i + 1] <- RC_small[length(RC_small) - 
+            i + 1] + overage
     }
-  }
-  
-  
-  # Step 6 Schuffle small rescources
-  RC_small <- RC_small[sample(length(RC_small))]
-  RCC <- c(RCC, RC_small)
-  
-  # sum(RC)
-  RCCs <- sort(RCC, decreasing = TRUE, index.return = TRUE)
-  RCC <-
-    list(
-      RCC = RCC,
-      CHECK = list(
-        cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
-        cost_topTEN = sum(RCCs$x[1:10]) / TC,
-        DISP1 = DISP1,
-        DISP2 = DISP2,
-        RC_VAR = RC_VAR
-      )
-    )
-  RCC = RCC$RCC
-  #### sourcing
-  FIRM$COSTING_SYSTEM$RCC = RCC
+}
+
+
+# Step 6 Schuffle small rescources
+RC_small <- RC_small[sample(length(RC_small))]
+RCC <- c(RCC, RC_small)
+
+# sum(RC)
+RCCs <- sort(RCC, decreasing = TRUE, index.return = TRUE)
+RCC <- list(RCC = RCC, CHECK = list(cost_largestRCP = RCCs$x[1]/RCCs$x[NUMB_RES], 
+    cost_topTEN = sum(RCCs$x[1:10])/TC, DISP1 = DISP1, 
+    DISP2 = DISP2, RC_VAR = RC_VAR))
+RCC = RCC$RCC
+#### sourcing
+FIRM$COSTING_SYSTEM$RCC = RCC
 ```
 
 ### 5.3. Generating the Benchmark Product Cost (.gen\_COST\_CONS\_PAT.R)
@@ -614,13 +629,16 @@ cost vector it is now possible to calculate the benchmark product costs,
 which are the actual production costs per product. For this, the total
 demand of every resource (**TRU** vector), which are basically the
 column sums of the total resource consumption matrix
-(RES\_CONS\_PAT\_total) is computed. By dividing the RCC Vector through
-total demand of every resource, the RCU vector is generated. This vector
-therefore contains the costs one unit of each resource. The benchmark
-costs are now calculated by multiplying the resource consumption for
-every product with the respective resource costs that are needed and the
-number of units that need to be produced (demand), resulting in a vector
-of actual costs per product (**PCB**)
+(RES\_CONS\_PAT\_total) is computed.
+
+By dividing the RCC Vector through total demand of every resource, the
+RCU vector is generated. This vector therefore contains the costs one
+unit of each resource.
+
+The benchmark costs are now calculated by multiplying the resource
+consumption for every product with the respective resource costs that
+are needed and the number of units that need to be produced (demand),
+resulting in a vector of actual costs per product (**PCB**)
 
 <br>
 
@@ -634,10 +652,14 @@ explained in the following paragraphs.
     
     # RES_CONS_PAT Anand et al. 2019
     
-    RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
+    #BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) 
+    #BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
+    RCU<- FIRM$COSTING_SYSTEM$RCC/TRU 
     
-    # Benchmark product costs
-    FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND #BENCHMARK PRODUCT COSTS (TOTAL)
+    #BENCHMARK PRODUCT COSTS (TOTAL)
+    FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT
+                                %*%RCU
+                                *FIRM$PRODUCTION_ENVIRONMENT$DEMAND 
 ```
 
 ## 6\. Generating the costing system
@@ -740,39 +762,55 @@ pool as the driver. It therefore sorts the resources in RC\_to\_ACP by
 their size and takes the first one as the driver of the respective cost
 pool. The relative consumption (from **RES\_CONS\_PATp**) of this driver
 resource then becomes a column of the activity consumption matrix (which
-has the size \*\*NUMB\_PRO\*CP**). By multiplying this, the estimated
-cost vector (**PCH\*\*) is calcualted.
+has the size **NUMB\_PROxCP** ). By multiplying this, the estimated cost
+vector ( **PCH** ) is calcualted.
 
 ## 8\. Calculating the error and producing the output (1\_INIT.R)
 
 This model applys three different error measures to measure the
 difference between **PCB** and **PCH**:
 
-*EUCD - square root of mean squared error *MAPE - mean absolute
-percentage error \*MSE - mean squared error
+  - EUCD - square root of mean squared error
+  - MAPE - mean absolute percentage error
+  - MSE - mean squared error
 
 Each of them are calculated differently and therefore may show different
 results.
 
 ``` r
- ## Calculating the estimated product costs
-    FIRM$COSTING_SYSTEM$PCH =  apply((FIRM$COSTING_SYSTEM$ACP) * t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT),2,sum) # CHECKED 2019/09/12
-  
-      ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
-    EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
-    MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
-    MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
+## Calculating the estimated product costs
+FIRM$COSTING_SYSTEM$PCH = apply((FIRM$COSTING_SYSTEM$ACP) * 
+    t(FIRM$COSTING_SYSTEM$ACT_CONS_PAT), 2, sum)  # CHECKED 2019/09/12
+
+## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007
+EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB - FIRM$COSTING_SYSTEM$PCH)^2)), 
+    digits = 2)
+MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB - FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB), 
+    digits = 4)
+MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB - FIRM$COSTING_SYSTEM$PCH)^2)), 
+    digits = 2)
 ```
 
-Eventually and output file is prduced which contains necessary model
+Eventually an output file is prduced which contains necessary model
 parametes that were applied within the peticular run of the model as
 well as the calculated error methods.
 
 ``` r
 #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
-    preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
-                         FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
-                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
+    preData = data.frame(o,
+                         nn,
+                         FIRM$COSTING_SYSTEM$CP,
+                         FIRM$COSTING_SYSTEM$RC_VAR, 
+                         FIRM$COSTING_SYSTEM$NUMB_Error, 
+                         FIRM$COSTING_SYSTEM$Error,
+                         FIRM$PRODUCTION_ENVIRONMENT$DENS, 
+                         FIRM$PRODUCTION_ENVIRONMENT$COR, 
+                         FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, 
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
+                         EUCD,
+                         MAPE,
+                         MSE)
   
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
