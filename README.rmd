@@ -498,19 +498,19 @@ There are different methods and heuristics that can be used to allocate cost poo
 
 The heuristics names already describe the basic steps, respectively. Outcome of these heuristics are two lists, stating which resources are in which cost pool (**RC_to_ACP**) and depciting the costwise size of each cost pool (sum of the resources' costs) (**ACP**).
 
-##### 6.1.1. Size Miscellaneous Assignment (MAP_RES_CP_SIZE_MISC)
+#### 6.1.1. Size Miscellaneous Assignment (MAP_RES_CP_SIZE_MISC)
 
 Given a list of cost pools, with the length C, this heuristic assignes the costwise biggest resources to the (C-1) cost pools and therefore lefts one open. This remaining cost pool (called miscellaneous pool) is then filled with the remaining unassigned resources. 
 
-##### 6.1.2. Size Correlation Miscellaneous Assignment (MAP_RES_CP_SIZE_CORREL_MISC_ANAND)
+#### 6.1.2. Size Correlation Miscellaneous Assignment (MAP_RES_CP_SIZE_CORREL_MISC_ANAND)
 
 As in the first heuristc, this heuristc also seeds the (C-1) cost pools with the largest resources. Then it computes the correlation between every assigned resource and every not assigned resource. By iterating through these correlations it identifies the overall highest correlation and assigns the corresponding resource to the pool, that contains the counterpart resource of the correlation. This process is repeated until, either the costwise size of the remaining resources is equal or smaller than the defined **MISCPOOLSIZE** or the correlation is smaller than the desired Cut-Off (**CC**). Every then, still not assigned resource is therefore assigned to the miscellaneous pool. This heuristic also ensures that the miscellaneous pool has at least one non-zero. 
 
-##### 6.1.3. Size Random Miscellaneous Assignment (MAP_RES_CP_SIZE_RANDOM_MISC)
+#### 6.1.3. Size Random Miscellaneous Assignment (MAP_RES_CP_SIZE_RANDOM_MISC)
 
 This heuristic seeds (C-1) pools with the largest resources. It then assigns unassigned resources randomly to the (C-1) cost pools until the costwise site of the remaining resources is equal or smaller than the defined **MISCPOOLSIZE**. The remaining resources are then assigned to the miscellaneous pool. As in the other heuristics, this one also ensures that every cots pool contains at least one non-zero resource.
 
-##### 6.1.4. Size Correlation Cut_Off Miscellaneous Assignment (MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND)
+#### 6.1.4. Size Correlation Cut_Off Miscellaneous Assignment (MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND)
 
 This last heuristic loops over the cost pools and assigns the largest of the unassigned resources to the respective cost pool. It then computes the correlation between the just assigned resource (in this case the seed resource) and the other not assigned resources, and assigns them unitl the correlation between the seed resource and the respective resource is smaller then the defined Cut-Off (**CC**), the costwise size of the remaining unassigned resources is equal or smaller than the defined **MISCPOOLSIZE** or the number of remaining unassigned resources is equal to the remaining, still epmty cost pools. If the latter is the case every remaining resource is randomly assigned to one of the empty cost pools. If the miscellaneous pool condition is met, the unassigned resources are assigned to one of the empty cost pools each and the last cost pool is filled with the, after that still remaining unassigned resources. If the correlation condition is met, the loop starts again, assigns the largest resource to the next cost pool, computes the correlations, and so on. In any case this heuristic ensures, that every cost pool has at least one non-zero resource.
 
