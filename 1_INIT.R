@@ -15,7 +15,7 @@
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
 
-  SIM_NUMB =         1000                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         200                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
   TC =               1000000                #Total costs
 
@@ -32,7 +32,7 @@
   
   CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
+  RC_VAR =  c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(0.4)                              #Demand variation
   Error = c(0)                            #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
@@ -107,13 +107,36 @@
     
     
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
-    preData = data.frame(o,nn,FIRM$COSTING_SYSTEM$CP,FIRM$COSTING_SYSTEM$RC_VAR, FIRM$COSTING_SYSTEM$NUMB_Error, FIRM$COSTING_SYSTEM$Error,
-                         FIRM$PRODUCTION_ENVIRONMENT$DENS, FIRM$PRODUCTION_ENVIRONMENT$COR, FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
-                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,EUCD,MAPE,MSE)
+    preData = data.frame(o,
+                         nn,
+                         FIRM$COSTING_SYSTEM$CP,
+                         FIRM$COSTING_SYSTEM$RC_VAR, 
+                         FIRM$COSTING_SYSTEM$NUMB_Error, 
+                         FIRM$COSTING_SYSTEM$Error,
+                         FIRM$PRODUCTION_ENVIRONMENT$DENS, 
+                         FIRM$PRODUCTION_ENVIRONMENT$COR, 
+                         FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, 
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
+                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q20,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q10,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q02,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$NonZeroConsumption,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$countNonZero,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2,
+                         EUCD,
+                         MAPE,
+                         MSE)
   
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'NUMB_ME_AD','DENS', 'COR', 'Q_VAR', 
-                       'NUMB_PRO', 'NUMB_RES' ,'EUCD','MAPE','MSE')  
+                       'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
+                       'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2'
+                       ,'EUCD','MAPE','MSE')  
    
     #stacking the data with each run
     DATA = rbind(DATA,preData)
@@ -145,9 +168,11 @@ output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
 
-# calc_error = aggregate(DATA,list(DATA$CP),mean)
-# plot(calc_error$MAPE,type ='l')
-
+check = aggregate(DATA,list(DATA$CP),mean)
+plot(check$MAPE,type ='l')
+print(mean(check$CHECK_RCC20))
+print(mean(check$CHECK_RCC10))
+print(mean(check$CHECK_RCC02))
 if (ProductCostOutput==1)
 {
   output = paste("output/ProductCost_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          

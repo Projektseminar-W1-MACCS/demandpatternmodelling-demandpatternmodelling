@@ -1,10 +1,45 @@
 ## BUILDING A RESOURCE COST VECTOR ##
 
 
-# Building variable / fix costs Mertens (2020)
-.gen_RCC_KGM <- function(FIRM, unitsize, nonunitsize) {
+
+.gen_RCC<- function(FIRM, unitsize, nonunitsize) {
   # INIT
-  if (RC_VAR == -1)
+  NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
+  TC = FIRM$COSTING_SYSTEM$TC
+  RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
+  
+  preRCC = rlnorm(NUMB_RES, meanlog = 1, sdlog = RC_VAR)
+  #preRCC = rbeta(NUMB_RES, 0.025,1)
+  
+  RCC = (preRCC/sum(preRCC))*TC #normalizing it #ceiled realized demand for each product
+  
+  
+  ## Move the biggest resource to the front
+  largest_RC <-
+    sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
+  RCC <- c(RCC[largest_RC], RCC[-largest_RC])
+  
+  ###CHECK###
+  RCCs = sort(RCC, decreasing = TRUE)
+  
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20 = sum(RCCs[1:(0.2 * length(RCC))])/TC     #size of 20% biggest resources
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources
+  
+  #plot(sort(RCC))
+  #### sourcing
+  FIRM$COSTING_SYSTEM$RCC = RCC
+  return(FIRM)
+  
+}
+
+# Building variable / fix costs Mertens (2020)
+.gen_RCC_unit <- function(FIRM, unitsize, nonunitsize) {
+  # INIT
+  
+  unitsize = FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE
+  nonunitsize =FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE
+  if (RC_VAR[1] == -1)
   {
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
@@ -17,8 +52,7 @@
   # NON-UNIT-LEVEL COST SHARE DETERMINED Ittner et al. (1997)
   RES_BATCH_COST_MIN = 0.2
   RES_BATCH_COST_MAX = 0.5
-  PER_BATCH = RES_BATCH_COST_MIN + (RES_BATCH_COST_MAX - RES_BATCH_COST_MIN) *
-    runif(1) # Uniform distribution (0,1)
+  PER_BATCH = runif(1, RES_BATCH_COST_MIN,RES_BATCH_COST_MAX) # Uniform distribution (0,1)
   TC = FIRM$COSTING_SYSTEM$TC
   
   # COST SHARE
@@ -29,12 +63,16 @@
   # Draw from a lognornmal Function
   p_UNIT = abs(rlnorm(
     unitsize,
-    meanlog = 0,
-    sdlog = FIRM$COSTING_SYSTEM$RC_VAR
+    meanlog = 1,
+    sdlog = (FIRM$COSTING_SYSTEM$RC_VAR)
   )) #%DRAW RANDOM NUMBER as costs per one unit of each resource
+  
+  
+  
+  
   p_BATCH = abs(rlnorm(
     nonunitsize,
-    meanlog = 0,
+    meanlog = 1,
     sdlog = FIRM$COSTING_SYSTEM$RC_VAR
   ))
   #%DRAW RANDOM NUMBER
@@ -44,6 +82,24 @@
   RC_UNIT = (p_UNIT / sum(p_UNIT)) * TC_UNIT #share of every unit resource costs multiplied with total unit costs
   RC_BATCH = (p_BATCH / sum(p_BATCH)) * TC_BATCH #share of every batch resource costs multiplied with total unit costs
   RCC = c(RC_UNIT, RC_BATCH)  #put the vectors together
+  
+  ## Move the biggest resource to the front
+  largest_RC <-
+    sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
+  RCC <- c(RCC[largest_RC], RCC[-largest_RC])
+  
+  
+  
+  plot(sort(RC_UNIT))
+  ###CHECK###
+  RCCs = sort(RCC, decreasing = TRUE)
+  
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20 = sum(RCCs[1:(0.2 * length(RCC))])/TC     #size of 20% biggest resources
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources
+  
+  
+  
   
   #### sourcing
   FIRM$COSTING_SYSTEM$RCC = RCC
@@ -56,6 +112,7 @@
   
   FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   
+  #RC_VAR =-1
   if (RC_VAR == -1)
   {
     DISP2_MIN = 0.4
@@ -148,9 +205,20 @@
     )
   
   RCC = RCC$RCC
+  
+  
+  ###CHECK###
+  RCCs = sort(RCC, decreasing = TRUE)
+  
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20 = sum(RCCs[1:(0.2 * length(RCC))])/TC     #size of 20% biggest resources
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources
+  
+  
+  
   #### sourcing
   FIRM$COSTING_SYSTEM$RCC = RCC
-  
+  plot(sort(RCC[1:DISP1]))
   
   
   

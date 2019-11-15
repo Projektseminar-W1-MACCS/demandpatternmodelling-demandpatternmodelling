@@ -10,15 +10,18 @@ if (set_PE_constant==1) {set.seed(13)}
    
 ## ====================== STEP 1  Determining the activities =========================
 
-UNITLEVEL_ACT_SHARE_MIN = 0.3
-UNITLEVEL_ACT_SHARE_MAX = 0.7
+UNITLEVEL_ACT_SHARE_MIN = 0.2    #has the size of DISP1
+UNITLEVEL_ACT_SHARE_MAX = 0.2
 FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1) #random activity share between lower and upper bounds
-#print(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE)
+
 
 ## ====================== STEP 1.a Determining the amount of cost categories =================
 
 unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
+
+FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
+FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
 
 
 ## ====================== STEP 1.b Determining the density (DENS)  =========================
@@ -41,7 +44,7 @@ FIRM = .gen_Demand(FIRM) #gen_Demand_Anand and gen_Demand
 
 FIRM = .gen_RES_CONS_PAT_Anand(FIRM)
 
-FIRM = .gen_RCC_Anand(FIRM)
+FIRM = .gen_RCC_unit(FIRM)
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
