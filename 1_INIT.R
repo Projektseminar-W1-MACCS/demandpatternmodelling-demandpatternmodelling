@@ -32,7 +32,7 @@
   
   CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                           #Resource cost variation --> base for DISP2
+  RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(0.4)                              #Demand variation
   Error = c(0)                            #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links

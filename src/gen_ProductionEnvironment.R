@@ -10,9 +10,9 @@ if (set_PE_constant==1) {set.seed(13)}
    
 ## ====================== STEP 1  Determining the activities =========================
 
-UNITLEVEL_ACT_SHARE_MIN = 0.2    #has the size of DISP1
+UNITLEVEL_ACT_SHARE_MIN = 0.2    #0.2 is the size of DISP1 =10
 UNITLEVEL_ACT_SHARE_MAX = 0.2
-FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = UNITLEVEL_ACT_SHARE_MIN + (UNITLEVEL_ACT_SHARE_MAX - UNITLEVEL_ACT_SHARE_MIN)*runif(1) #random activity share between lower and upper bounds
+FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = runif(1, UNITLEVEL_ACT_SHARE_MIN, UNITLEVEL_ACT_SHARE_MAX) #random activity share between lower and upper bounds
 
 
 ## ====================== STEP 1.a Determining the amount of cost categories =================
