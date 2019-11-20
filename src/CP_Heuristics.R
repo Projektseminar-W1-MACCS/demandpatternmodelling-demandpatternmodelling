@@ -652,6 +652,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
    RES_CONS_PATp = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE * FIRM$COSTING_SYSTEM$TC
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
+   
    if (CP > 1){
       
       RCCn =length(RCC)
@@ -666,7 +667,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
          
          
          for (i in 1:(CP-1)){               # assign the biggest Resource to an activity pool
-            
+         
             #if(length(not_assigned)> length(i:(CP-1)) && sum(RCC[not_assigned])>MISCPOOLSIZE){
             
             #ACP[i]<-max(RCC[not_assigned])
@@ -685,11 +686,16 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
             
             x =1
             
-            while(RC_Correl$x[x] >= CC && NUMB_RES - length(unlist(RC_to_ACP))> length(i:CP) && sum(RCC[not_assigned])>MISCPOOLSIZE){
+            while(RC_Correl$x[x] >= CC && NUMB_RES - length(unlist(RC_to_ACP))> length(i:CP) && sum(RCC[unlist(RC_to_ACP)])< (FIRM$COSTING_SYSTEM$TC- MISCPOOLSIZE)){
+               
+               # if(x == 1){
+               #    RC_to_ACP[[i]]<- not_assigned[which.max(RCC[not_assigned])]
+               # }
+              
                
                RC_to_ACP[[i]] = c(RC_to_ACP[[i]],not_assigned[RC_Correl$ix[x]])
-               #ACP[i] = sum(ACP[i],RCC[RC_Correl$ix[x]])
                #not_assigned = setdiff(c(1:RCCn),unlist(RC_to_ACP))
+               #ACP[i] = sum(ACP[i],RCC[RC_Correl$ix[x]])
                #already_assigned[RC_Correl$ix[x]] = c(already_assigned[RC_Correl$ix[x]],RC_Correl$ix[x])
                x=x+1
                

@@ -187,9 +187,9 @@ write.table(Input_DATA, file = Input_DATA_output, sep = ';', row.names = TRUE,co
 
 print("Cost System Design FILE has been written")
 
-# check = aggregate(DATA,list(DATA$CP),mean)
-# plot(check$MAPE,type ='l')
-# print(check$MAPE)
+check = aggregate(DATA,list(DATA$CP),mean)
+plot(check$MAPE,type ='l')
+print(check$MAPE)
 
 if (ProductCostOutput==1)
 {
