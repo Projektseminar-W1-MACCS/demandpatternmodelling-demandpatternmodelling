@@ -17,6 +17,8 @@
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
+  FIRM$COSTING_SYSTEM$RC_VAR_MIN = RC_VAR_MIN
+  FIRM$COSTING_SYSTEM$RC_VAR_MAX = RC_VAR_MAX
   
   preRCC = rlnorm(NUMB_RES, meanlog = 1, sdlog = RC_VAR)
   #preRCC = rbeta(NUMB_RES, 0.025,1)
@@ -58,6 +60,9 @@
     
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
+  
+  FIRM$COSTING_SYSTEM$RC_VAR_MIN = RC_VAR_MIN
+  FIRM$COSTING_SYSTEM$RC_VAR_MAX = RC_VAR_MAX
   
   # NON-UNIT-LEVEL COST SHARE DETERMINED Ittner et al. (1997)
   RES_BATCH_COST_MIN = 0.2
@@ -136,11 +141,14 @@
   #RC_VAR =-1
   if (RC_VAR == -1)
   {
-    DISP2_MIN = 0.4               #if boundes between 0.5 and 0.8 this could be an equivilent to per_BATCH costs in gen_RCC_unit
+    DISP2_MIN = 0.4               #if bounds between 0.5 and 0.8 this could be an equivilent to per_BATCH costs in gen_RCC_unit
     DISP2_MAX = 0.7
     DISP2 = runif(1, DISP2_MIN, DISP2_MAX)
     #DISP2 = RC_VAR
   }
+  
+  FIRM$COSTING_SYSTEM$RC_VAR_MIN = DISP2_MIN
+  FIRM$COSTING_SYSTEM$RC_VAR_MAX = DISP2_MAX
   
   DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
   TC = FIRM$COSTING_SYSTEM$TC

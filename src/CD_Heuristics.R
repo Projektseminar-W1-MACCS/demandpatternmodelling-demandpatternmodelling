@@ -7,6 +7,7 @@
 ## Balakrishnan, Hansen, Labro 2011
 MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 
+FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_BIGPOOL, == 0'
 ACP_index_choosen<-vector(mode="numeric")
 # normalize RES_CONS_PAT
 RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp

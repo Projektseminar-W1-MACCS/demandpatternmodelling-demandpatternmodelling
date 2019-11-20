@@ -30,7 +30,7 @@
   dec_CD=            1                      # =
   
   
-  CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
+  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(0.4)                              #Demand variation
@@ -40,6 +40,9 @@
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
+  
+  CP_HEURISTIC = 3                          #Which Heuristic for pooling resources?
+  CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
   
 ## ======================================END OF INPUT MASK=====================================================                           
 
@@ -75,6 +78,8 @@
     FIRM$COSTING_SYSTEM$TC = TC
     FIRM$COSTING_SYSTEM$CC = CC
     FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
+    FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC
+    FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC
     
                 
     
@@ -88,13 +93,20 @@
     ####   !!!!! Normalerweise könnten wir Select-Case nutzen um die verschiedenen Heuristiken besser auszuwählen..  !!!! ####
     
     FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
-
-  
-    FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM) #Building the cost pools
-  
-  
-    FIRM = MAP_CP_P_BIGPOOL(FIRM,Error) #Selecting the drivers of a cost pool
     
+    #Building the cost pools
+    if(CP_HEURISTIC == 0){FIRM = MAP_RES_CP_SIZE_MISC(FIRM)}
+    
+    else if(CP_HEURISTIC == 1){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM)}
+    
+    else if(CP_HEURISTIC == 2){FIRM = MAP_RES_CP_SIZE_RANDOM_MISC(FIRM)}
+    
+    else if(CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
+  
+    #Selecting the drivers of a cost pool
+    if(CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error)}
+    
+  
     ## Calculating the estimated product costs
     
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12
@@ -164,18 +176,24 @@
 
 #### ====================================== OUTPUT WRITING ===================================
             
-output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+#output data
+output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")
 write.csv(DATA, file = output)
+
+#datalogging for inputparameter
+Input_DATA = .input_datalogging(FIRM,Input_DATA)
+Input_DATA_output = paste("output/input_params_CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".txt", sep = "")
+write.table(Input_DATA, file = Input_DATA_output, sep = ';', row.names = TRUE,col.names = FALSE)
+
 print("Cost System Design FILE has been written")
 
-check = aggregate(DATA,list(DATA$CP),mean)
-plot(check$MAPE,type ='l')
-print(mean(check$CHECK_RCC20))
-print(mean(check$CHECK_RCC10))
-print(mean(check$CHECK_RCC02))
+# check = aggregate(DATA,list(DATA$CP),mean)
+# plot(check$MAPE,type ='l')
+# print(check$MAPE)
+
 if (ProductCostOutput==1)
 {
   output = paste("output/ProductCost_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
-  write.csv(DATAp, file = output)
+  write.xlsx(DATAp, file = output)
   print("Product costs FILE has been written")
 }

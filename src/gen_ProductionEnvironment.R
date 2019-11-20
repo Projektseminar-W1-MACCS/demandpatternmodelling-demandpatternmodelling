@@ -14,7 +14,8 @@ UNITLEVEL_ACT_SHARE_MIN = 0.2    #0.2 is the size of DISP1 =10
 UNITLEVEL_ACT_SHARE_MAX = 0.2
 FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = runif(1, UNITLEVEL_ACT_SHARE_MIN, UNITLEVEL_ACT_SHARE_MAX) #random activity share between lower and upper bounds
 
-
+FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MIN = UNITLEVEL_ACT_SHARE_MIN
+FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MAX = UNITLEVEL_ACT_SHARE_MAX
 ## ====================== STEP 1.a Determining the amount of cost categories =================
 
 unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
@@ -35,16 +36,18 @@ DENS = runif(1, DENS_MIN, DENS_MAX);
 FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 }
 
+FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN = DENS_MIN
+FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
 
 ## ====================== '' STEP 2 Building Demand, RES_CONS_PAT, RCC and PCB '' =========================
 
 
 
-FIRM = .gen_Demand(FIRM) #gen_Demand_Anand and gen_Demand
+FIRM = .gen_Demand_Anand(FIRM) #gen_Demand_Anand and gen_Demand
 
 FIRM = .gen_RES_CONS_PAT_Anand(FIRM)
 
-FIRM = .gen_RCC_unit(FIRM)
+FIRM = .gen_RCC_Anand(FIRM)
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 

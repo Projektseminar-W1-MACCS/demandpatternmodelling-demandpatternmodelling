@@ -354,6 +354,8 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
 
 ## ANAND et al. 2019;
 MAP_RES_CP_SIZE_MISC<-function(FIRM){
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_MISC, == 0"
+   
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -410,7 +412,7 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
 } # ANAND p==0
 
 MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
-   
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_CORREL_MISC_ANAND, == 1"
    
    #### SOURCE ####
    CP = FIRM$COSTING_SYSTEM$CP
@@ -538,6 +540,8 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
 } # ANAND p==1 / with misc pool and both conditions (MISCpool AND CC)
 
 MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_RANDOM_MISC, == 2"
+   
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####
    CP = FIRM$COSTING_SYSTEM$CP                  #
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -567,12 +571,13 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
       
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(c(1:RCCn),already_assigned)
-      not_assigned = sample(not_assigned)
+      
       
       
       if(NUMB_RES > CP){
          
          ####Random Assignment####
+         not_assigned = sample(not_assigned)
          ACP_pre2 = vector(mode = 'numeric', length = CP-1)
          
          
@@ -636,7 +641,7 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
 } #ANAND p==2
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
-   
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND, == 3"
    
    
    ##INIT##
@@ -649,13 +654,12 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
    if (CP > 1){
       
+      RCCn =length(RCC)
+      already_assigned<- vector(mode = 'numeric', length = RCCn)          #transforms the list into a vector with all resources that are already assigned
+      not_assigned <- setdiff(c(1:RCCn),already_assigned)
+      
       if(NUMB_RES>CP){
          
-         
-         
-         RCCn =length(RCC)
-         already_assigned<- vector(mode = 'numeric', length = RCCn)          #transforms the list into a vector with all resources that are already assigned
-         not_assigned <- setdiff(c(1:RCCn),already_assigned)
          
          RC_to_ACP<-list()
          
@@ -722,7 +726,12 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
          
          ACP = append(ACP,ACP_misc)
          
-      }else{
+      }
+      
+      
+      if(NUMB_RES == CP){
+         
+         
          
          RC_to_ACP = list()
          ACP = vector(mode='numeric', length = CP)
@@ -733,10 +742,6 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
             ACP[i] = RCC[not_assigned[i]]
          }
          
-         
-         #Adding the misc pool value to ACP
-         
-         ACP = ACP_pre1
          
       }
       
