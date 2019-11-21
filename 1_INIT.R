@@ -41,7 +41,7 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   
-  CP_HEURISTIC = 3                          #Which Heuristic for pooling resources?
+  CP_HEURISTIC = 1                          #Which Heuristic for pooling resources?
   CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
   
 ## ======================================END OF INPUT MASK=====================================================                           
@@ -102,6 +102,8 @@
     else if(CP_HEURISTIC == 2){FIRM = MAP_RES_CP_SIZE_RANDOM_MISC(FIRM)}
     
     else if(CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
+    
+    else if(CP_HEURISTIC == 4){FIRM = MAP_CP_CORREL_MISC(FIRM)}
   
     #Selecting the drivers of a cost pool
     if(CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error)}
@@ -140,6 +142,7 @@
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$countNonZero,
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1,
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL,
                          EUCD,
                          MAPE,
                          MSE)
@@ -147,8 +150,8 @@
     #preData_p = .datalogging()
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
-                       'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2'
-                       ,'EUCD','MAPE','MSE')  
+                       'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
+                       'MISCPOOL','EUCD','MAPE','MSE')  
    
     #stacking the data with each run
     DATA = rbind(DATA,preData)

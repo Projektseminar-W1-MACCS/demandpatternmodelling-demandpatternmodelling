@@ -404,6 +404,9 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
    }
    
    
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
+   
    FIRM$COSTING_SYSTEM$ACP = ACP
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
@@ -531,6 +534,10 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    }
    
    
+   
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
+   
    #### SOURCING ####  
    
    FIRM$COSTING_SYSTEM$ACP = ACP
@@ -628,7 +635,8 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
       
    }
    
-   
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
    
    
    ###SOURCING
@@ -652,7 +660,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
    RES_CONS_PATp = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE * FIRM$COSTING_SYSTEM$TC
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
-   
+  
    if (CP > 1){
       
       RCCn =length(RCC)
@@ -686,11 +694,10 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
             
             x =1
             
-            while(RC_Correl$x[x] >= CC && NUMB_RES - length(unlist(RC_to_ACP))> length(i:CP) && sum(RCC[unlist(RC_to_ACP)])< (FIRM$COSTING_SYSTEM$TC- MISCPOOLSIZE)){
+            while(RC_Correl$x[x] >= CC && NUMB_RES - length(unlist(RC_to_ACP))> (CP-i) && sum(RCC[unlist(RC_to_ACP)])< (FIRM$COSTING_SYSTEM$TC- MISCPOOLSIZE)){
                
-               # if(x == 1){
-               #    RC_to_ACP[[i]]<- not_assigned[which.max(RCC[not_assigned])]
-               # }
+               #NUMB_RES - length(unlist(RC_to_ACP))> length(i:CP) yields a different result, since the constraint is reached one resource to early, which causes that
+               #the then not assigned resource is assigned later (if not even in the misc pool) and the correlation is then lower --> higher error
               
                
                RC_to_ACP[[i]] = c(RC_to_ACP[[i]],not_assigned[RC_Correl$ix[x]])
@@ -760,6 +767,11 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
       
    }  
    
+   
+   
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
+   
    FIRM$COSTING_SYSTEM$ACP = ACP
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
@@ -768,7 +780,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
 }# ANAND P==3 like anands currel cutoff ( not one by one) w/ miscpool
 
 MAP_CP_CORREL_MISC<-function(FIRM){
-   
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_CP_CORREL_MISC, == OLEs"
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
    CP = FIRM$COSTING_SYSTEM$CP
