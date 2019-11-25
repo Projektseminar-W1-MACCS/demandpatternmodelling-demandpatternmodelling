@@ -143,6 +143,7 @@
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1,
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2,
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL,
+                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$DISP2,
                          EUCD,
                          MAPE,
                          MSE)
@@ -151,7 +152,7 @@
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
                        'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
-                       'MISCPOOL','EUCD','MAPE','MSE')  
+                       'MISCPOOL','DISP2','EUCD','MAPE','MSE')  
    
     #stacking the data with each run
     DATA = rbind(DATA,preData)
