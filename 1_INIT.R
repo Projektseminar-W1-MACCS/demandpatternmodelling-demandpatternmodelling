@@ -41,7 +41,7 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   
-  CP_HEURISTIC = 1                          #Which Heuristic for pooling resources?
+  CP_HEURISTIC = 3                          #Which Heuristic for pooling resources? # 0-4
   CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
   
 ## ======================================END OF INPUT MASK=====================================================                           
@@ -181,19 +181,19 @@
 #### ====================================== OUTPUT WRITING ===================================
             
 #output data
-output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")
+output = paste("output/Third Replication/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".csv", sep = "")
 write.csv(DATA, file = output)
 
 #datalogging for inputparameter
 Input_DATA = .input_datalogging(FIRM,Input_DATA)
-Input_DATA_output = paste("output/input_params_CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".txt", sep = "")
+Input_DATA_output = paste("output/Third Replication/input_params_CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".txt", sep = "")
 write.table(Input_DATA, file = Input_DATA_output, sep = ';', row.names = TRUE,col.names = FALSE)
 
 print("Cost System Design FILE has been written")
 
-check = aggregate(DATA,list(DATA$CP),mean)
-plot(check$MAPE,type ='l')
-print(check$MAPE)
+# check = aggregate(DATA,list(DATA$CP),mean)
+# plot(check$MAPE,type ='l')
+# print(check$MAPE)
 
 if (ProductCostOutput==1)
 {
