@@ -32,7 +32,7 @@
   
   CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(-1)                           #Resource cost variation --> base for DISP2
+  RC_VAR =  c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                           #Resource cost variation --> base for DISP2
   Q_VAR = c(0.4)                              #Demand variation
   Error = c(0)                            #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
@@ -41,7 +41,7 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   
-  CP_HEURISTIC = 3                          #Which Heuristic for pooling resources? # 0-4
+  CP_HEURISTIC = 1                          #Which Heuristic for pooling resources? # 0-4
   CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
   
 ## ======================================END OF INPUT MASK=====================================================                           
@@ -143,7 +143,6 @@
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1,
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2,
                          FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$DISP2,
                          EUCD,
                          MAPE,
                          MSE)
@@ -152,7 +151,7 @@
     colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR', 'Q_VAR', 
                        'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
                        'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
-                       'MISCPOOL','DISP2','EUCD','MAPE','MSE')  
+                       'MISCPOOL','EUCD','MAPE','MSE')  
    
     #stacking the data with each run
     DATA = rbind(DATA,preData)
@@ -181,13 +180,13 @@
 #### ====================================== OUTPUT WRITING ===================================
             
 #output data
-output = paste("output/Third Replication/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".csv", sep = "")
+output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".csv", sep = "")
 write.csv(DATA, file = output)
 
 #datalogging for inputparameter
-Input_DATA = .input_datalogging(FIRM,Input_DATA)
-Input_DATA_output = paste("output/Third Replication/input_params_CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".txt", sep = "")
-write.table(Input_DATA, file = Input_DATA_output, sep = ';', row.names = TRUE,col.names = FALSE)
+# Input_DATA = .input_datalogging(FIRM,Input_DATA)
+# Input_DATA_output = paste("output/input_params_CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".txt", sep = "")
+# write.table(Input_DATA, file = Input_DATA_output, sep = ';', row.names = TRUE,col.names = FALSE)
 
 print("Cost System Design FILE has been written")
 
