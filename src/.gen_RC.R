@@ -17,8 +17,8 @@
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
-  FIRM$COSTING_SYSTEM$RC_VAR_MIN = RC_VAR_MIN
-  FIRM$COSTING_SYSTEM$RC_VAR_MAX = RC_VAR_MAX
+  FIRM$COSTING_SYSTEM$RC_VAR_MIN = 0.4
+  FIRM$COSTING_SYSTEM$RC_VAR_MAX = 0.7
   
   preRCC = rlnorm(NUMB_RES, meanlog = 1, sdlog = RC_VAR)
   #preRCC = rbeta(NUMB_RES, 0.025,1)
@@ -51,8 +51,11 @@
   
   unitsize = FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE
   nonunitsize =FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE
+  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
+  FIRM$COSTING_SYSTEM$RC_VAR_MIN = 0.4
+  FIRM$COSTING_SYSTEM$RC_VAR_MAX = 0.7
   
-  if (RC_VAR == -1)
+  if (RC_VAR[1] == -1)
   {
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
@@ -62,9 +65,7 @@
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
-  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
-  FIRM$COSTING_SYSTEM$RC_VAR_MIN = 0.4
-  FIRM$COSTING_SYSTEM$RC_VAR_MAX = 0.7
+  
   
   
   # NON-UNIT-LEVEL COST SHARE DETERMINED Ittner et al. (1997)
@@ -102,16 +103,7 @@
   RCC = c(RC_UNIT, RC_BATCH)  #put the vectors together
   
   
-  # if(sum((RC_UNIT)/TC) > 0.8){
-  #   browser()
-  # }
-  # 
-  # #Moving the unitsize biggest resources to the front
-  # largest_RC <-
-  #   sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[unitsize]
-  # largest_RC = sample(largest_RC)
-  # RCC <- c(RCC[largest_RC], RCC[-largest_RC])
-  
+ 
   ## Move the biggest resource to the front
   largest_RC <-
     sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
@@ -119,7 +111,6 @@
   
   
   
-  #plot(sort(RC_UNIT))
   ###CHECK###
   RCCs = sort(RCC, decreasing = TRUE)
   

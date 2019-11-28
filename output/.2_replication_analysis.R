@@ -4,7 +4,7 @@
 
 ####setup####
 #options(java.parameters = "- Xmx2048m")
-install.packages("reshape2") #and 'xlsx',robustHD,lm.beta
+#install.packages("reshape2") #and 'xlsx',robustHD,lm.beta
 library("xlsx")
 library('ggplot2')
 library('robustHD')
@@ -153,11 +153,13 @@ coef(linearReg_anand_beta)
 #### Model breaking with Q-var variation####
 
 
-##loading
+##loading a saved file
 file_q_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Q_VAR variation/Zwischenpräsentation/CSD_2019-11-27-14191.csv"
 
 
 rep_q_var_output = read.csv(file_q_var)
+
+
 
 
 ###reshaping###
@@ -184,11 +186,11 @@ ggplot(q_var_output_agg, aes(x = CP, y = MAPE, color = Q_VAR, group = Q_VAR))+ge
 
 q_var = melt(q_var_output, id = c('CP','Q_VAR'))
 q_var$CP = as.factor(q_var$CP)
-
+q_var_output_agg$CP = as.factor(q_var_output_agg$CP)
 ggplot(q_var, aes(x = CP, y = value, fill = Q_VAR))+geom_boxplot()+
   ggtitle('SIZE CORREL MISC Q_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
-  ylim(0,1)
+  ylim(0,1)+geom_line(data = q_var_output_agg, aes(x =CP, y=MAPE, group = Q_VAR))
 
 
 
@@ -197,6 +199,21 @@ ggplot(q_var, aes(x = CP, y = value, fill = Q_VAR))+geom_boxplot()+
 q_var_direct = subset(q_var, Q_VAR == 2 | Q_VAR == 'ANAND')
 
 ggplot(q_var_direct, aes(x = CP, y = value, fill = Q_VAR))+geom_boxplot()+
+  ggtitle('SIZE CORREL MISC Q_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
+  ylim(0,1)
+
+
+
+
+####loading the output directly####
+
+DATA = DATA
+
+DATA_agg = aggregate(.~CP + RCC_VAR, data = DATA, FUN = mean)
+
+
+ggplot(DATA_agg, aes(x = CP, y = MAPE, color = RCC_VAR, group = RCC_VAR))+geom_line(size = 1)+
   ggtitle('SIZE CORREL MISC Q_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
   ylim(0,1)
