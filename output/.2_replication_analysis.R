@@ -21,17 +21,28 @@ file_rep = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third R
 
 replication_output = read.xlsx(file_rep,2)
 
+##loading the outpout directly from R
+
+replication_output = DATA
+
 ##loading the original model output
-file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic,".xlsx")
+file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 2",".xlsx")
 
 anand_output = read.xlsx(file_anand, 2)
 
+file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 3",".csv")
+
+anand_output = read.csv(file_anand, sep =";")
+
 #anand_output[] <- lapply(anand_output, function(x) as.numeric(as.character(x)))
 
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC",".xlsx")
+file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 3",".csv")
 
-anand_output_gdrcc = read.xlsx(file_anand_gdrcc, 1)
+anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
 
+file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 2",".xslx")
+
+anand_output_gdrcc = read.xslx(file_anand_gdrcc,1)
 #anand_output_gdrcc[] <- lapply(anand_output_gdrcc, function(x) as.numeric(as.character(x)))
 
 
@@ -62,54 +73,35 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Model)) +
         panel.grid.minor = element_blank(),
         axis.line = element_line(colour = "black"))+
   theme_bw()+
-  ggtitle('SIZE CORREL CUT-OFF')+                              #Adaption required each time heuristic is changes
+  ggtitle('SIZE CORREL MISC')+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
   ylim(0,1)
 
 
-# ###descriptive statistics#####
-# CP = unique(anand_output$ACP)
-# 
-# 
-# 
-# ###Anand Standard deviation
-# anand_sd = vector(mode ='numeric')
-# for(i in CP) {
-#   
-#   
-#   anand_sd[i] = sd(anand_output$MPE[anand_output$ACP == i])
-#   
-# }
-# 
-# ###Anand Mean
-# anand_mean = vector(mode ='numeric')
-# for(i in CP) {
-#   
-#   
-#   anand_mean[i] = mean(anand_output$MPE[anand_output$ACP == i])
-#   
-# }
-# 
-# ###Replication Standard deviation
-# replication_sd = vector(mode ='numeric')
-# for(i in CP) {
-#   
-#   
-#   replication_sd[i] = sd(replication_output$MAPE[replication_output$CP == i])
-#   
-# }
-# 
-# ###Replication Mean
-# replication_mean = vector(mode ='numeric')
-# for(i in CP) {
-#   
-#   
-#   replication_mean[i] = mean(replication_output$MAPE[replication_output$CP == i])
-#   
-# }
-# 
-# 
-# descriptive_stats = data.frame(anand_sd,anand_mean,replication_sd,replication_mean)
+
+
+
+# ###descriptive statistics and Check #####
+
+plot(hist(replication_output$CHECK_RCC02, breaks = 7, xlim = c(0.05,0.5)))
+plot(hist(anand_output$CHECK_RCC02, breaks = 7,xlim = c(0.05,0.5)), add = TRUE)
+
+
+ks.test(replication_output$CHECK_RCC02,'rnorm')
+
+plot(sort(anand_output$RCC_0/1000000), type = 'l')
+lines(sort(unique(replication_output$CHECK_RCC02)), type = 'l')
+
+mean(replication_output$CHECK_RCC02)
+mean(replication_output$CHECK_RCC10)
+mean(replication_output$CHECK_RCC20)
+
+
+anand_output$CHECK_RCC02 = as.numeric(anand_output$CHECK_RCC02)
+mean(anand_output$CHECK_RCC02)
+mean(anand_output$CHECK_RCC10)
+mean(anand_output$CHECK_RCC20)
+
 #####Regression Analysis####
 
 print('CORRELATION BETWEEN REPLICATION AND ANAND MAPE CURVE OVER COST POOLS')
@@ -117,7 +109,7 @@ cor(anand_output$MPE,replication_output$MAPE)
 
 scatter.smooth(replication_output$MAPE, replication_output$CHECK_RCC02)   #scatter plot to see if a linear regression would make sense --> makes sense
 
-
+scatter.smooth(anand_output$MPE, anand_output$CHECK_RCC02)
 
 ###Standardized regression analysis###
 
@@ -151,6 +143,15 @@ coef(linearReg_anand_beta)
 
 
 #### Model breaking with Q-var variation####
+
+
+
+
+
+
+
+
+
 
 
 ##loading a saved file
