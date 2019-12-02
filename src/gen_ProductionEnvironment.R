@@ -43,11 +43,11 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
 
 
 
-FIRM = .gen_Demand_Anand(FIRM) #gen_Demand_Anand and gen_Demand
+FIRM = .gen_Demand(FIRM) #gen_Demand_Anand and gen_Demand
 
 FIRM = .gen_RES_CONS_PAT_Anand(FIRM)
 
-FIRM = .gen_RCC_unit(FIRM)
+FIRM = .gen_RCC_Anand(FIRM)
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
