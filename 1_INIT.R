@@ -87,12 +87,10 @@
     
     #print(FIRM$COSTING_SYSTEM$CP)  
     #print(FIRM$COSTING_SYSTEM$Error)  
-    
-    ####   !!!!! Normalerweise könnten wir Select-Case nutzen um die verschiedenen Heuristiken besser auszuwählen..  !!!! ####
-    
+       
     FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
     
-    #Building the cost pools
+    ##Building the cost pools
     if(CP_HEURISTIC == 0){FIRM = MAP_RES_CP_SIZE_MISC(FIRM)}
     
     else if(CP_HEURISTIC == 1){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM)}
@@ -102,17 +100,9 @@
     else if(CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
     
     else if(CP_HEURISTIC == 4){FIRM = MAP_CP_CORREL_MISC(FIRM)}
-  
-    #Selecting the drivers of a cost pool
+    ## Selecting the drivers of a cost pool
     if(CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error)}
-    
-  
-    
-    
-    
-    
-    
-    
+      
     
     ## Calculating the estimated product costs
     
@@ -122,15 +112,11 @@
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
-   
-     
-    
     
     ## DATA LOGGING
     
-    DATA = .system_datalogging(o,nn,FIRM,DATA,CP_HEURISTIC,CD_HEURISTIC)
-    if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp)}
-   
+    DATA = .system_datalogging(o,nn,FIRM,DATA)
+    if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
     ## Print outputs;
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
@@ -169,6 +155,6 @@ print("Cost System Design FILE has been written")
 if (ProductCostOutput==1)
 {
   output = paste("output/ProductCost_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
-  write.xlsx(DATAp, file = output)
+  write.csv(DATAp, file = output)
   print("Product costs FILE has been written")
 }
