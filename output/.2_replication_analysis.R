@@ -40,9 +40,9 @@ file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output
 
 anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
 
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 2",".xslx")
+file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 2",".xlsx")
 
-anand_output_gdrcc = read.xslx(file_anand_gdrcc,1)
+anand_output_gdrcc = read.xlsx(file_anand_gdrcc,1)
 #anand_output_gdrcc[] <- lapply(anand_output_gdrcc, function(x) as.numeric(as.character(x)))
 
 
@@ -81,7 +81,7 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Model)) +
 
 
 
-# ###descriptive statistics and Check #####
+####descriptive statistics and Check #####
 
 plot(hist(replication_output$CHECK_RCC02, breaks = 7, xlim = c(0.05,0.5)))
 plot(hist(anand_output$CHECK_RCC02, breaks = 7,xlim = c(0.05,0.5)), add = TRUE)
@@ -219,3 +219,46 @@ ggplot(DATA_agg, aes(x = CP, y = MAPE, color = RCC_VAR, group = RCC_VAR))+geom_l
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
   ylim(0,1)
        
+
+
+#####SIM_NUMB_VARIATION####
+
+file_path = 'C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/SIM_NUMB Variation/SIM_NUMB Variation 200 vs 1000 P==1 20191202.xlsx'
+
+sim_numb_output = read.xlsx(file_path,3)
+
+plot_data = melt(sim_numb_output, id.vars = 'CP')
+plot_data = plot_data[order(plot_data$variable),]
+
+ggplot(plot_data, aes(x = CP, y=value, linetype = variable, color = variable))+geom_line(size = 1.5)+xlim(c(0,20))+ylim(c(0.2,0.75))+ theme_bw()+
+  ggtitle('EFFECT OF SIM_NUMB ON ACCURACY')+                              #Adaption required each time heuristic is changes
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+geom_point(aes(shape = variable), size = 3)
+
+
+summary(sim_numb_output)
+
+
+
+
+
+
+sim_numb_100 = DATA
+sim_numb_100 = aggregate(.~CP,sim_numb_100, mean)
+
+sim_numb_200 = DATA
+sim_numb_200 = aggregate(.~CP,sim_numb_200, mean)
+
+sim_numb_500 = DATA
+sim_numb_500 = aggregate(.~CP,sim_numb_500, mean)
+
+sim_numb_1000 = DATA
+sim_numb_1000 = aggregate(.~CP,sim_numb_1000, mean)
+
+
+
+
+plot_sim_numb = data.frame(sim_numb_100$CP,sim_numb_100$MAPE,sim_numb_200$MAPE,sim_numb_500$MAPE,sim_numb_1000$MAPE)
+plot_sim_numb = melt(plot_sim_numb, id.vars = 'sim_numb_100.CP')
+
+ggplot(plot_sim_numb, aes(x = sim_numb_100.CP, y= value, linetype = variable, color = variable))+geom_line(size = 1.5)
+

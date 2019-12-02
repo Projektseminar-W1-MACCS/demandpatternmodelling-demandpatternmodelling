@@ -2,7 +2,7 @@
 # COST DRIVER SELECTION HEURISTICS
 # The algorithms orientates to 
 # Balakrishnan, Hansen, Labro 2011
-################################################
+
 
 ## Balakrishnan, Hansen, Labro 2011
 MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
@@ -53,21 +53,14 @@ ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
 
 
 
-
 FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
 FIRM$COSTING_SYSTEM$ACP_index_choosen
 
+
+
+
 return(FIRM)
 }
-
-
-
-
-
-
-
-
-
 
 MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
