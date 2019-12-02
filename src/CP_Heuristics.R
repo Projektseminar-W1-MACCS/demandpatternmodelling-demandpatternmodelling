@@ -354,6 +354,8 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
 
 ## ANAND et al. 2019;
 MAP_RES_CP_SIZE_MISC<-function(FIRM){
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_MISC, == 0"
+   
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -402,6 +404,9 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
    }
    
    
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
+   
    FIRM$COSTING_SYSTEM$ACP = ACP
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
@@ -410,6 +415,8 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
 } # ANAND p==0
 
 MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_CORREL_MISC_ANAND, == 1"
+   
    #### SOURCE ####
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -435,8 +442,9 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(c(1:RCCn),already_assigned)
       #correlative assignment only if there are more than one resource in not_assigned
+      ####CORRELATION RULE####
       if (NUMB_RES > CP){
-         ####CORRELATION RULE####
+   
          
          #### BUILDIUNG OF CORRELATION MATRIX ####
          
@@ -496,7 +504,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
             i = i+1
          }
          
-         ###MISCPOOL RULE####
+   ###MISCPOOL RULE####
          
          #Appending 
          RC_to_ACP_misc =list(not_assigned)
@@ -526,6 +534,10 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    }
    
    
+   
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
+   
    #### SOURCING ####  
    
    FIRM$COSTING_SYSTEM$ACP = ACP
@@ -535,6 +547,8 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
 } # ANAND p==1 / with misc pool and both conditions (MISCpool AND CC)
 
 MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_RANDOM_MISC, == 2"
+   
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####
    CP = FIRM$COSTING_SYSTEM$CP                  #
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -564,12 +578,13 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
       
       already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
       not_assigned <- setdiff(c(1:RCCn),already_assigned)
-      not_assigned = sample(not_assigned)
+      
       
       
       if(NUMB_RES > CP){
          
          ####Random Assignment####
+         not_assigned = sample(not_assigned)
          ACP_pre2 = vector(mode = 'numeric', length = CP-1)
          
          
@@ -620,7 +635,8 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
       
    }
    
-   
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
    
    
    ###SOURCING
@@ -632,8 +648,8 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
    
 } #ANAND p==2
 
-MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
-   
+MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND, == 3"
    
    
    ##INIT##
@@ -644,22 +660,22 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
    RES_CONS_PATp = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE * FIRM$COSTING_SYSTEM$TC
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
+  
    if (CP > 1){
+      
+      RCCn =length(RCC)
+      already_assigned<- vector(mode = 'numeric', length = RCCn)          #transforms the list into a vector with all resources that are already assigned
+      not_assigned <- setdiff(c(1:RCCn),already_assigned)
       
       if(NUMB_RES>CP){
          
-         
-         
-         RCCn =length(RCC)
-         already_assigned<- vector(mode = 'numeric', length = RCCn)          #transforms the list into a vector with all resources that are already assigned
-         not_assigned <- setdiff(c(1:RCCn),already_assigned)
          
          RC_to_ACP<-list()
          
          
          
          for (i in 1:(CP-1)){               # assign the biggest Resource to an activity pool
-            
+         
             #if(length(not_assigned)> length(i:(CP-1)) && sum(RCC[not_assigned])>MISCPOOLSIZE){
             
             #ACP[i]<-max(RCC[not_assigned])
@@ -678,11 +694,15 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
             
             x =1
             
-            while(RC_Correl$x[x] >= CC && NUMB_RES - length(unlist(RC_to_ACP))> length(i:CP) && sum(RCC[not_assigned])>MISCPOOLSIZE){
+            while(RC_Correl$x[x] >= CC && NUMB_RES - length(unlist(RC_to_ACP))> (CP-i) && sum(RCC[unlist(RC_to_ACP)])< (FIRM$COSTING_SYSTEM$TC- MISCPOOLSIZE)){
+               
+               #NUMB_RES - length(unlist(RC_to_ACP))> length(i:CP) yields a different result, since the constraint is reached one resource to early, which causes that
+               #the then not assigned resource is assigned later (if not even in the misc pool) and the correlation is then lower --> higher error
+              
                
                RC_to_ACP[[i]] = c(RC_to_ACP[[i]],not_assigned[RC_Correl$ix[x]])
-               #ACP[i] = sum(ACP[i],RCC[RC_Correl$ix[x]])
                #not_assigned = setdiff(c(1:RCCn),unlist(RC_to_ACP))
+               #ACP[i] = sum(ACP[i],RCC[RC_Correl$ix[x]])
                #already_assigned[RC_Correl$ix[x]] = c(already_assigned[RC_Correl$ix[x]],RC_Correl$ix[x])
                x=x+1
                
@@ -719,7 +739,12 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
          
          ACP = append(ACP,ACP_misc)
          
-      }else{
+      }
+      
+      
+      if(NUMB_RES == CP){
+         
+         
          
          RC_to_ACP = list()
          ACP = vector(mode='numeric', length = CP)
@@ -730,10 +755,6 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
             ACP[i] = RCC[not_assigned[i]]
          }
          
-         
-         #Adding the misc pool value to ACP
-         
-         ACP = ACP_pre1
          
       }
       
@@ -746,6 +767,11 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
       
    }  
    
+   
+   
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
+   
    FIRM$COSTING_SYSTEM$ACP = ACP
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
@@ -754,7 +780,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
 }# ANAND P==3 like anands currel cutoff ( not one by one) w/ miscpool
 
 MAP_CP_CORREL_MISC<-function(FIRM){
-   
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_CP_CORREL_MISC, == OLEs"
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
    CP = FIRM$COSTING_SYSTEM$CP
@@ -1534,7 +1560,7 @@ MAP_RES_CP_SIZE_CORREL_RAND_MISC<-function(FIRM){
    return(FIRM)
 } #with miscpool and trying to minimize it by random assignment
 
-MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
+MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
    
    
    

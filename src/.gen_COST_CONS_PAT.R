@@ -36,7 +36,7 @@
     # RES_CONS_PAT Anand et al. 2019
     
     RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
-   # browser()
+   
     # Benchmark product costs
     FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND #BENCHMARK PRODUCT COSTS (TOTAL)
     
@@ -45,20 +45,16 @@
     
     #PCB = PCB*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
     
-    
-    
     #PCB = vector(mode ='numeric')
     
-    #PCB = RES_CONS_PATp%*%RCC
+    
+    #PCB = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp%*%FIRM$COSTING_SYSTEM$RCC
     
     #FIRM$COSTING_SYSTEM$PCB = PCB
     #check1 = sum(PC_B); % sum must be 10^6
     # RES_CONS_PATp is essential for further cost allocation.
     
     #RES_CONS_PATp = as.data.frame(scale(RES_CONS_PAT, center=FALSE, scale=colSums(RES_CONS_PAT)))
-    
-    
-    
     
     
   }else if(COST_APPROACH=="BALA"){

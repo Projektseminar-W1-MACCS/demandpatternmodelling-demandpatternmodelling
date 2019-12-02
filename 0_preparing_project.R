@@ -7,7 +7,6 @@
 #### Test
 ###########
 
-
 ##############################
 # 0 - Install librairies - Library
 ##############################
@@ -17,6 +16,7 @@
 #   "tidyr",
 #   "rmarkdown",
 #   "ggplot2"
+#     
 #   
 # ))
 # 
@@ -39,8 +39,3 @@ source('src/.datalogging.R')
 
 
 source("1_INIT.R")
-
-#test
-
-
-
