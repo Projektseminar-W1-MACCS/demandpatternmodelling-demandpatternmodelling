@@ -2,8 +2,6 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
-
-
 ## ======================================INPUT MASK============================================================
   FIRM = list()                           
   FIRM$PRODUCTION_ENVIRONMENT = list()
@@ -20,7 +18,7 @@
   TC =               1000000                #Total costs
 
 
-  ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
+  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
   set_PE_constant=   0                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
 
   dec_ERROR=         1                      #Control Variable - 
@@ -30,12 +28,12 @@
   dec_CD=            1                      # =
   
   
-  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
+  CP = c(1)                                 #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                           #Resource cost variation --> base for DISP2
-  Q_VAR = c(0.4)                              #Demand variation
-  Error = c(0)                            #Measurement error
-  NUMB_Error = c(1)                         #Number of errornoues links
+  RC_VAR =  c(0.2)                          #Resource cost variation --> base for DISP2 (ABL2019)
+  Q_VAR = c(0.4)                            #Demand variation
+  Error = c(0)                              #Measurement error (BHL2011)
+  NUMB_Error = c(1)                         #Number of errornoues links (LV2008)
   DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
@@ -109,6 +107,13 @@
     if(CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error)}
     
   
+    
+    
+    
+    
+    
+    
+    
     ## Calculating the estimated product costs
     
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12
@@ -118,48 +123,15 @@
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
    
+     
     
     
-  #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
-    preData = data.frame(o,
-                         nn,
-                         FIRM$COSTING_SYSTEM$CP,
-                         FIRM$COSTING_SYSTEM$RC_VAR, 
-                         FIRM$COSTING_SYSTEM$NUMB_Error, 
-                         FIRM$COSTING_SYSTEM$Error,
-                         FIRM$PRODUCTION_ENVIRONMENT$DENS, 
-                         FIRM$PRODUCTION_ENVIRONMENT$COR, 
-                         FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, 
-                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
-                         FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q20,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q10,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q02,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$NonZeroConsumption,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$countNonZero,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2,
-                         FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL,
-                         EUCD,
-                         MAPE,
-                         MSE)
-  
-    #preData_p = .datalogging()
-    colnames(preData) = c('o','nn','CP','RCC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR', 'Q_VAR', 
-                       'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
-                       'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
-                       'MISCPOOL','EUCD','MAPE','MSE')  
+    ## DATA LOGGING
+    
+    DATA = .system_datalogging(o,nn,FIRM,DATA,CP_HEURISTIC,CD_HEURISTIC)
+    if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp)}
    
-    #stacking the data with each run
-    DATA = rbind(DATA,preData)
-       
-    # TRACKING THE PRODUCT LEVEL WHEN NEEDED
-    if (ProductCostOutput==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
-   
-    #Print outputs;
+    ## Print outputs;
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
     print((EUCD))

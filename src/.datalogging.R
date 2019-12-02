@@ -1,8 +1,54 @@
 ################################################
-# TRACKS THE PRODUCT LEVEL
+# TRACKING THE DATA
 ################################################
 
-.datalogging<-function(o,nn,FIRM,DATAp){
+
+.system_datalogging <- function(o,nn,FIRM,DATA,CP_HEURISTIC,CD_HEURISTIC){
+  
+  #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
+  preData = data.frame(o,
+                       nn,
+                       CP_HEURISTIC,
+                       CD_HEURISTIC,
+                       FIRM$COSTING_SYSTEM$CP,
+                       FIRM$COSTING_SYSTEM$RC_VAR, 
+                       FIRM$COSTING_SYSTEM$NUMB_Error, 
+                       FIRM$COSTING_SYSTEM$Error,
+                       FIRM$PRODUCTION_ENVIRONMENT$DENS, 
+                       FIRM$PRODUCTION_ENVIRONMENT$COR, 
+                       FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, 
+                       FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
+                       FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q20,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q10,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q02,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$NonZeroConsumption,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$countNonZero,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL,
+                       EUCD,
+                       MAPE,
+                       MSE)
+  
+  #preData_p = .datalogging()
+  colnames(preData) = c('o','nn','CPH','CDH','CP','RCC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR', 'Q_VAR', 
+                        'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
+                        'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
+                        'MISCPOOL','EUCD','MAPE','MSE')  
+  
+  #stacking the data with each run
+  DATA = rbind(DATA,preData)
+  
+  return(DATA)
+  
+}
+
+
+.product_datalogging<-function(o,nn,FIRM,DATAp){
   
   NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
   
