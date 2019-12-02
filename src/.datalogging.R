@@ -2,8 +2,7 @@
 # TRACKS THE PRODUCT LEVEL
 ################################################
 
-.datalogging<-function(o,nn,FIRM,DATAp)
-{
+.datalogging<-function(o,nn,FIRM,DATAp){
   
   NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
   
@@ -48,6 +47,37 @@
   DATAp = rbind(DATAp,DATApre) #put it together
   
   return(DATAp)
+}
+
+.input_datalogging <- function(FIRM,Input_DATA){
+  
+  
+  Input_DATA = data.frame(FIRM$PRODUCTION_ENVIRONMENT$DENS,
+                          FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN,
+                          FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX,
+                          FIRM$PRODUCTION_ENVIRONMENT$COR,
+                          FIRM$PRODUCTION_ENVIRONMENT$Q_VAR,
+                          FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
+                          FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
+                          FIRM$PRODUCTION_ENVIRONMENT$DISP1,
+                          FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MIN,
+                          FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MAX,
+                          FIRM$COSTING_SYSTEM$RC_VAR_MIN,
+                          FIRM$COSTING_SYSTEM$RC_VAR_MAX,
+                          FIRM$COSTING_SYSTEM$Error,
+                          FIRM$COSTING_SYSTEM$NUMB_Error,
+                          FIRM$COSTING_SYSTEM$CC,
+                          FIRM$COSTING_SYSTEM$MISCPOOLSIZE,
+                          FIRM$COSTING_SYSTEM$CP_HEURISTIC,
+                          FIRM$COSTING_SYSTEM$CD_HEURISTIC)
+    
+   colnames(Input_DATA) = c('DENS','DENS_MIN','DENS_MAX','COR','Q_VAR','NUMB_PRO','NUMB_RES','DISP1','UNITLEVEL_ACT_SHARE_MIN',
+                            'UNITLEVEL_ACT_SHARE_MAX','RC_VAR_MIN','RC_VAR_MAX','ERROR','NUMB_ERROR','CC','MISCPOOLSIZE','CP_HEURISTIC','CD_HEURISTIC')
+   
+   Input_DATA = t(Input_DATA)
+   
+   return(Input_DATA)
+    
 }
 
 
