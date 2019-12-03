@@ -211,11 +211,17 @@ ggplot(q_var_direct, aes(x = CP, y = value, fill = Q_VAR))+geom_boxplot()+
 
 DATA = DATA
 
-DATA_agg = aggregate(.~CP + RCC_VAR, data = DATA, FUN = mean)
+DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
 
+replication_output_agg = aggregate(.~CP, data = replication_output, FUN = mean)
 
-ggplot(DATA_agg, aes(x = CP, y = MAPE, color = RCC_VAR, group = RCC_VAR))+geom_line(size = 1)+
-  ggtitle('SIZE CORREL MISC Q_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
+DATA_agg_comb = data.frame(DATA_agg$CP, DATA_agg$MAPE, replication_output_agg$MAPE)
+colnames(DATA_agg_comb) = c('CP','Breaking','Replication')
+
+DATA_agg_comb = melt(DATA_agg_comb, id.vars = 'CP')
+
+ggplot(DATA_agg_comb, aes(x = CP, y = value, linetype = variable))+geom_line(size = 1)+
+  ggtitle('SIZE CORREL MISC FIXING COMPUTATIONAL ERRORS')+theme_bw()+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
   ylim(0,1)
        

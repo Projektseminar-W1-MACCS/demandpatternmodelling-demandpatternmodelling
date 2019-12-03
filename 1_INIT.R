@@ -13,7 +13,7 @@
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
 
-  SIM_NUMB =         1000                  #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         200                  #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
   TC =               1000000                #Total costs
 
@@ -28,7 +28,7 @@
   dec_CD=            1                      # =
   
   
-  CP = c(1,2,4,6,8,10,12,14,16,18,20)                                 #No. of Cost Pools
+  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)                                 #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
 
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
@@ -40,7 +40,7 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   
-  CP_HEURISTIC = 1                          #Which Heuristic for pooling resources? # 0-4
+  CP_HEURISTIC = 5                          #Which Heuristic for pooling resources? # 0-4
   CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
   
 ## ======================================END OF INPUT MASK=====================================================                           
@@ -101,6 +101,8 @@
     else if(CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
     
     else if(CP_HEURISTIC == 4){FIRM = MAP_CP_CORREL_MISC(FIRM)}
+    
+    else if(CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_OWN(FIRM)}
     ## Selecting the drivers of a cost pool
     if(CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error)}
       
