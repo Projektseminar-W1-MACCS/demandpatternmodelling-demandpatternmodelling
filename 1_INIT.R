@@ -28,22 +28,19 @@
   dec_CD=            1                      # =
   
   
-<<<<<<< Updated upstream
+
   CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)                                 #No. of Cost Pools
-=======
-  CP = c(1,2,4,6,8,10,12,14,16,18,20)       #No. of Cost Pools
->>>>>>> Stashed changes
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
   Q_VAR = c(0.4)                            #Demand variation
   Error = c(0)                              #Measurement error (BHL2011)
   NUMB_Error = c(1)                         #Number of errornoues links (LV2008)
-  DENS = c(-1)                              #Number of links between products and resources (sharing)
+  DENS = c(0.1,0.2,0.4,0.6,0.8,1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   
-  CP_HEURISTIC = 5                          #Which Heuristic for pooling resources? # 0-4
+  CP_HEURISTIC = 1                          #Which Heuristic for pooling resources? # 0-4
   CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
   
 ## ====================================== END OF INPUT MASK=====================================================                           
@@ -119,6 +116,15 @@
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
     
+    
+    UC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)>0)/NUMB_PRO
+    OC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)<=0)/NUMB_PRO  
+    
+    UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
+    OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
+    
+    
+    
     ## DATA LOGGING
     
     DATA = .system_datalogging(o,nn,FIRM,DATA)
@@ -144,8 +150,8 @@
 #### ====================================== OUTPUT WRITING ===================================
             
 #output data
-# output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".csv", sep = "")
-# write.csv(DATA, file = output)
+output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),CP_HEURISTIC, ".csv", sep = "")
+write.csv(DATA, file = output)
 
 
 

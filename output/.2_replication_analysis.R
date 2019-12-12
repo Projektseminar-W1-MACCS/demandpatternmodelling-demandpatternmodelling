@@ -268,3 +268,31 @@ plot_sim_numb = melt(plot_sim_numb, id.vars = 'sim_numb_100.CP')
 
 ggplot(plot_sim_numb, aes(x = sim_numb_100.CP, y= value, linetype = variable, color = variable))+geom_line(size = 1.5)
 
+
+
+
+
+
+
+
+
+
+####Over-and Undercosting####
+
+DATA = DATA
+
+DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
+
+DATA$Q_VAR = as.factor(DATA$Q_VAR)
+
+boxplot_data = data.frame(DATA$Q_VAR,DATA$OC,DATA$UC, DATA$OC5, DATA$UC5)
+
+colnames(boxplot_data) = c('Q_VAR','UC','OC','UC5','OC5')
+
+boxplot = melt(boxplot_data, id.vars = 'Q_VAR', value.name = 'OC_UC')
+
+
+
+ggplot(boxplot, aes(x = Q_VAR, y = OC_UC, fill = variable))+geom_boxplot()
+
+
