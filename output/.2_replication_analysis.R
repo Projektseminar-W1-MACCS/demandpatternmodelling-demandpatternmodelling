@@ -23,24 +23,24 @@ replication_output = read.xlsx(file_rep,2)
 
 ##loading the outpout directly from R
 
-replication_output = DATA
+#replication_output = DATA
 
 ##loading the original model output
-file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 2",".xlsx")
+file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic,".xlsx")
 
 anand_output = read.xlsx(file_anand, 2)
 
-file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 3",".csv")
-
-anand_output = read.csv(file_anand, sep =";")
+# file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 3",".csv")
+# 
+# anand_output = read.csv(file_anand, sep =";")
 
 #anand_output[] <- lapply(anand_output, function(x) as.numeric(as.character(x)))
 
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 3",".csv")
+# file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 3",".csv")
+# 
+# anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
 
-anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
-
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 2",".xlsx")
+file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC",".xlsx")
 
 anand_output_gdrcc = read.xlsx(file_anand_gdrcc,1)
 #anand_output_gdrcc[] <- lapply(anand_output_gdrcc, function(x) as.numeric(as.character(x)))
