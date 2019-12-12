@@ -1,7 +1,7 @@
 #############################################################
-# Initizalization of the CostSystemDesignSim (CSDS)
+# Initizalization of the CostSystemDesignSim 
 #############################################################
-
+# Kai Stinkt
 ## ======================================INPUT MASK============================================================
   FIRM = list()                           
   FIRM$PRODUCTION_ENVIRONMENT = list()
