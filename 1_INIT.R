@@ -1,4 +1,3 @@
-
 # Initizalization of the CostSystemDesignSim (CSDS)
 #
 
