@@ -28,7 +28,7 @@ FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
 ## ====================== STEP 1.b Determining the density (DENS)  =========================
 
 #Randomization and setting clear design points. 
-if(DENS == -1)
+if(DENS[1] == -1)
 {
 DENS_MIN = 0.4;
 DENS_MAX = 0.7;
@@ -38,7 +38,8 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
 FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 }
 
-FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+#FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
 ## ====================== '' STEP 2 Building Demand, RES_CONS_PAT, RCC and PCB '' =========================
 
 

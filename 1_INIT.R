@@ -35,7 +35,7 @@
   Q_VAR = c(0.4)                            #Demand variation
   Error = c(0)                              #Measurement error (BHL2011)
   NUMB_Error = c(1)                         #Number of errornoues links (LV2008)
-  DENS = c(0.1,0.2,0.4,0.6,0.8,1)                              #Number of links between products and resources (sharing)
+  DENS = c(0.4,0.6,1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
