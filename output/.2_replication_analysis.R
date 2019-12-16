@@ -280,10 +280,10 @@ ggplot(plot_sim_numb, aes(x = sim_numb_100.CP, y= value, linetype = variable, co
 ####-------------------------------------Over-and Undercosting---------------------------------------------------####
 
 
-###
+###DENS VARIATION###
 DATA = DATA
 
-DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
+#DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
 
 DATA$DENS = as.factor(DATA$DENS)
 
@@ -298,5 +298,24 @@ boxplot = boxplot[order(boxplot$DENS),]
 
 ggplot(boxplot, aes(x = DENS, y = OC_UC, fill = variable))+geom_boxplot()
 
+
+### Q_VAR Variation
+
+DATA = DATA
+
+#DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
+
+DATA$Q_VAR = as.factor(DATA$Q_VAR)
+
+boxplot_data = data.frame(DATA$Q_VAR,DATA$OC,DATA$UC)
+
+colnames(boxplot_data) = c('Q_VAR','OC','UC')
+
+boxplot = melt(boxplot_data, id.vars = 'Q_VAR', value.name = 'OC_UC')
+
+boxplot = boxplot[order(boxplot$Q_VAR),]
+
+
+ggplot(boxplot, aes(x = Q_VAR, y = OC_UC, fill = variable))+geom_boxplot()
 
 
