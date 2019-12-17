@@ -286,36 +286,56 @@ DATA = DATA
 #DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
 
 DATA$DENS = as.factor(DATA$DENS)
+DATA$CP = as.factor(DATA$CP)
 
-boxplot_data = data.frame(DATA$DENS,DATA$OC,DATA$UC)
+boxplot_data_UC = data.frame(DATA$DENS,DATA$CP,DATA$UC)
 
-colnames(boxplot_data) = c('DENS','OC','UC')
+colnames(boxplot_data_UC) = c('DENS','CP','UC')
 
-boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'OC_UC')
+#boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'Share_of_UC')
 
-boxplot = boxplot[order(boxplot$DENS),]
-
-
-ggplot(boxplot, aes(x = DENS, y = OC_UC, fill = variable))+geom_boxplot()
+#boxplot = boxplot[order(boxplot$DENS),]
 
 
-### Q_VAR Variation
+ggplot(boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+geom_boxplot()
+
+DATA$DENS = as.factor(DATA$DENS)
+DATA$CP = as.factor(DATA$CP)
+
+boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC)
+
+colnames(boxplot_data_OC) = c('DENS','CP','OC_UC')
+
+ggplot(boxplot_data_OC, aes(x = DENS, y = OC_UC, fill = CP))+geom_boxplot()+geom_boxplot(data =boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+theme_bw()
+
+
+
+### Q_VAR Variation ####
 
 DATA = DATA
 
 #DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
 
 DATA$Q_VAR = as.factor(DATA$Q_VAR)
+DATA$CP = as.factor(DATA$CP)
 
-boxplot_data = data.frame(DATA$Q_VAR,DATA$OC,DATA$UC)
+boxplot_data_UC = data.frame(DATA$Q_VAR,DATA$CP,DATA$UC5)
 
-colnames(boxplot_data) = c('Q_VAR','OC','UC')
+colnames(boxplot_data_UC) = c('Q_VAR','CP','UC')
 
-boxplot = melt(boxplot_data, id.vars = 'Q_VAR', value.name = 'OC_UC')
+#boxplot = melt(boxplot_data, id.vars = 'Q_VAR', value.name = 'OC_UC')
 
-boxplot = boxplot[order(boxplot$Q_VAR),]
-
-
-ggplot(boxplot, aes(x = Q_VAR, y = OC_UC, fill = variable))+geom_boxplot()
+#boxplot = boxplot[order(boxplot$Q_VAR),]
 
 
+#ggplot(boxplot, aes(x = Q_VAR, y = OC_UC, fill = variable))+geom_boxplot()
+
+
+DATA$Q_VAR = as.factor(DATA$Q_VAR)
+
+boxplot_data_OC = data.frame(DATA$Q_VAR,DATA$CP,DATA$OC5)
+
+colnames(boxplot_data_OC) = c('Q_VAR','CP','OC')
+
+
+ggplot(boxplot_data_UC, aes(x = Q_VAR, y = UC, fill = CP))+geom_boxplot()+geom_boxplot(data = boxplot_data_OC, aes(x = Q_VAR, y = OC, fill = CP))
