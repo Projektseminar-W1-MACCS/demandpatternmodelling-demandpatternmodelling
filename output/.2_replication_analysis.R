@@ -280,33 +280,40 @@ ggplot(plot_sim_numb, aes(x = sim_numb_100.CP, y= value, linetype = variable, co
 ####-------------------------------------Over-and Undercosting---------------------------------------------------####
 
 
-###DENS VARIATION###
-DATA = DATA
-
-#DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
-
-DATA$DENS = as.factor(DATA$DENS)
+DATA$RCC_VAR = as.factor(DATA$RCC_VAR)
 DATA$CP = as.factor(DATA$CP)
+DATA_agg = aggregate(.~ME_AD+CP+RCC_VAR, data = DATA, FUN = mean)
 
-boxplot_data_UC = data.frame(DATA$DENS,DATA$CP,DATA$UC)
+ggplot(DATA_agg, aes(x = ME_AD, y = OC, color = CP, linetype = DENS))+geom_line()
 
-colnames(boxplot_data_UC) = c('DENS','CP','UC')
+###DENS VARIATION###
+DATAx = DATA[]
+
+DATAx$DENS = as.factor(DATAx$DENS)
+DATAx$CP = as.factor(DATAx$CP)
+
+boxplot_data_UC = data.frame(DATAx$DENS,DATAx$CP,DATAx$UC5, DATA$ME_AD)
+
+colnames(boxplot_data_UC) = c('DENS','CP','UC', 'Error')
 
 #boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'Share_of_UC')
 
 #boxplot = boxplot[order(boxplot$DENS),]
 
 
-ggplot(boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+geom_boxplot()
+ggplot(boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
 
 DATA$DENS = as.factor(DATA$DENS)
 DATA$CP = as.factor(DATA$CP)
 
-boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC)
+boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC5, DATA$ME_AD)
 
-colnames(boxplot_data_OC) = c('DENS','CP','OC_UC')
+colnames(boxplot_data_OC) = c('DENS','CP','OC','Error')
 
-ggplot(boxplot_data_OC, aes(x = DENS, y = OC_UC, fill = CP))+geom_boxplot()+geom_boxplot(data =boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+theme_bw()
+
+ggplot(boxplot_data_OC, aes(x = DENS, y = OC, fill = CP))+geom_boxplot()
+
+ggplot(boxplot_data_OC, aes(x = DENS, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+theme_classic()+facet_wrap('Error')
 
 
 
