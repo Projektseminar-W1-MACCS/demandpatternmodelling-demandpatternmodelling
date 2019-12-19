@@ -279,20 +279,24 @@ ggplot(plot_sim_numb, aes(x = sim_numb_100.CP, y= value, linetype = variable, co
 
 ####-------------------------------------Over-and Undercosting---------------------------------------------------####
 
+###----------------------Aggregated DATA--------------------- ####
 
-DATA$RCC_VAR = as.factor(DATA$RCC_VAR)
+DATA$RCC_VAR = as.numeric(DATA$RCC_VAR)
 DATA$CP = as.factor(DATA$CP)
-DATA_agg = aggregate(.~ME_AD+CP+RCC_VAR, data = DATA, FUN = mean)
+DATA$DENS = as.factor(DATA$DENS)
+DATA_agg = aggregate(.~CP+NUMB_ME+ME_AD, data = DATA, FUN = mean)
 
-ggplot(DATA_agg, aes(x = ME_AD, y = OC, color = CP, linetype = DENS))+geom_line()
+ggplot(DATA_agg, aes(x = RCC_VAR, y = OC, color = CP))+geom_line()
 
-###DENS VARIATION###
-DATAx = DATA[]
+mean(DATA$OC[DATA$NUMB_ME == 0.8])
+
+###---------------------DENS VARIATION----------------------- ####
+DATAx = DATA
 
 DATAx$DENS = as.factor(DATAx$DENS)
 DATAx$CP = as.factor(DATAx$CP)
 
-boxplot_data_UC = data.frame(DATAx$DENS,DATAx$CP,DATAx$UC5, DATA$ME_AD)
+boxplot_data_UC = data.frame(DATAx$DENS,DATAx$CP,DATAx$UC, DATA$NUMB_ME)
 
 colnames(boxplot_data_UC) = c('DENS','CP','UC', 'Error')
 
@@ -301,34 +305,34 @@ colnames(boxplot_data_UC) = c('DENS','CP','UC', 'Error')
 #boxplot = boxplot[order(boxplot$DENS),]
 
 
-ggplot(boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
+#ggplot(boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
 
 DATA$DENS = as.factor(DATA$DENS)
 DATA$CP = as.factor(DATA$CP)
 
-boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC5, DATA$ME_AD)
+boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC, DATA$NUMB_ME)
 
 colnames(boxplot_data_OC) = c('DENS','CP','OC','Error')
 
 
-ggplot(boxplot_data_OC, aes(x = DENS, y = OC, fill = CP))+geom_boxplot()
+#ggplot(boxplot_data_OC, aes(x = DENS, y = OC, fill = CP))+geom_boxplot()
 
 ggplot(boxplot_data_OC, aes(x = DENS, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+theme_classic()+facet_wrap('Error')
 
 
 
-### Q_VAR Variation ####
+###---------------------Q_VAR VARIATION----------------------- ####
 
-DATA = DATA
+DATAx = DATA
 
 #DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
 
-DATA$Q_VAR = as.factor(DATA$Q_VAR)
-DATA$CP = as.factor(DATA$CP)
+DATAx$Q_VAR = as.factor(DATAx$Q_VAR)
+DATAx$CP = as.factor(DATAx$CP)
 
-boxplot_data_UC = data.frame(DATA$Q_VAR,DATA$CP,DATA$UC5)
+boxplot_data_UC = data.frame(DATAx$Q_VAR,DATAx$CP,DATAx$UC, DATAx$NUMB_ME)
 
-colnames(boxplot_data_UC) = c('Q_VAR','CP','UC')
+colnames(boxplot_data_UC) = c('Q_VAR','CP','UC', 'NUMB_ERROR')
 
 #boxplot = melt(boxplot_data, id.vars = 'Q_VAR', value.name = 'OC_UC')
 
@@ -338,11 +342,70 @@ colnames(boxplot_data_UC) = c('Q_VAR','CP','UC')
 #ggplot(boxplot, aes(x = Q_VAR, y = OC_UC, fill = variable))+geom_boxplot()
 
 
-DATA$Q_VAR = as.factor(DATA$Q_VAR)
+DATAx$Q_VAR = as.factor(DATAx$Q_VAR)
 
-boxplot_data_OC = data.frame(DATA$Q_VAR,DATA$CP,DATA$OC5)
+boxplot_data_OC = data.frame(DATAx$Q_VAR,DATAx$CP,DATAx$OC,DATAx$NUMB_ME)
 
-colnames(boxplot_data_OC) = c('Q_VAR','CP','OC')
+colnames(boxplot_data_OC) = c('Q_VAR','CP','OC','NUMB_ERROR')
 
 
-ggplot(boxplot_data_UC, aes(x = Q_VAR, y = UC, fill = CP))+geom_boxplot()+geom_boxplot(data = boxplot_data_OC, aes(x = Q_VAR, y = OC, fill = CP))
+ggplot(boxplot_data_OC, aes(x = Q_VAR, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data = boxplot_data_UC, aes(x = Q_VAR, y = UC, fill = CP))+theme_classic()+facet_wrap('NUMB_ERROR')
+
+
+###---------------------RC_VAR VARIATION----------------------- ####
+DATAx = DATA
+
+DATAx$RCC_VAR = as.factor(DATAx$RCC_VAR)
+DATAx$CP = as.factor(DATAx$CP)
+
+boxplot_data_UC = data.frame(DATAx$RCC_VAR,DATAx$CP,DATAx$UC, DATA$ME_AD)
+
+colnames(boxplot_data_UC) = c('RCC_VAR','CP','UC', 'Error')
+
+#boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'Share_of_UC')
+
+#boxplot = boxplot[order(boxplot$DENS),]
+
+
+ggplot(boxplot_data_UC, aes(x = RCC_VAR, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
+
+
+
+boxplot_data_OC = data.frame(DATAx$RCC_VAR,DATAx$CP,DATAx$OC, DATAx$ME_AD)
+
+colnames(boxplot_data_OC) = c('RCC_VAR','CP','OC','Error')
+
+
+ggplot(boxplot_data_OC, aes(x = RCC_VAR, y = OC, fill = CP))+geom_boxplot()
+
+ggplot(boxplot_data_OC, aes(x = RCC_VAR, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = RCC_VAR, y = UC, fill = CP))+theme_classic()+facet_wrap('Error')
+
+
+###-----------------NUMB_ERROR Variation------------------ ####
+
+DATAx = DATA
+
+DATAx$NUMB_ME = as.factor(DATAx$NUMB_ME)
+DATAx$CP = as.factor(DATAx$CP)
+
+boxplot_data_UC = data.frame(DATAx$CP,DATAx$UC5, DATAx$NUMB_ME, DATAx$ME_AD)
+
+colnames(boxplot_data_UC) = c('CP','UC', 'NUMB_ERROR','Error')
+
+#boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'Share_of_UC')
+
+#boxplot = boxplot[order(boxplot$DENS),]
+
+
+#ggplot(boxplot_data_UC, aes(x = RCC_VAR, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
+
+
+
+boxplot_data_OC = data.frame(DATAx$CP,DATAx$OC5, DATAx$NUMB_ME, DATAx$ME_AD)
+
+colnames(boxplot_data_OC) = c('CP','OC','NUMB_ERROR','Error')
+
+
+#ggplot(boxplot_data_OC, aes(x = RCC_VAR, y = OC, fill = CP))+geom_boxplot()
+
+ggplot(boxplot_data_OC, aes(x = CP, y = OC, color = NUMB_ERROR))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = CP, y = UC, fill = NUMB_ERROR))+theme_classic()+facet_wrap('Error')

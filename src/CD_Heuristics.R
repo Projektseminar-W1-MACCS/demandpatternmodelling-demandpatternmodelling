@@ -39,17 +39,49 @@ if(length(RC_ACP_index[[i]])==1){
 }
 
 
-
- if (!is.null(ME_AD)) {
-  if(length(RC_ACP_index)==1){
-    ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
-  }else{
-    err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*(length(RC_ACP_index)),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
-    ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
-    ACT_CONS_PAT = ACT_CONS_PAT/colSums(ACT_CONS_PAT)
+if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error is applied to all driver links in each driver in the act const pat
+  if (!is.null(ME_AD)) {
+    if(length(RC_ACP_index)==1){        #if there is only one cost pool
+      ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
+      
+      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
+      
+    }else{                              # when therer are more than one cost pools, every cost pool is weighed with the measurement error
+      err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*(length(RC_ACP_index)),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
+      ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
+      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
+    }
+    ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
   }
-ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
- }
+  
+  
+  
+  ###if numb_error is implemented###
+}else{
+  if (!is.null(ME_AD)) {
+    if(length(RC_ACP_index)==1){        #if there is only one cost pool
+      error_links = round(runif(ceiling(ME_AD_NUMB* FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),1,FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),0)
+      ACT_CONS_PAT[error_links] = ACT_CONS_PAT[error_links]*runif(length(error_links),min=(1-ME_AD),max=(1+ME_AD))
+      
+      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
+      
+    }else{                              # when therer are more than one cost pools, every cost pool is weighed with the measurement error
+      
+      err_MAT<-matrix(1,nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,ncol=length(RC_ACP_index))
+      
+      for (i in 1:length(RC_ACP_index)){
+        error_links = round(runif(ceiling(ME_AD_NUMB* FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),1,FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),0)
+        err_MAT[error_links,i] = runif(length(error_links),min=(1-ME_AD),max=(1+ME_AD))
+      }
+       
+      ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
+      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
+    }
+    ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
+  }
+  
+}
+
 
 
 

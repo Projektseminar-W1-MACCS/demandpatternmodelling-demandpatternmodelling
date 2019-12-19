@@ -51,17 +51,12 @@
   
   unitsize = FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE
   nonunitsize =FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE
-  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
-  FIRM$COSTING_SYSTEM$RC_VAR_MIN = 0.4
-  FIRM$COSTING_SYSTEM$RC_VAR_MAX = 0.7
   
-  if (RC_VAR[1] == -1)
+  if (FIRM$COSTING_SYSTEM$RC_VAR == -1)
   {
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
     RC_VAR = runif(1, RC_VAR_MIN, RC_VAR_MAX)
-    FIRM$COSTING_SYSTEM$RC_VAR_MIN = RC_VAR_MIN
-    FIRM$COSTING_SYSTEM$RC_VAR_MAX = RC_VAR_MAX
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
@@ -92,7 +87,7 @@
   p_BATCH = abs(rlnorm(
     nonunitsize,
     meanlog = 0,
-    sdlog = (FIRM$COSTING_SYSTEM$RC_VAR)                #originally RC_VAR
+    sdlog = (FIRM$COSTING_SYSTEM$RC_VAR)                
   ))
   #%DRAW RANDOM NUMBER
   
