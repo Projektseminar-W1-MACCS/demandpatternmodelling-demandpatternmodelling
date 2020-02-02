@@ -296,7 +296,7 @@ DATAx = DATA
 DATAx$DENS = as.factor(DATAx$DENS)
 DATAx$CP = as.factor(DATAx$CP)
 
-boxplot_data_UC = data.frame(DATAx$DENS,DATAx$CP,DATAx$UC, DATA$NUMB_ME)
+boxplot_data_UC = data.frame(DATAx$DENS,DATAx$CP,DATAx$UC5, DATA$NUMB_ME)
 
 colnames(boxplot_data_UC) = c('DENS','CP','UC', 'Error')
 
@@ -310,7 +310,7 @@ colnames(boxplot_data_UC) = c('DENS','CP','UC', 'Error')
 DATA$DENS = as.factor(DATA$DENS)
 DATA$CP = as.factor(DATA$CP)
 
-boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC, DATA$NUMB_ME)
+boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC5, DATA$NUMB_ME)
 
 colnames(boxplot_data_OC) = c('DENS','CP','OC','Error')
 
@@ -408,4 +408,4 @@ colnames(boxplot_data_OC) = c('CP','OC','NUMB_ERROR','Error')
 
 #ggplot(boxplot_data_OC, aes(x = RCC_VAR, y = OC, fill = CP))+geom_boxplot()
 
-ggplot(boxplot_data_OC, aes(x = CP, y = OC, color = NUMB_ERROR))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = CP, y = UC, fill = NUMB_ERROR))+theme_classic()+facet_wrap('Error')
+ggplot(boxplot_data_OC, aes(x = NUMB_ERROR, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = NUMB_ERROR, y = UC, fill = CP))+theme_classic()+facet_wrap('Error')
