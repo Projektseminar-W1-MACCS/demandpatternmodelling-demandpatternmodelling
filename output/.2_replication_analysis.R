@@ -11,6 +11,66 @@ library('robustHD')
 library('lm.beta')
 library('reshape2')
 
+
+####-------------Plotting the current DATA------------####
+
+
+check = aggregate(DATA,list(DATA$CP),mean)
+plot(check$MAPE,type ='p')
+#print(check$MAPE)
+
+
+
+
+sweep(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp,1,)
+
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT
+
+FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC == FIRM$COSTING_SYSTEM$ACT_CONS_PAT * FIRM$COSTING_SYSTEM$TC
+
+sum(rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC)) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT *FIRM$COSTING_SYSTEM$TC
+
+FIRM$COSTING_SYSTEM$RCC == FIRM$COSTING_SYSTEM$ACP
+
+rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC) == FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+colSums(FIRM$COSTING_SYSTEM$PCB) == rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC)
+
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) == rowMeans(FIRM$COSTING_SYSTEM$ACT_CONS_PAT)
+
+check = matrix(c(2,2,3,3,4,4,5,5),ncol = 4)
+
+rowMeans(check)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #####Choice of heuristic to analyse####
 
 

@@ -29,7 +29,7 @@
   
   
 
-  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50) #No. of Cost Pools
+  CP = c(1) #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
   Q_VAR = c(0.4)                            #Demand variation
@@ -41,8 +41,8 @@
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(2)                                #No. of Resources used for indexed driver
   
-  CP_HEURISTIC = c(0,1,2,3)                 #Which Heuristic for pooling resources? # 0-6
-  CD_HEURISTIC = c(0,1,2)                   #which Heuristic for selecting a driver? #0-1
+  CP_HEURISTIC = c(1)                       #Which Heuristic for pooling resources? # 0-6
+  CD_HEURISTIC = c(1)                   #which Heuristic for selecting a driver? #0-1
   
 ## ====================================== END OF INPUT MASK=====================================================                           
 
@@ -121,7 +121,7 @@
     
     ## Calculating the estimated product costs
     
-    FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12
+    FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12 
   
     ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
@@ -145,6 +145,7 @@
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
     print((EUCD))
+    print(sum(FIRM$COSTING_SYSTEM$RCC))
     
     o=o+1 #Counting for the total number of runs
   }
@@ -164,8 +165,8 @@
 #### ====================================== OUTPUT WRITING ===================================
             
 #output data
-output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
-write.csv(DATA, file = output)
+# output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
+# write.csv(DATA, file = output)
 
 
 

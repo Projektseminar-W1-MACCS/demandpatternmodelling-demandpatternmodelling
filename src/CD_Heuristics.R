@@ -117,23 +117,24 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
     }else{
       
       # 1. Order ACP_index in decreasing order of resource size
-      RC_order<-sort(RCC, decreasing=TRUE)
+      #RC_order<-sort(RCC, decreasing=TRUE)
       
-      RC_ACP_index[[i]]<-RC_ACP_index[[i]][order(match(RC_ACP_index[[i]],RC_order))]
+      #RC_ACP_index[[i]]<-RC_ACP_index[[i]][order(match(RC_ACP_index[[i]],RC_order))]
       RES_CONS_PAT_temp<-RES_CONS_PAT[,RC_ACP_index[[i]]] # subsetting for resources used in this ACP and ordering
       # ACs<-sort(colSums(RES_CONS_PAT_temp),decreasing = TRUE,index.return=TRUE)
-      ACT_CONS_PAT[,i]<-rowMeans(RES_CONS_PAT_temp) #use the average of all resources in that CP as the driver
+      rowMeans(RES_CONS_PAT_temp) == rowSums(RES_CONS_PAT_temp)/ncol(RES_CONS_PAT_temp)
+      ACT_CONS_PAT[,i]<-as.vector(rowSums(RES_CONS_PAT_temp)/ncol(RES_CONS_PAT_temp)) #use the average of all resources in that CP as the driver
     }
   }
   
-  
+
   if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error is applied to all driver links in each driver in the act const pat
     if (!is.null(ME_AD)) {
       if(length(RC_ACP_index)==1){        #if there is only one cost pool
         ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
-        
+
         ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
-        
+
       }else{                              # when therer are more than one cost pools, every cost pool is weighed with the measurement error
         err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*(length(RC_ACP_index)),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
         ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
@@ -141,33 +142,33 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
       }
       ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
     }
-    
-    
-    
+
+
+
     ###if numb_error is implemented###
   }else{
     if (!is.null(ME_AD)) {
       if(length(RC_ACP_index)==1){        #if there is only one cost pool
         error_links = round(runif(ceiling(ME_AD_NUMB* FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),1,FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),0)
         ACT_CONS_PAT[error_links] = ACT_CONS_PAT[error_links]*runif(length(error_links),min=(1-ME_AD),max=(1+ME_AD))
-        
+
         ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
-        
+
       }else{                              # when therer are more than one cost pools, every cost pool is weighed with the measurement error
-        
+
         err_MAT<-matrix(1,nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,ncol=length(RC_ACP_index))
-        
+
         for (i in 1:length(RC_ACP_index)){
           error_links = round(runif(ceiling(ME_AD_NUMB* FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),1,FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),0)
           err_MAT[error_links,i] = runif(length(error_links),min=(1-ME_AD),max=(1+ME_AD))
         }
-        
+
         ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
         ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
       }
       ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
     }
-    
+
   }
   
   
