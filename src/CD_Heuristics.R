@@ -122,8 +122,13 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
       #RC_ACP_index[[i]]<-RC_ACP_index[[i]][order(match(RC_ACP_index[[i]],RC_order))]
       RES_CONS_PAT_temp<-RES_CONS_PAT[,RC_ACP_index[[i]]] # subsetting for resources used in this ACP and ordering
       # ACs<-sort(colSums(RES_CONS_PAT_temp),decreasing = TRUE,index.return=TRUE)
-      rowMeans(RES_CONS_PAT_temp) == rowSums(RES_CONS_PAT_temp)/ncol(RES_CONS_PAT_temp)
-      ACT_CONS_PAT[,i]<-as.vector(rowSums(RES_CONS_PAT_temp)/ncol(RES_CONS_PAT_temp)) #use the average of all resources in that CP as the driver
+      for (row in 1:nrow(RES_CONS_PAT_temp)){
+        
+        ACT_CONS_PAT[row,i] =  mean(RES_CONS_PAT_temp[row,])#use the average of all resources in that CP as the driver
+        
+      }
+      
+      
     }
   }
   
@@ -145,7 +150,7 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 
 
 
-    ###if numb_error is implemented###
+  ##if numb_error is implemented###
   }else{
     if (!is.null(ME_AD)) {
       if(length(RC_ACP_index)==1){        #if there is only one cost pool
@@ -170,11 +175,11 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
     }
 
   }
+
+
   
   
-  
-  
-  FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
+  FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-ACT_CONS_PAT
   FIRM$COSTING_SYSTEM$ACP_index_choosen
   
   

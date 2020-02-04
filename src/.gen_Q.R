@@ -10,7 +10,7 @@
   
   DEMAND = ceiling((preDemand/sum(preDemand))*units) #normalizing it #ceiled realized demand for each product
   
-  FIRM$PRODUCTION_ENVIRONMENT$DEMAND = DEMAND
+  FIRM$PRODUCTION_ENVIRONMENT$DEMAND = as.vector(DEMAND)
   
   #FIRM$PRODUCTION_ENVIRONMENT$Q_VAR = sd(DEMAND)/mean(DEMAND)
   
