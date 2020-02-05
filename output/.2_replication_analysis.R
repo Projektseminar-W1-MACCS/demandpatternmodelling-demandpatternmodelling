@@ -16,7 +16,7 @@ library('reshape2')
 
 
 check = aggregate(DATA,list(DATA$CP),mean)
-plot(check$MAPE,type ='p')
+plot(check$MAPE,type ='l')
 #print(check$MAPE)
 
 
@@ -129,8 +129,7 @@ RES_CONS_PATp <- sweep((FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT),2,TCU,"/")
 
 
 
-
-
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) == rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)/ncol(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)
 
 
 

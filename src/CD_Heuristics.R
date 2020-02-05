@@ -98,7 +98,7 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   #FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_AVERAGE, == 1'
   ACP_index_choosen<-vector(mode="numeric")
   # normalize RES_CONS_PAT
-  RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+  COST_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$COST_CONS_PATp
   ME_AD = FIRM$COSTING_SYSTEM$Error
   ME_AD_NUMB = FIRM$COSTING_SYSTEM$NUMB_Error
   RCC<-FIRM$COSTING_SYSTEM$RCC
@@ -113,25 +113,21 @@ MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
     ## exception handler if there is only one resource in ACP[[i]] take this resource as the driver
     # in original version not needed, this is due to basic implementation of Rs function rowSums
     if(length(RC_ACP_index[[i]])==1){
-      ACT_CONS_PAT[,i]<-RES_CONS_PAT[,RC_ACP_index[[i]]]
+      ACT_CONS_PAT[,i]<-COST_CONS_PAT[,RC_ACP_index[[i]]]
     }else{
       
       # 1. Order ACP_index in decreasing order of resource size
       #RC_order<-sort(RCC, decreasing=TRUE)
       
       #RC_ACP_index[[i]]<-RC_ACP_index[[i]][order(match(RC_ACP_index[[i]],RC_order))]
-      RES_CONS_PAT_temp<-RES_CONS_PAT[,RC_ACP_index[[i]]] # subsetting for resources used in this ACP and ordering
-      # ACs<-sort(colSums(RES_CONS_PAT_temp),decreasing = TRUE,index.return=TRUE)
-      for (row in 1:nrow(RES_CONS_PAT_temp)){
+      COST_CONS_PAT_temp<-COST_CONS_PAT[,RC_ACP_index[[i]]] # subsetting for resources used in this ACP and ordering
+      # ACs<-sort(colSums(RES_CONS_PAT_temp),decreasing = TRUE,index.return=TRUE
         
-        ACT_CONS_PAT[row,i] =  mean(RES_CONS_PAT_temp[row,])#use the average of all resources in that CP as the driver
-        
-      }
+      ACT_CONS_PAT[,i] = rowMeans(COST_CONS_PAT_temp) #use the average of all resources in that CP as the driver
       
       
     }
-  }
-  
+  } 
 
   if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error is applied to all driver links in each driver in the act const pat
     if (!is.null(ME_AD)) {
