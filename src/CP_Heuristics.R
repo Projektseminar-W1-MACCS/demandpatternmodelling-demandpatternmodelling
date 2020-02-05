@@ -128,8 +128,12 @@ MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
 
 MAP_RES_CP_SIZE_CORREL<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
+   
+   
+   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
+   RES_CONS_PATp = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
    RCCn = length(RCC)
    NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
    
@@ -163,15 +167,15 @@ MAP_RES_CP_SIZE_CORREL<-function(FIRM){
       
       ##fill empty matrix with correlations
       for (i in 1:length(already_assigned)){
-         for (j in 1:ncol(RES_CONS_PAT)){
+         for (j in 1:ncol(RES_CONS_PATp)){
             
-            RC_Correl[i,j] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
+            RC_Correl[i,j] = cor(RES_CONS_PATp[,already_assigned[i]],RES_CONS_PATp[,j])
             
          }
       }
       
       
-      colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PAT)))#changing the column names to the resource number
+      colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PATp)))#changing the column names to the resource number
       RC_Correl = matrix(RC_Correl[,-already_assigned], ncol = length(not_assigned)) #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
       colnames(RC_Correl) = paste(not_assigned)
       
@@ -278,7 +282,7 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
       
       ##fill empty matrix with correlations
       for (i in 1:length(already_assigned)){
-         for (j in 1:ncol(RES_CONS_PAT)){
+         for (j in 1:ncol(RES_CONS_PATp)){
             
             RC_Correl[i,j] = cor(RES_CONS_PAT[,already_assigned[i]],RES_CONS_PAT[,j])
             
@@ -286,7 +290,7 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
       }
       
       
-      colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PAT)))#changing the column names to the resource number
+      colnames(RC_Correl) = paste(c(1:ncol(RES_CONS_PATp)))#changing the column names to the resource number
       RC_Correl = matrix(RC_Correl[,-already_assigned], ncol = length(not_assigned)) #delete resources that are already assigned from Correlation Matrix, so they dont get assigned twice
       colnames(RC_Correl) = paste(not_assigned) #change resources names back 
       
@@ -348,8 +352,6 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
    
    return(FIRM)
 }#fully implemented
-
-
 
 
 ## ANAND et al. 2019;

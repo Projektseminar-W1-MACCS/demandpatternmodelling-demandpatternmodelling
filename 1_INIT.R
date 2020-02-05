@@ -17,9 +17,9 @@
   TC =               1000000                #Total costs
 
 
-  ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
-  set_PE_constant=   0                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
-
+  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
+  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+  set_CSD_constant=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
   dec_ERROR=         1                      #Control Variable - 
 
   #dec_DC=           0                      # = no direct costs 
@@ -38,7 +38,7 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   
-  CP_HEURISTIC = 1                          #Which Heuristic for pooling resources? # 0-4
+  CP_HEURISTIC = 5                          #Which Heuristic for pooling resources? # 0-4
   CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
   
 ## ======================================END OF INPUT MASK=====================================================                           
@@ -77,8 +77,7 @@
     FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC
-    
-                
+    FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
     
   nn=1 # necessary for repeating the SIM_NUMB loop
   #### ============================== SIMULATION ======================================
@@ -100,13 +99,17 @@
     else if(CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
     
     else if(CP_HEURISTIC == 4){FIRM = MAP_CP_CORREL_MISC(FIRM)}
-  
+    
+    else if(CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL(FIRM)}
     #Selecting the drivers of a cost pool
     if(CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error)}
     
   
-    ## Calculating the estimated product costs
     
+    
+    
+    
+    ## Calculating the estimated product costs
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12
   
     ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007
