@@ -2,6 +2,8 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
+## Kai ist cool ###
+
 ## ======================================INPUT MASK============================================================
   FIRM = list()                           
   FIRM$PRODUCTION_ENVIRONMENT = list()
@@ -48,11 +50,23 @@
   Error = c(0)                              #Measurement error (BHL2011)
   NUMB_Error = c(0)                         #Number of errornoues links (LV2008)
   DENS = c(-1)                              #Number of links between products and resources (sharing)
+
   Error = c(0)                              #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(1)                               #Number of links between products and resources (sharing)
 
-    CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
+  CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
+
+  CP = c(10)       #No. of Cost Pools
+  COR = c(0.6)                              #Correlation between resources
+  RC_VAR =  c(0.5)                          #Resource cost variation --> base for DISP2
+  Q_VAR = c(0.4)                            #Demand variation
+  Error = c(0)                              #Measurement error
+  NUMB_Error = c(1)                         #Number of errornoues links
+  DENS = c(1)                              #Number of links between products and resources (sharing)
+
+  CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
+
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(2)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(2)                                #No. of Resources used for indexed driver
@@ -67,7 +81,7 @@
             set.seed(13) #Reproducability
             o=1 # First design point
             
-## ====================================== DESIGN OF EXPERIMENTS ================================================== 
+## ======================================DESIGN OF EXPERIMENTS ================================================== 
 ## EVIRONMENTAL FACTORS [] 
   for (ix_CP in seq_along(CP)) {
      for (ix_COR in seq_along(COR)) {
@@ -110,15 +124,19 @@
     
     #print(FIRM$COSTING_SYSTEM$CP)  
     #print(FIRM$COSTING_SYSTEM$Error)  
+
        
     FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
     
     ##Building the cost pools
+
     
     
     
     #CP_HEURISTIC = FIRM$COSTING_SYSTEM$CP_HEURISTIC
     #CD_HEURISTIC = FIRM$COSTING_SYSTEM$CD_HEURISTIC
+
+
     if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 0){FIRM = MAP_RES_CP_SIZE_MISC(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 1){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM)}
@@ -132,29 +150,21 @@
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 6){FIRM = MAP_RES_CP_SIZE_RANDOM(FIRM)}
-    #Selecting the drivers of a cost pool
-   
-    
-    
-    
-    
-    
-     ## Selecting the drivers of a cost pool
+
+      ## Selecting the drivers of a cost pool
     if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error,NUMB_Error)}
     
     else if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 1){FIRM = MAP_CP_P_AVERAGE(FIRM,Error,NUMB_Error)}
     
     else if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 2){FIRM = MAP_CP_P_INDEXED(FIRM,Error,NUMB_Error)}
     
-    
-    
-    
+
     ## Calculating the estimated product costs
     
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12 
     #FIRM$COSTING_SYSTEM$PCH = rowSums(sweep(FIRM$COSTING_SYSTEM$ACT_CONS_PAT, MARGIN=1, FIRM$COSTING_SYSTEM$ACP, `*`))
   
-    ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
+    ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
@@ -165,24 +175,20 @@
     
     UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
     OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
-    
-    
+       
     
     ## DATA LOGGING
-    
     DATA = .system_datalogging(o,nn,FIRM,DATA)
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
     ## Print outputs;
-    MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
-    
+
     
     OC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)>0)/NUMB_PRO
     UC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)<=0)/NUMB_PRO  
     
     OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
     UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
-    
-   
+
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
     preData = data.frame(o,
                          nn,
@@ -222,7 +228,7 @@
     # TRACKING THE PRODUCT LEVEL WHEN NEEDED
     if (ProductCostOutput==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
    
-    #Print outputs;
+
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
     print((MAPE))
@@ -242,7 +248,7 @@
   }
 }
 
-#### ====================================== OUTPUT WRITING ===================================
+#### ====================================OUTPUT WRITING ===================================
             
 #output data
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
