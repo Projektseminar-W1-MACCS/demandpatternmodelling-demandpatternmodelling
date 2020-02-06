@@ -11,12 +11,12 @@
                        FIRM$COSTING_SYSTEM$CP_HEURISTIC,
                        FIRM$COSTING_SYSTEM$CD_HEURISTIC,
                        FIRM$COSTING_SYSTEM$CP,
-                       FIRM$COSTING_SYSTEM$RC_VAR, 
-                       FIRM$COSTING_SYSTEM$NUMB_Error, 
+                       FIRM$COSTING_SYSTEM$RC_VAR,
+                       FIRM$COSTING_SYSTEM$NUMB_Error,
                        FIRM$COSTING_SYSTEM$Error,
-                       FIRM$PRODUCTION_ENVIRONMENT$DENS, 
-                       FIRM$PRODUCTION_ENVIRONMENT$COR, 
-                       FIRM$PRODUCTION_ENVIRONMENT$Q_VAR, 
+                       FIRM$PRODUCTION_ENVIRONMENT$DENS,
+                       FIRM$PRODUCTION_ENVIRONMENT$COR,
+                       FIRM$PRODUCTION_ENVIRONMENT$Q_VAR,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20,
@@ -37,12 +37,13 @@
                        EUCD,
                        MAPE,
                        MSE)
-  
+
   #preData_p = .datalogging()
-  colnames(preData) = c('o','nn','CPH','CDH','CP','RCC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR', 'Q_VAR', 
+  colnames(preData) = c('o','nn','CPH','CDH','CP','RCC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR', 'Q_VAR',
                         'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
                         'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
-                        'MISCPOOL','OC','UC','OC5','UC5','EUCD','MAPE','MSE')  
+                        'MISCPOOL','OC','UC','OC5','UC5','EUCD','MAPE','MSE')
+
   
   #stacking the data with each run
   DATA = rbind(DATA,preData)
