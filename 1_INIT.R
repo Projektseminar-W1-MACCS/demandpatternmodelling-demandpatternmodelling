@@ -2,14 +2,6 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
-
-## Imnprecision Project
-
-
-## Imnprecision Project
-
-
-
 ## ======================================INPUT MASK============================================================
   FIRM = list()                           
   FIRM$PRODUCTION_ENVIRONMENT = list()
