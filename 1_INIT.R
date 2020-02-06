@@ -7,17 +7,17 @@
   FIRM$COSTING_SYSTEM = list()
   DATA = data.frame()
   DATAp = data.frame()
-  
-  
+    
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
   SIM_NUMB =         10                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000                #Total costs
-  
-  
+
+
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
-  set_PE_constant=   0                     #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
-  set_CSD_constant=  0                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+  set_CSD_constant=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+
     
         
   CP = c(10)       #No. of Cost Pools
@@ -72,15 +72,20 @@
     FIRM$COSTING_SYSTEM$TC = TC
     FIRM$COSTING_SYSTEM$CC = CC
     FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
+    FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC
+    FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC
+    FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
     FIRM$COSTING_SYSTEM$NUM = NUM
     FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
-   
-    
-  nn=1 # necessary for repeating the SIM_NUMB loop
-  #### ============================== SIMULATION ======================================
-  for (nn in 1:SIM_NUMB) {
+
+                             
+
+ 
+   #### ============================== SIMULATION ======================================
+   nn=1 # necessary for repeating the SIM_NUMB loop
+   for (nn in 1:SIM_NUMB) {
     
     #print(FIRM$COSTING_SYSTEM$CP)  
     #print(FIRM$COSTING_SYSTEM$Error)  
@@ -96,7 +101,7 @@
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 2){FIRM = MAP_RES_CP_SIZE_RANDOM_MISC(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
-    
+
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 4){FIRM = MAP_CP_CORREL_MISC(FIRM)}
 
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL(FIRM)}
@@ -117,10 +122,7 @@
     
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12 
     #FIRM$COSTING_SYSTEM$PCH = rowSums(sweep(FIRM$COSTING_SYSTEM$ACT_CONS_PAT, MARGIN=1, FIRM$COSTING_SYSTEM$ACP, `*`))
-  
-    
-    
-    
+
     ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
@@ -132,7 +134,7 @@
     
     UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
     OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
-    
+  
     OC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)>0)/NUMB_PRO
     UC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)<=0)/NUMB_PRO  
     
