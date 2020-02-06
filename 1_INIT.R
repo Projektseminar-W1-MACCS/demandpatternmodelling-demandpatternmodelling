@@ -2,8 +2,7 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
-## IMPRECISION ###
-## TEEEEST ###
+## Kai ist cool ###
 
 ## ======================================INPUT MASK============================================================
   FIRM = list()                           
