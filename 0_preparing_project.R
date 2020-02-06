@@ -2,11 +2,6 @@
 #### CostSystemDesignSim   // 2019-08-28    V 1.00
 #####################################
 
-
-###########
-#### Test
-###########
-
 ##############################
 # 0 - Install librairies - Library
 ##############################
@@ -20,8 +15,13 @@
 #   
 # ))
 # 
+
  Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr")
  lapply(Packages, library, character.only = TRUE)
+
+ # Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr")
+ # lapply(Packages, library, character.only = TRUE)
+
 
 ##############################
 # 1 - Start
