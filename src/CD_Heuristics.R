@@ -7,7 +7,7 @@
 ## Balakrishnan, Hansen, Labro 2011
 MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 
-#FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_BIGPOOL, == 0'
+FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_BIGPOOL, == 0'
 ACP_index_choosen<-vector(mode="numeric")
 # normalize RES_CONS_PAT
 RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
@@ -38,7 +38,6 @@ if(length(RC_ACP_index[[i]])==1){
 }
 }
 
-
 if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error is applied to all driver links in each driver in the act const pat
   if (!is.null(ME_AD)) {
     if(length(RC_ACP_index)==1){        #if there is only one cost pool
@@ -54,9 +53,8 @@ if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error 
     ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
   }
   
-  
-  
-  ###if numb_error is implemented###
+  # Measurement error 
+  # waive seed for implementing random measurement errors
 }else{
   if (!is.null(ME_AD)) {
     if(length(RC_ACP_index)==1){        #if there is only one cost pool
@@ -77,12 +75,7 @@ if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error 
       ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
       ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
     }
-    ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
-  }
-  
-}
-
-
+    ACP_index_choosen[i]<-RC_ACP_index[[i]][1]}
 
 
 FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
@@ -90,10 +83,15 @@ FIRM$COSTING_SYSTEM$ACP_index_choosen
 
 
 
-
 return(FIRM)
 }
+}
+  
+  
 
+
+
+  
 MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   #FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_AVERAGE, == 1'
   ACP_index_choosen<-vector(mode="numeric")

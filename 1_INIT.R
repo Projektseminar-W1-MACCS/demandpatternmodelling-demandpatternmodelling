@@ -33,12 +33,30 @@
   
   #CP = c(1)
   CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50) #No. of Cost Pools
+  SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  TC =               1000000                #Total costs
+
+
+  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
+  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+  set_CSD_constant=  1                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  dec_ERROR=         1                      #Control Variable - 
+
+  CP = c(10)                                #No. of Cost Pools
+
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
   Q_VAR = c(0.4)                            #Demand variation
+
   Error = c(0)                              #Measurement error (BHL2011)
   NUMB_Error = c(0)                         #Number of errornoues links (LV2008)
   DENS = c(-1)                              #Number of links between products and resources (sharing)
+
+  Error = c(0)                              #Measurement error
+  NUMB_Error = c(1)                         #Number of errornoues links
+  DENS = c(1)                               #Number of links between products and resources (sharing)
+
+  CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
 
   CP = c(10)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
@@ -49,13 +67,16 @@
   DENS = c(1)                              #Number of links between products and resources (sharing)
 
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
+
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(2)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(2)                                #No. of Resources used for indexed driver
   
+
   CP_HEURISTIC = c(1)                       #Which Heuristic for pooling resources? # 0-6
-  CD_HEURISTIC = c(1)                   #which Heuristic for selecting a driver? #0-1
-  
+  CD_HEURISTIC = c(1)                       #which Heuristic for selecting a driver? #0-1
+
+
 ## ====================================== END OF INPUT MASK=====================================================                           
 
             set.seed(13) #Reproducability
@@ -110,6 +131,13 @@
     
     ##Building the cost pools
 
+    
+    
+    
+    #CP_HEURISTIC = FIRM$COSTING_SYSTEM$CP_HEURISTIC
+    #CD_HEURISTIC = FIRM$COSTING_SYSTEM$CD_HEURISTIC
+
+
     if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 0){FIRM = MAP_RES_CP_SIZE_MISC(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 1){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM)}
@@ -119,13 +147,11 @@
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 4){FIRM = MAP_CP_CORREL_MISC(FIRM)}
-    
-    else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_OWN(FIRM)}
+
+    else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 6){FIRM = MAP_RES_CP_SIZE_RANDOM(FIRM)}
-   
-      
-      
+
       ## Selecting the drivers of a cost pool
     if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error,NUMB_Error)}
     
@@ -133,9 +159,7 @@
     
     else if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 2){FIRM = MAP_CP_P_INDEXED(FIRM,Error,NUMB_Error)}
     
-      
-      
-      
+
     ## Calculating the estimated product costs
     
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12 
@@ -165,10 +189,7 @@
     
     OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
     UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
-    
-    
-    
-    
+
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
     preData = data.frame(o,
                          nn,
@@ -208,7 +229,6 @@
     # TRACKING THE PRODUCT LEVEL WHEN NEEDED
     if (ProductCostOutput==1){DATAp = .datalogging(o,nn,FIRM,DATAp)}
    
-    #Print outputs;
 
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
@@ -234,9 +254,6 @@
 #output data
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
 write.csv(DATA, file = output)
-
-
-
 print("Cost System Design FILE has been written")
 
 # check = aggregate(DATA,list(DATA$CP),mean)

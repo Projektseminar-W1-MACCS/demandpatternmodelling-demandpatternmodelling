@@ -38,15 +38,20 @@ MAP_RES_CP_RANDOM<-function(FIRM){
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP    #class RC_to_ACP as a variable of the firms costing system 
   
    return(FIRM)
- } #fully implemented
+ } #
 
 MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
-   #FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_RANDOM, == 6"
-   #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
+
+   FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_RANDOM, == 6"
+ 
+   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
    CP = FIRM$COSTING_SYSTEM$CP                  #
    RCC= FIRM$COSTING_SYSTEM$RCC                 #
-   RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
+   RES_CONS_PATp = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
    NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = 0
+   RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
+   
   
    ####---- pre allocation of largest resorces ----####
    ACP_pre1<-vector(mode="numeric")                      #empty vector for ACP-biggest resource assignment
@@ -72,7 +77,7 @@ MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
   RCCs2$x = RCCs$x[! RCCs$x %in% RCCs$x[1:CP]]  ## Can be improved in speed; the remaining resources that are not yet allocated to a CP
   RCCs2$ix = RCCs$ix[! RCCs$ix %in% RCCs$ix[1:CP]]
  
-    ####---- Assign other RC randomly ----####
+   ####---- Assign other RC randomly ----####
    
 
    ACP_SIZE<-rmultinom(n = 1, size = length(RCCs2$x), prob = rep(1/CP, CP))    #Validate; defines sizes of remaining cost pools (No. of RC)
@@ -125,10 +130,13 @@ MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
    return(FIRM)
-}#fully implemented
+}#
+
 
 MAP_RES_CP_SIZE_CORREL<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
+   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = 0
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
    RCCn = length(RCC)
@@ -235,7 +243,7 @@ MAP_RES_CP_SIZE_CORREL<-function(FIRM){
    
    
    return(FIRM)
-}#fully impemented
+}#
 
 MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
    #### Random Allocation of Resources to Cost Pools and then correlative allocation ####    
@@ -348,7 +356,7 @@ MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
    
    return(FIRM)
-}#fully implemented
+}#
 
 
 
