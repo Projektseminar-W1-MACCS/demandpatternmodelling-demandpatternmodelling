@@ -11,6 +11,142 @@ library('robustHD')
 library('lm.beta')
 library('reshape2')
 
+
+####-------------Plotting the current DATA------------####
+
+
+check = aggregate(DATA,list(DATA$CP),mean)
+plot(check$MAPE,type ='l')
+#print(check$MAPE)
+
+
+
+
+rowSums(sweep(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp,1,ncol(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp),"/")) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT
+
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC == FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP
+
+sum(rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC)- sum(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP)
+
+
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) * FIRM$COSTING_SYSTEM$TC == FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP    #the same
+
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)* FIRM$COSTING_SYSTEM$ACP == FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP    #the same
+
+FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCU == FIRM$COSTING_SYSTEM$ACT_CONS_PAT * FIRM$COSTING_SYSTEM$ACP
+
+
+
+FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL %*% FIRM$COSTING_SYSTEM$RCU == FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC
+
+FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL %*% FIRM$COSTING_SYSTEM$RCU == (FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%FIRM$COSTING_SYSTEM$RCU)*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+
+
+PCH = FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP
+PCB0 = rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC
+
+PCB1 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL %*% FIRM$COSTING_SYSTEM$RCU
+
+PCB2 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC
+
+PCB3 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%FIRM$COSTING_SYSTEM$RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+
+PCB4 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%(FIRM$COSTING_SYSTEM$RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
+
+#PCB5 = (FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCU) * FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+
+PCB1 == PCB2  #NO
+PCB1 == PCB3  #NO
+PCB1 == PCB4  #COmpletely NO
+
+PCB2 == PCB3  #NO
+PCB2 == PCB4  #Completely NO
+
+PCB3 == PCB4  #Completely NO
+
+PCH == PCB0
+PCH == PCB1   #Completely NO
+PCH == PCB2   #Completely NO
+PCH == PCB3   #Completely NO
+PCH == PCB4   #Completely NO
+
+plot(PCB4,type = 'l')
+plot(PCB3,type = 'l')
+plot(PCH,type = 'l')
+
+PCH-PCB3
+
+
+(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC)/colSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
+
+
+
+PCB4 == PCH
+
+
+difference = abs(rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC - rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT * FIRM$COSTING_SYSTEM$ACP))
+
+sum(difference)
+
+rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT * FIRM$COSTING_SYSTEM$ACP
+
+sum(rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC)) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT *FIRM$COSTING_SYSTEM$TC
+
+FIRM$COSTING_SYSTEM$RCC == FIRM$COSTING_SYSTEM$ACP
+
+rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC) == FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
+colSums(FIRM$COSTING_SYSTEM$PCB) == rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC)
+
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) == rowMeans(FIRM$COSTING_SYSTEM$ACT_CONS_PAT)
+
+check = matrix(c(2,3,3,3,4,4,5,5),ncol = 4)
+
+mean(check[2,])
+
+rowMeans(check)
+
+
+#ANAND RCU * RES_CONS_PAT
+PCB_ANAND = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT %*% (FIRM$COSTING_SYSTEM$RCC/ FIRM$PRODUCTION_ENVIRONMENT$TRU)*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+
+sum(FIRM$COSTING_SYSTEM$PCB)
+
+PCH_ANAND = (FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP) / FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+
+sum(FIRM$COSTING_SYSTEM$PCH)
+
+sum(PCB_ANAND)
+
+FIRM$COSTING_SYSTEM$PCH == PCB_ANAND
+
+#RES_CONS_PAT_TOTAL <- RES_CONS_PAT * FIRM$PRODUCTION_ENVIRONMENT$DEMAND     #does this needs to be a matrix multiplication?
+##CALCULATING TCU
+TCU <- colSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT)
+##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
+RES_CONS_PATp <- sweep((FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT),2,TCU,"/")
+
+
+
+
+
+rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) == rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)/ncol(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #####Choice of heuristic to analyse####
 
 
@@ -23,24 +159,24 @@ replication_output = read.xlsx(file_rep,2)
 
 ##loading the outpout directly from R
 
-replication_output = DATA
+#replication_output = DATA
 
 ##loading the original model output
-file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 2",".xlsx")
+file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic,".xlsx")
 
 anand_output = read.xlsx(file_anand, 2)
 
-file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 3",".csv")
-
-anand_output = read.csv(file_anand, sep =";")
+# file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 3",".csv")
+# 
+# anand_output = read.csv(file_anand, sep =";")
 
 #anand_output[] <- lapply(anand_output, function(x) as.numeric(as.character(x)))
 
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 3",".csv")
+# file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 3",".csv")
+# 
+# anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
 
-anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
-
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 2",".xlsx")
+file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC",".xlsx")
 
 anand_output_gdrcc = read.xlsx(file_anand_gdrcc,1)
 #anand_output_gdrcc[] <- lapply(anand_output_gdrcc, function(x) as.numeric(as.character(x)))
@@ -268,3 +404,144 @@ plot_sim_numb = melt(plot_sim_numb, id.vars = 'sim_numb_100.CP')
 
 ggplot(plot_sim_numb, aes(x = sim_numb_100.CP, y= value, linetype = variable, color = variable))+geom_line(size = 1.5)
 
+
+
+
+
+
+
+
+
+
+####-------------------------------------Over-and Undercosting---------------------------------------------------####
+
+###----------------------Aggregated DATA--------------------- ####
+
+DATA$RCC_VAR = as.numeric(DATA$RCC_VAR)
+DATA$CP = as.factor(DATA$CP)
+DATA$DENS = as.factor(DATA$DENS)
+DATA_agg = aggregate(.~CP+NUMB_ME+ME_AD, data = DATA, FUN = mean)
+
+ggplot(DATA_agg, aes(x = RCC_VAR, y = OC, color = CP))+geom_line()
+
+mean(DATA$OC[DATA$NUMB_ME == 0.8])
+
+###---------------------DENS VARIATION----------------------- ####
+DATAx = DATA
+
+DATAx$DENS = as.factor(DATAx$DENS)
+DATAx$CP = as.factor(DATAx$CP)
+
+boxplot_data_UC = data.frame(DATAx$DENS,DATAx$CP,DATAx$UC5, DATA$NUMB_ME)
+
+colnames(boxplot_data_UC) = c('DENS','CP','UC', 'Error')
+
+#boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'Share_of_UC')
+
+#boxplot = boxplot[order(boxplot$DENS),]
+
+
+#ggplot(boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
+
+DATA$DENS = as.factor(DATA$DENS)
+DATA$CP = as.factor(DATA$CP)
+
+boxplot_data_OC = data.frame(DATA$DENS,DATA$CP,DATA$OC5, DATA$NUMB_ME)
+
+colnames(boxplot_data_OC) = c('DENS','CP','OC','Error')
+
+
+#ggplot(boxplot_data_OC, aes(x = DENS, y = OC, fill = CP))+geom_boxplot()
+
+ggplot(boxplot_data_OC, aes(x = DENS, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = DENS, y = UC, fill = CP))+theme_classic()+facet_wrap('Error')
+
+
+
+###---------------------Q_VAR VARIATION----------------------- ####
+
+DATAx = DATA
+
+#DATA_agg = aggregate(.~CP, data = DATA, FUN = mean)
+
+DATAx$Q_VAR = as.factor(DATAx$Q_VAR)
+DATAx$CP = as.factor(DATAx$CP)
+
+boxplot_data_UC = data.frame(DATAx$Q_VAR,DATAx$CP,DATAx$UC, DATAx$NUMB_ME)
+
+colnames(boxplot_data_UC) = c('Q_VAR','CP','UC', 'NUMB_ERROR')
+
+#boxplot = melt(boxplot_data, id.vars = 'Q_VAR', value.name = 'OC_UC')
+
+#boxplot = boxplot[order(boxplot$Q_VAR),]
+
+
+#ggplot(boxplot, aes(x = Q_VAR, y = OC_UC, fill = variable))+geom_boxplot()
+
+
+DATAx$Q_VAR = as.factor(DATAx$Q_VAR)
+
+boxplot_data_OC = data.frame(DATAx$Q_VAR,DATAx$CP,DATAx$OC,DATAx$NUMB_ME)
+
+colnames(boxplot_data_OC) = c('Q_VAR','CP','OC','NUMB_ERROR')
+
+
+ggplot(boxplot_data_OC, aes(x = Q_VAR, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data = boxplot_data_UC, aes(x = Q_VAR, y = UC, fill = CP))+theme_classic()+facet_wrap('NUMB_ERROR')
+
+
+###---------------------RC_VAR VARIATION----------------------- ####
+DATAx = DATA
+
+DATAx$RCC_VAR = as.factor(DATAx$RCC_VAR)
+DATAx$CP = as.factor(DATAx$CP)
+
+boxplot_data_UC = data.frame(DATAx$RCC_VAR,DATAx$CP,DATAx$UC, DATA$ME_AD)
+
+colnames(boxplot_data_UC) = c('RCC_VAR','CP','UC', 'Error')
+
+#boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'Share_of_UC')
+
+#boxplot = boxplot[order(boxplot$DENS),]
+
+
+ggplot(boxplot_data_UC, aes(x = RCC_VAR, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
+
+
+
+boxplot_data_OC = data.frame(DATAx$RCC_VAR,DATAx$CP,DATAx$OC, DATAx$ME_AD)
+
+colnames(boxplot_data_OC) = c('RCC_VAR','CP','OC','Error')
+
+
+ggplot(boxplot_data_OC, aes(x = RCC_VAR, y = OC, fill = CP))+geom_boxplot()
+
+ggplot(boxplot_data_OC, aes(x = RCC_VAR, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = RCC_VAR, y = UC, fill = CP))+theme_classic()+facet_wrap('Error')
+
+
+###-----------------NUMB_ERROR Variation------------------ ####
+
+DATAx = DATA
+
+DATAx$NUMB_ME = as.factor(DATAx$NUMB_ME)
+DATAx$CP = as.factor(DATAx$CP)
+
+boxplot_data_UC = data.frame(DATAx$CP,DATAx$UC5, DATAx$NUMB_ME, DATAx$ME_AD)
+
+colnames(boxplot_data_UC) = c('CP','UC', 'NUMB_ERROR','Error')
+
+#boxplot = melt(boxplot_data, id.vars = 'DENS', value.name = 'Share_of_UC')
+
+#boxplot = boxplot[order(boxplot$DENS),]
+
+
+#ggplot(boxplot_data_UC, aes(x = RCC_VAR, y = UC, fill = CP))+geom_boxplot()+facet_wrap('Error')
+
+
+
+boxplot_data_OC = data.frame(DATAx$CP,DATAx$OC5, DATAx$NUMB_ME, DATAx$ME_AD)
+
+colnames(boxplot_data_OC) = c('CP','OC','NUMB_ERROR','Error')
+
+
+#ggplot(boxplot_data_OC, aes(x = RCC_VAR, y = OC, fill = CP))+geom_boxplot()
+
+ggplot(boxplot_data_OC, aes(x = NUMB_ERROR, y = OC, color = CP))+geom_boxplot()+scale_color_grey()+geom_boxplot(data =boxplot_data_UC, aes(x = NUMB_ERROR, y = UC, fill = CP))+theme_classic()+facet_wrap('Error')

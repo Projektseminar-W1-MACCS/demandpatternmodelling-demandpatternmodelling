@@ -44,7 +44,9 @@ res_cons_pat_b_pre = runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_
 ## 1/0 DENSITY
 res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > FIRM$PRODUCTION_ENVIRONMENT$DENS, 0,1),
                           FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
-  
+
+
+
 RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
 FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
 
@@ -56,7 +58,7 @@ FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
 RES_CONS_PAT[,1] <- (BASE)
 RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
 ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
-RES_CONS_PAT_TOTAL <- RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND       
+RES_CONS_PAT_TOTAL <- RES_CONS_PAT * FIRM$PRODUCTION_ENVIRONMENT$DEMAND       
 ##CALCULATING TCU
 TCU <- colSums(RES_CONS_PAT_TOTAL)
 ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
@@ -180,11 +182,14 @@ return(FIRM)
     RES_CONS_PAT[,1] <- (BASE)
     RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
     ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
-    RES_CONS_PAT_TOTAL <- RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND     #does this needs to be a matrix multiplication?
+    RES_CONS_PAT_TOTAL <- sweep(RES_CONS_PAT,MARGIN = 1,FIRM$PRODUCTION_ENVIRONMENT$DEMAND,'*')     #does this needs to be a matrix multiplication?
     ##CALCULATING TCU
     TCU <- colSums(RES_CONS_PAT_TOTAL)
     ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
     RES_CONS_PATp <- sweep((RES_CONS_PAT_TOTAL),2,TCU,"/") #Absolute matrix to relative matrix
+    
+    TRU = colSums(RES_CONS_PAT)
+    RES_CONS_PATps <- sweep((RES_CONS_PAT),2,TRU,"/")     #relative matrix for single production quantity without weitghted by demand
     
     ## ===================== EXCPETION HANDLER ====================
     
@@ -220,10 +225,11 @@ return(FIRM)
   
   
   #Average distance 
-  FIRM$PRODUCTION_ENVIRONMENT$TRU = colSums(RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND) #total demand of every resource
+  FIRM$PRODUCTION_ENVIRONMENT$TRU = colSums(RES_CONS_PAT_TOTAL) #total demand of every resource
   FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
   FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL = RES_CONS_PAT_TOTAL
   FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp = RES_CONS_PATp
+  FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATps = RES_CONS_PATps
   ## OPEN ´´
   # for schliefe? 
   # 
