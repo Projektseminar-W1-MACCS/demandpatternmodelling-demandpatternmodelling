@@ -28,16 +28,18 @@ FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
 ## ====================== STEP 1.b Determining the density (DENS)  =========================
 
 #Randomization and setting clear design points. 
-if(DENS == -1)
+if(DENS[1] == -1)
 {
 DENS_MIN = 0.4;
 DENS_MAX = 0.7;
 DENS = runif(1, DENS_MIN, DENS_MAX);
-FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
-}
-
 FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN = DENS_MIN
 FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
+FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+}
+FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
+
 
 ## ====================== '' STEP 2 Building Demand, RES_CONS_PAT, RCC and PCB '' =========================
 
@@ -47,7 +49,7 @@ FIRM = .gen_Demand_Anand(FIRM) #gen_Demand_Anand and gen_Demand
 
 FIRM = .gen_RES_CONS_PAT_Anand(FIRM)
 
-FIRM = .gen_RCC_unit(FIRM)
+FIRM = .gen_RCC_Anand(FIRM)
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
