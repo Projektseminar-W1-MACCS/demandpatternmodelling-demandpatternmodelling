@@ -2,8 +2,13 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
-## Kai ist cool ###
-## PUSTKUCHEN ###
+
+## Imnprecision Project
+
+
+## Imnprecision Project
+
+
 
 ## ======================================INPUT MASK============================================================
   FIRM = list()                           
