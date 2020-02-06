@@ -41,7 +41,7 @@ MAP_RES_CP_RANDOM<-function(FIRM){
  } #
 
 MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
-
+   browser()
    FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_RANDOM, == 6"
  
    if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
@@ -51,7 +51,7 @@ MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
    NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
    FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = 0
    RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
-   
+  
   
    ####---- pre allocation of largest resorces ----####
    ACP_pre1<-vector(mode="numeric")                      #empty vector for ACP-biggest resource assignment
@@ -131,7 +131,6 @@ MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
    
    return(FIRM)
 }#
-
 
 MAP_RES_CP_SIZE_CORREL<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    

@@ -21,6 +21,7 @@ ACT_CONS_PAT<-matrix(0,nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,ncol = length
 
 for (i in 1:length(RC_ACP_index)){
     
+  
 ## exception handler if there is only one resource in ACP[[i]] take this resource as the driver
 # in original version not needed, this is due to basic implementation of Rs function rowSums
 if(length(RC_ACP_index[[i]])==1){
@@ -37,6 +38,8 @@ if(length(RC_ACP_index[[i]])==1){
 }
 }
 
+
+#set.seed(Sys.time())
 if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error is applied to all driver links in each driver in the act const pat
   if (!is.null(ME_AD)) {
     if(length(RC_ACP_index)==1){        #if there is only one cost pool
