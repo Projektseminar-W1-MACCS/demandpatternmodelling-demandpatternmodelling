@@ -10,28 +10,28 @@
     
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-  SIM_NUMB =         10                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         300                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000                #Total costs
 
 
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
   set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
-  set_CSD_constant=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  set_CSD_constant=  1                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
     
         
-  CP = c(10)       #No. of Cost Pools
+  CP = c(1,5,10,15,20,25,30,35,40,45,50)    #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(0.5)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(0.4)                            #Demand variation
-  Error = c(0)                              #Measurement error
+  Error = c(0.1,0.3,0.5)                    #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
-  DENS = c(1)                              #Number of links between products and resources (sharing)
+  DENS = c(0.5)                             #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
-  DISP1 = c(2)                             #No. of the biggest resources that have a DISP2 share of the total costs
+  DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(2)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c(6)                       #Which Heuristic for pooling resources? # 0-6
+  CP_HEURISTIC = c(5)                       #Which Heuristic for pooling resources? # 0-6
   CD_HEURISTIC = c(0)                       #which Heuristic for selecting a driver? #0-1
 
 
