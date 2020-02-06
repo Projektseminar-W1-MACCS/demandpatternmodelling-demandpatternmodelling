@@ -1,5 +1,4 @@
-## PRODUCTION ENVIRONMENT GENERATION V 1.01
-
+## PRODUCTION ENVIRONMENT GENERATION V 1.1
 
 gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
 
@@ -8,7 +7,7 @@ gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
 if (set_PE_constant==1) {set.seed(13)} 
    
    
-## ====================== STEP 1  Determining the activities =========================
+## ====================== STEP 1.a  Determining the activities =========================
 
 UNITLEVEL_ACT_SHARE_MIN = 0.2    #0.2 is the size of DISP1 =10
 UNITLEVEL_ACT_SHARE_MAX = 0.2
@@ -16,7 +15,7 @@ FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = runif(1, UNITLEVEL_ACT_SHARE_M
 
 FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MIN = UNITLEVEL_ACT_SHARE_MIN
 FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MAX = UNITLEVEL_ACT_SHARE_MAX
-## ====================== STEP 1.a Determining the amount of cost categories =================
+## ====================== STEP 1.b Determining the amount of cost categories =================
 
 unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
@@ -25,7 +24,7 @@ FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
 FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
 
 
-## ====================== STEP 1.b Determining the density (DENS)  =========================
+## ====================== STEP 1.c Determining the density (DENS)  =========================
 
 #Randomization and setting clear design points. 
 if(DENS[1] == -1)
@@ -41,9 +40,7 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 
 
 
-## ====================== '' STEP 2 Building Demand, RES_CONS_PAT, RCC and PCB '' =========================
-
-
+## ===================== STEP 2 Building Demand, RES_CONS_PAT, RCC and PCB '' =========================
 
 FIRM = .gen_Demand_Anand(FIRM) #gen_Demand_Anand and gen_Demand
 
@@ -60,42 +57,6 @@ if (set_PE_constant==1) {set.seed(NULL)} # This removes the seed of the firm all
 
 
 return(FIRM)
-
-
-#RES_CONS_PAT,CHECK] = genRES_CONS_PAT2(ProductionEnvironment,DENS_RUN,COR); % generate res_cons_pat
-
-
-#FIRM = .gen_RCC_KGM(FIRM, unitsize, nonunitsize);
-
-
-
-#COSTING_SYSTEM$PCB = COSTING_SYSTEM$RCC*PRODUCTION_ENVIRONMENT$
- #  [RES_CONS_PATp,CostSystem,CHECK] = genCOST_CONS_PAT(ProductionEnvironment,CHECK,RC,RES_CONS_PAT,DENS_RUN,COR);
-   
- #  %% COMPUTING DESCRIPTIVE VALUES 
- #  % Computing Resource cost percentage: How many percentage are in the
- #  RC_sort = sort(RC,'descend');
- #  RC_20p = sum(RC_sort(1:(NUMB_RES*0.2)));
- #  CHECK.RC_20p = RC_20p./TC*100;
- #  
- #  % Computing Output distribution percentage; How many percentage are in the % 20% values?
- #    DEMAND_sort = sort(TQ,'descend');
- #  DEMAND_20p = sum(DEMAND_sort(1:(NUMB_PRO*0.2))); 
- #  CHECK.DEMAND_20p = DEMAND_20p./sum(TQ)*100;
- #  
- #  % Computing heterogeneity 
- #  [CHECK] = measure_heterogeneity(RES_CONS_PATp,ProductionEnvironment,CHECK);
- #  
- #  % Averange range between lowest and highest consumption.
- #  CORAP_pre=max(RES_CONS_PATp)-min(RES_CONS_PATp);
- #  CHECK.CORAP=mean(CORAP_pre)*100;  
- #  
-
-
-
-
-
- 
 
 
  } # Function end
