@@ -2,6 +2,10 @@
 # Initizalization of the CostSystemDesignSim (CSDS)
 #############################################################
 
+#######
+# IMPRECISION PROJECT
+######
+
 ## ======================================INPUT MASK============================================================
   FIRM = list()                           
   FIRM$PRODUCTION_ENVIRONMENT = list()
