@@ -1,4 +1,3 @@
-################################################
 # COST DRIVER SELECTION HEURISTICS
 # The algorithms orientates to 
 # Balakrishnan, Hansen, Labro 2011
@@ -86,12 +85,7 @@ FIRM$COSTING_SYSTEM$ACP_index_choosen
 return(FIRM)
 }
 }
-  
-  
 
-
-
-  
 MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   #FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_AVERAGE, == 1'
   ACP_index_choosen<-vector(mode="numeric")
@@ -280,44 +274,3 @@ MAP_CP_P_INDEXED <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
   return(FIRM)
 } 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  # stop("Not fully implemented yet")
-  # ACP_index_choosen<-vector(mode="numeric")
-  # # normalize RES_CONS_PAT
-  # RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
-  # ME_AD = FIRM$COSTING_SYSTEM$Error
-  # RCC<-FIRM$COSTING_SYSTEM$RCC
-  # RC_ACP_index<-FIRM$COSTING_SYSTEM$RC_ACP
-  # 
-  # # preallocation
-  # ACT_CONS_PAT<-matrix(0,nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,ncol = length(RC_ACP_index))
-  # 
-  # 
-  #   
-  # if (!is.null(ME_AD)) {
-  #   if(length(RC_ACP_index)==1){
-  #     ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
-  #   }else{
-  #     err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*length(RC_ACP_index),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
-  #     ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
-  #     ACT_CONS_PAT = ACT_CONS_PAT/colSums(ACT_CONS_PAT)
-  #   }
-  # }
-  # 
-  # FIRM$COSTING_SYSTEM$ACT_CONS_PAT<-as.matrix(ACT_CONS_PAT)
-  # FIRM$COSTING_SYSTEM$ACP_index_choosen
-  # 
-  # 
-  # return(FIRM)
-  
-
-
