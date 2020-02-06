@@ -39,7 +39,7 @@ if(length(RC_ACP_index[[i]])==1){
 }
 
 
-#set.seed(Sys.time())
+set.seed(Sys.time())
 if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error is applied to all driver links in each driver in the act const pat
   if (!is.null(ME_AD)) {
     if(length(RC_ACP_index)==1){        #if there is only one cost pool

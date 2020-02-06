@@ -17,7 +17,7 @@
   
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
   set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
-  set_CSD_constant=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  set_CSD_constant=  1                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
   dec_ERROR=         1                      #Control Variable - 
     
         
@@ -66,6 +66,7 @@
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
     FIRM$PRODUCTION_ENVIRONMENT$DISP1 = DISP1
+    FIRM$COSTING_SYSTEM$CP = CP[ix_CP]
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
     FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
     FIRM$COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
@@ -76,7 +77,10 @@
     FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
-    
+   
+ 
+    FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
+    FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
                 
     
   nn=1 # necessary for repeating the SIM_NUMB loop
@@ -143,7 +147,7 @@
     ## DATA LOGGING
     DATA = .system_datalogging(o,nn,FIRM,DATA)
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
-    browser()
+   
     
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
@@ -170,10 +174,6 @@
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
 write.csv(DATA, file = output)
 print("Cost System Design FILE has been written")
-
-# check = aggregate(DATA,list(DATA$CP),mean)
-# plot(check$MAPE,type ='l')
-# print(check$MAPE)
 
 if (ProductCostOutput==1)
 {

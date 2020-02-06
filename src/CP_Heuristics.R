@@ -41,7 +41,7 @@ MAP_RES_CP_RANDOM<-function(FIRM){
  } #
 
 MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
-   browser()
+  
    FIRM$COSTING_SYSTEM$CP_HEURISTIC = "MAP_RES_CP_SIZE_RANDOM, == 6"
  
    if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
