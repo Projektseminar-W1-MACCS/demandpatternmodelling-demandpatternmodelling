@@ -5,8 +5,7 @@
 
 ## Balakrishnan, Hansen, Labro 2011
 MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
-
-FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_BIGPOOL, == 0'
+set.seed(NULL)
 ACP_index_choosen<-vector(mode="numeric")
 # normalize RES_CONS_PAT
 RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
@@ -39,7 +38,6 @@ if(length(RC_ACP_index[[i]])==1){
 }
 
 
-set.seed(Sys.time())
 if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error is applied to all driver links in each driver in the act const pat
   if (!is.null(ME_AD)) {
     if(length(RC_ACP_index)==1){        #if there is only one cost pool

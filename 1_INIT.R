@@ -16,9 +16,8 @@
   
   
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
-  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
-  set_CSD_constant=  1                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
-  dec_ERROR=         1                      #Control Variable - 
+  set_PE_constant=   0                     #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+  set_CSD_constant=  0                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
     
         
   CP = c(10)       #No. of Cost Pools
@@ -78,10 +77,6 @@
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
    
- 
-    FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
-    FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
-                
     
   nn=1 # necessary for repeating the SIM_NUMB loop
   #### ============================== SIMULATION ======================================
@@ -107,7 +102,9 @@
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 6){FIRM = MAP_RES_CP_SIZE_RANDOM(FIRM)}
-
+    
+    else{print("error CP_Heuristic")}
+      
     # Selecting the drivers of a cost pool
     if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error,NUMB_Error)}
     
@@ -115,7 +112,7 @@
     
     else if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 2){FIRM = MAP_CP_P_INDEXED(FIRM,Error,NUMB_Error)}
     
-
+    else{print("error CD_Heuristic")}
     ## Calculating the estimated product costs
     
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12 
@@ -152,6 +149,7 @@
     print(o)
     print(FIRM$COSTING_SYSTEM$CP)
     print((MAPE))
+    print((EUCD))
     
     o=o+1 #Counting for the total number of runs
   }
