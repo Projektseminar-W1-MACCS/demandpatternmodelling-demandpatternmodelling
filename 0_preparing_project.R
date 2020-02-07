@@ -12,14 +12,13 @@
  #   "dplyr",
  #   "tidyr",
  #   "rmarkdown",
- #   "ggplot2",
- #   'randomizr'
+ #   "ggplot2"
  # 
  # 
  # ))
  # 
  # 
- # Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr",'randomizr')
+ # Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr")
  # lapply(Packages, library, character.only = TRUE)
 
 

@@ -3,7 +3,6 @@
 # The algorithms orientate to 
 # Balakrishnan, Hansen, Labro 2011
 # Anand, Balakrishnan, Labro 2019
-library(randomizr)
 
 ## BALAKRISHNAN et al. 2011
 
@@ -15,8 +14,6 @@ MAP_RES_CP_RANDOM<-function(FIRM){
  RCC= FIRM$COSTING_SYSTEM$RCC
  RCCn = length(RCC)
  NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
-
- CP = 20
  
  if(CP > 1){
     
@@ -29,24 +26,15 @@ MAP_RES_CP_RANDOM<-function(FIRM){
     }
     
     not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+    x = length(unlist(RC_to_ACP))
     
-    length(not_assigned)
-    
-    
-    allowable_length = NUMB_RES - CP
-    
-    ACP_SIZE<-rmultinom(n = 1, size = length(not_assigned), prob = rep(1/CP, CP))
-    
-    RC_to_ACP_temp<-split(not_assigned,rep(1:CP,ACP_SIZE))
-    
-    
-    RC_to_ACP_t = list()
-    
-    for(i in RC_to_ACP_temp){
-       
-       RC_to_ACP_t[i] = unlist(i)
+    while(x < NUMB_RES){
+       not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+       random_cp = sample(c(1:CP),1)
+       RC_to_ACP[[random_cp]] = c(RC_to_ACP[[random_cp]],sample(not_assigned,1))
+       not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+       x = length(unlist(RC_to_ACP))
     }
-
     
     
     
