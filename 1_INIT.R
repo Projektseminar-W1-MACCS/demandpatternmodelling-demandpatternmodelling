@@ -22,7 +22,7 @@
 
 
 
-  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
+  CP = c(10)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
@@ -33,10 +33,8 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(1)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c('base',0,1,2,3)                       #Which Heuristic for pooling resources? # 0-6
-  CD_HEURISTIC = c('base',0)                       #which Heuristic for selecting a driver? #0-1
-  SIM_NUMB =         50                  #Control Variable - Number of Simulations for every single environment (standard: 30)
-  TC =               1000000                #Total costs
+  CP_HEURISTIC = c(0)                       #Which Heuristic for pooling resources? # 0-6
+  CD_HEURISTIC = c(5)                       #which Heuristic for selecting a driver? #0-1
 
 ## ====================================== END OF INPUT MASK=====================================================                           
 
@@ -75,11 +73,8 @@
     FIRM$COSTING_SYSTEM$TC = TC
     FIRM$COSTING_SYSTEM$CC = CC
     FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
-    FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC
-    FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC
-    FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
+    FIRM$COSTING_SYSTEM$set_CSD_fix = set_CSD_fix
     FIRM$COSTING_SYSTEM$NUM = NUM
-    FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
 
