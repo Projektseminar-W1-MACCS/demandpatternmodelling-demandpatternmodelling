@@ -3,7 +3,7 @@
 ############
 
 
-.genCOST_CONS_PAT<-function(FIRM,COST_APPROACH="ANAND"){
+.gen_COST_CONS_PAT<-function(FIRM,COST_APPROACH="ANAND"){
   
   if(COST_APPROACH=="KGM"){
     # # case 1 # ADDING THE COSTS TO THE RESOURCE_CONSUMPTION_MATRIX ORIGINAL  KGM MM
@@ -27,20 +27,27 @@
     # % check = PC_B_UNIT + PC_B_BATCH; 20180502 checked
     # RES_CONS_PATp = RES_CONS_PAT_t./sum(RES_CONS_PAT_t);
     
-  }else if(COST_APPROACH=="ANAND"){
+  }
+  
+  else if(COST_APPROACH=="ANAND"){
     ## ADDING THE COSTS TO THE RESOURCE_CONSUMPTION_MATRIX ORIGINAL in ANAND
-
+    if(FIRM$PRODUCTION_ENVIRONMENT$set_RCU_fix == 1){
+      
+      RCU = FIRM$COSTING_SYSTEM$RCU
+      
+      RCC = FIRM$PRODUCTION_ENVIRONMENT$TRU * FIRM$COSTING_SYSTEM$RCU
+      
+      
+      ###CHECK###
+      RCCs = sort(RCC, decreasing = TRUE)
+      
+      
+      FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20 = sum(RCCs[1:(0.2 * length(RCC))])/TC     #size of 20% biggest resources (10)
+      FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources (5)
+      FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources (1)
+    }  #if this is set fix, the RCC vector is adapted to the acutal Demand and resource consumption so that the sum is alwas equal to TC
    
 
-    # COST_CONS_PAT = sweep(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATps, MARGIN=2, FIRM$COSTING_SYSTEM$RCC, `*`)
-    # 
-    # sum(COST_CONS_PAT)
-    # sum(FIRM$COSTING_SYSTEM$RCC)
-    # sum(RES_CONS_PATp_single)
-    # 
-    # COST_CONS_PATp = sweep((COST_CONS_PAT),2,colSums(COST_CONS_PAT),"/")
-    # 
-    # FIRM$COSTING_SYSTEM$COST_CONS_PAT = COST_CONS_PAT
     
     ###TOTAL COST CONS PAT###
     
@@ -54,12 +61,15 @@
     
     
     
+    
+    
+    
     # Total Resource Units -> Amount Needed to produce mix QT = ProductionEnvironment[['DEMAND']]
-    #TRU = FIRM$PRODUCTION_ENVIRONMENT$TRU
+    TRU = FIRM$PRODUCTION_ENVIRONMENT$TRU
     
     # RES_CONS_PAT Anand et al. 2019
     
-    #FIRM$COSTING_SYSTEM$RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
+    FIRM$COSTING_SYSTEM$RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
     RCU = FIRM$COSTING_SYSTEM$RCU
     # Benchmark product costs
     FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%FIRM$COSTING_SYSTEM$RCU * FIRM$PRODUCTION_ENVIRONMENT$DEMAND #BENCHMARK PRODUCT COSTS (TOTAL)
@@ -88,7 +98,9 @@
     #RES_CONS_PATp = as.data.frame(scale(RES_CONS_PAT, center=FALSE, scale=colSums(RES_CONS_PAT)))
     
     
-  }else if(COST_APPROACH=="BALA"){
+  }
+  
+  else if(COST_APPROACH=="BALA"){
     
     
     

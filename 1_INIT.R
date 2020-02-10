@@ -6,20 +6,22 @@
   FIRM$COSTING_SYSTEM = list()
   DATA = data.frame()
   DATAp = data.frame()
+    
+  NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
+  NUMB_RES  =        50                  #INPUT independent variable - Number of factors
+  SIM_NUMB =         200                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  TC =               1000000             #Total costs
 
-  NUMB_PRO =         50                     #INPUT independent Variable - Number of products
-  NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-  SIM_NUMB =         200                 #Control Variable - Number of Simulations for every single environment (standard: 30)
-  TC =               1000000                #Total costs
+
 
 
   ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
 
   set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_fix = 0             #Control variable - Decide if the resource consumption is constant
+  set_RES_CONS_PAT_fix = 1             #Control variable - Decide if the resource consumption is constant
   set_RCU_fix = 0                      #Control variable - Decide if the resource costs (and resource costs per unit) are constant
-  set_CSD_fix=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
-
+  set_RCC_fix = 0                    # Control Variable - Decide if the reosurce costs vector is the same
+  set_CSD_fix=  1                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
 
   CP = c(10)       #No. of Cost Pools
@@ -27,14 +29,16 @@
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
   Error = c(0)                              #Measurement error
-  NUMB_Error = c(0)                         #Number of errornoues links
+  NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(1)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c(0)                       #Which Heuristic for pooling resources? # 0-6
-  CD_HEURISTIC = c(5)                       #which Heuristic for selecting a driver? #0-1
+  CP_HEURISTIC = c(5)                       #Which Heuristic for pooling resources? # 0-6
+  CD_HEURISTIC = c(0)                       #which Heuristic for selecting a driver? #0-1
+
+
 
 ## ====================================== END OF INPUT MASK=====================================================                           
 
@@ -66,6 +70,9 @@
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
     FIRM$PRODUCTION_ENVIRONMENT$DISP1 = DISP1
+    FIRM$PRODUCTION_ENVIRONMENT$set_DEMAND_fix = set_DEMAND_fix
+    FIRM$PRODUCTION_ENVIRONMENT$set_RES_CONS_PAT_fix = set_RES_CONS_PAT_fix
+    FIRM$PRODUCTION_ENVIRONMENT$set_RCU_fix = set_RCU_fix
     FIRM$COSTING_SYSTEM$CP = CP[ix_CP]
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
     FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
@@ -74,6 +81,7 @@
     FIRM$COSTING_SYSTEM$CC = CC
     FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
     FIRM$COSTING_SYSTEM$set_CSD_fix = set_CSD_fix
+    FIRM$COSTING_SYSTEM$set_RCC_fix = set_RCC_fix
     FIRM$COSTING_SYSTEM$NUM = NUM
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
@@ -142,6 +150,7 @@
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
 
     ## DATA LOGGING
+    browser()
     DATA = .system_datalogging(o,nn,FIRM,DATA)
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
 
