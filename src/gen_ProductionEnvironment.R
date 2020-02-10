@@ -5,19 +5,18 @@ gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
 
 
 
-## ====================== '' STEP 2 Building Demand, RES_CONS_PAT, RCC and PCB '' =========================
+
 
 ## ====================== Set constant or vary =========
 if (set_PE_constant==1) {set.seed(13)} 
   
 FIRM = .gen_Demand_Anand(FIRM) #gen_Demand_Anand and gen_Demand
 
-FIRM = .gen_RES_CONS_PAT_Anand(FIRM)
+FIRM = .gen_RES_CONS_PAT_Anand(FIRM) ## Building Demand, RES_CONS_PAT, RCC and PCB 
 
-FIRM = .gen_RCC_Anand(FIRM)
+FIRM = .gen_RCC_Anand(FIRM) ##RCC - 
 
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
-
 
 if (set_PE_constant==1) {set.seed(NULL)} # This removes the seed of the firm allowing random cost system design
 
