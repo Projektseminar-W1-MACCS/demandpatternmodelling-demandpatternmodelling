@@ -4,7 +4,6 @@
 # Balakrishnan, Hansen, Labro 2011
 # Anand, Balakrishnan, Labro 2019
 
-
 ## BALAKRISHNAN et al. 2011
 
 MAP_RES_CP_RANDOM<-function(FIRM){
@@ -14,28 +13,49 @@ MAP_RES_CP_RANDOM<-function(FIRM){
  CP = FIRM$COSTING_SYSTEM$CP
  RCC= FIRM$COSTING_SYSTEM$RCC
  RCCn = length(RCC)
-
+ NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
  
-   repeat{
-     ACP_SIZE<-rmultinom(n = 1, size = RCCn, prob = rep(1/CP, CP))    # validate, define size (#of RC) of each ACP
-     
-     # break if every ACP has at least one resource 
-     if(any(ACP_SIZE==0)==FALSE){
-       break
-     }
-   }
+ if(CP > 1){
+    
+    not_assigned = sample(c(1:NUMB_RES),NUMB_RES)
+    RC_to_ACP = list()
+    
+    for(i in 1:CP){
+       
+       RC_to_ACP[i] = not_assigned[i]
+    }
+    
+    not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+    x = length(unlist(RC_to_ACP))
+    
+    while(x < NUMB_RES){
+       not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+       random_cp = sample(c(1:CP),1)
+       RC_to_ACP[[random_cp]] = c(RC_to_ACP[[random_cp]],sample(not_assigned,1))
+       not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+       x = length(unlist(RC_to_ACP))
+    }
+    
+    
+    
+    ACP<-vector(mode="numeric") #empty vector for all ACPs volume
+    for (i in 1:length(RC_to_ACP)) {
+       
+       ACP[i]<-sum(RCC[RC_to_ACP[[i]]]) # assign to every row in ACP the sum of resource costs for evey ACP in to RC_to_ACP
+       
+    }
+    
+ }
+
+ if(CP == 1){
+    ACP = sum(RCC)
+    RC_to_ACP = list(c(1:NUMB_RES)) 
+ } 
    
-   RC_to_ACP<-split(sample(c(1:RCCn),RCCn),rep(1:CP,ACP_SIZE)) #Assign Resources (RC) to ACP, by splitting the # RC into each ACP and taking into account the ACP_Size
-   
-   ACP<-vector(mode="numeric") #empty vector for all ACPs volume
-   for (i in 1:length(RC_to_ACP)) {
-     
-     ACP[i]<-sum(RCC[RC_to_ACP[[i]]]) # assign to every row in ACP the sum of resource costs for evey ACP in to RC_to_ACP
-     
-   }
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
  
    FIRM$COSTING_SYSTEM$ACP = ACP             #class ACP as a variable of the firms costing system
-   FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP    #class RC_to_ACP as a variable of the firms costing system 
+   FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP             #class RC_to_ACP as a variable of the firms costing system 
   
    return(FIRM)
  } #

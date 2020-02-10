@@ -10,29 +10,29 @@
     
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-  SIM_NUMB =         10                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         200                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000                #Total costs
 
 
-  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
-  set_PE_constant=   1                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+  ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
+  set_PE_constant=   0                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
   set_CSD_constant=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
     
         
-  CP = c(10)       #No. of Cost Pools
+  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(0.5)                          #Resource cost variation --> base for DISP2
-  Q_VAR = c(0.4)                            #Demand variation
+  RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
+  Q_VAR = c(-1)                            #Demand variation
   Error = c(0)                              #Measurement error
-  NUMB_Error = c(1)                         #Number of errornoues links
-  DENS = c(1)                              #Number of links between products and resources (sharing)
+  NUMB_Error = c(0)                         #Number of errornoues links
+  DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
-  DISP1 = c(2)                             #No. of the biggest resources that have a DISP2 share of the total costs
-  NUM = c(2)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c(6)                       #Which Heuristic for pooling resources? # 0-6
-  CD_HEURISTIC = c(0)                       #which Heuristic for selecting a driver? #0-1
+  DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
+  NUM = c(1)                                #No. of Resources used for indexed driver
+  CP_HEURISTIC = c('base',0,1,2,3)                       #Which Heuristic for pooling resources? # 0-6
+  CD_HEURISTIC = c('base',0)                       #which Heuristic for selecting a driver? #0-1
 
 
 ## ====================================== END OF INPUT MASK=====================================================                           
@@ -94,7 +94,9 @@
     FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
     
     ##Building the cost pools
-    if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 0){FIRM = MAP_RES_CP_SIZE_MISC(FIRM)}
+    if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 'base'){FIRM = MAP_RES_CP_RANDOM(FIRM)}
+    
+    else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 0){FIRM = MAP_RES_CP_SIZE_MISC(FIRM)}
     
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 1){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM)}
     
@@ -111,7 +113,9 @@
     else{print("error CP_Heuristic")}
       
     # Selecting the drivers of a cost pool
-    if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error,NUMB_Error)}
+    if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 'base'){FIRM = MAP_CP_P_RANDOM(FIRM,Error,NUMB_Error)}
+    
+    else if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error,NUMB_Error)}
     
     else if(FIRM$COSTING_SYSTEM$CD_HEURISTIC == 1){FIRM = MAP_CP_P_AVERAGE(FIRM,Error,NUMB_Error)}
     
@@ -121,13 +125,14 @@
     ## Calculating the estimated product costs
     
     FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12 
-    #FIRM$COSTING_SYSTEM$PCH = rowSums(sweep(FIRM$COSTING_SYSTEM$ACT_CONS_PAT, MARGIN=1, FIRM$COSTING_SYSTEM$ACP, `*`))
-  
+
     ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007
     EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
     MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
     MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
     
+    
+    ## OVER AND UNDERCOSTING ##
     
     UC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)>0)/NUMB_PRO
     OC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)<=0)/NUMB_PRO  
@@ -135,14 +140,9 @@
     UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
     OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
   
-    OC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)>0)/NUMB_PRO
-    UC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)<=0)/NUMB_PRO  
-    
-    OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
-    UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
 
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
- 
+    
     ## DATA LOGGING
     DATA = .system_datalogging(o,nn,FIRM,DATA)
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
