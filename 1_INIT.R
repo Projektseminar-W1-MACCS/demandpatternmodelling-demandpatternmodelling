@@ -18,7 +18,7 @@
   
   set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
   set_RES_CONS_PAT_fix = 0             #Control variable - Decide if the resource consumption is constant
-  set_RCU_constant_fix = 0                      #Control variable - Decide if the resource costs (and resource costs per unit) are constant
+  set_RCU_fix = 0                      #Control variable - Decide if the resource costs (and resource costs per unit) are constant
   set_CSD_fix=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
     
