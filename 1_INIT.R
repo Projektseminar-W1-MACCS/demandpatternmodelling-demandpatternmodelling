@@ -15,10 +15,11 @@
 
 
   ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
-  set_DEMAND_constant=   0                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_constant = 1             #Control variale - Decide if the resource consumption is constant
-  set_RC_constant = 1                       #Control variable - Decide if the resource costs (and resource costs per unit) are constant
-  set_CSD_constant=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  
+  set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
+  set_RES_CONS_PAT_fix = 0             #Control variable - Decide if the resource consumption is constant
+  set_RCU_constant_fix = 0                      #Control variable - Decide if the resource costs (and resource costs per unit) are constant
+  set_CSD_fix=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
     
         

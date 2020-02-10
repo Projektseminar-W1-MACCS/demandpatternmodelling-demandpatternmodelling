@@ -257,7 +257,7 @@
 .gen_RCC_variation <- function(FIRM, unitsize, nonunitsize) {
   
   FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
-  
+  PRE_BASE = 1000000 #former TC but helps to level our resource cost drivers. 
   #RC_VAR =-1
   if (RC_VAR == -1)
   {
@@ -274,7 +274,7 @@
   #FIRM$PRODUCTION_ENVIRONMENT$CHECK$DISP2 = RC_VAR
   
   DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
-  TC = FIRM$COSTING_SYSTEM$TC
+
   NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
   
   # Step 1
@@ -361,16 +361,16 @@
   
   ###CHECK###
   RCCs = sort(RCC, decreasing = TRUE)
+    #### sourcing
+  FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
+  FIRM$COSTING_SYSTEM$RCC = RCC
+  
+  
+  
   
   FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20 = sum(RCCs[1:(0.2 * length(RCC))])/TC     #size of 20% biggest resources (10)
   FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources (5)
   FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources (1)
-  
-  
-  #### sourcing
-  FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
-  FIRM$COSTING_SYSTEM$RCC = RCC
-  
   
   
   

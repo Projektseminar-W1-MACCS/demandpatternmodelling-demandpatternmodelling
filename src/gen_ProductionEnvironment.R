@@ -32,6 +32,9 @@ FIRM = .gen_RCC_Anand(FIRM)
 
 if (set_RC_constant==1) {set.seed(NULL)}
 
+
+
+
 FIRM = .genCOST_CONS_PAT(FIRM,COST_APPROACH = "ANAND")
 
 
