@@ -4,6 +4,36 @@
 
 .gen_RES_CONS_PAT <- function(FIRM) {
 
+  ## ====================== STEP 1 Determining the activities =========================
+  UNITLEVEL_ACT_SHARE_MIN = 0.2    #0.2 is the size of DISP1 =10
+  UNITLEVEL_ACT_SHARE_MAX = 0.2
+  FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE = runif(1, UNITLEVEL_ACT_SHARE_MIN, UNITLEVEL_ACT_SHARE_MAX) #random activity share between lower and upper bounds
+  
+  FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MIN = UNITLEVEL_ACT_SHARE_MIN
+  FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE_MAX = UNITLEVEL_ACT_SHARE_MAX
+  ## ====================== STEP 1 Determining the amount of cost categories =================
+  
+  unitsize = floor(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
+  nonunitsize = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES-unitsize
+  
+  FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
+  FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
+  
+  
+  ## ====================== STEP 0.b Determining the density (DENS)  =========================
+  #Randomization and setting clear design points. 
+  if(DENS[1] == -1)
+  {
+    DENS_MIN = 0.4;
+    DENS_MAX = 0.7;
+    DENS = runif(1, DENS_MIN, DENS_MAX);
+    FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN = DENS_MIN
+    FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
+    FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+  }
+  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+  
+  
 ## ====================== STEP 1 BASELINE NORM ========================= 
 
 repeat    {
