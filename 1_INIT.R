@@ -10,7 +10,7 @@
     
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-  SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         50                  #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000                #Total costs
 
 
@@ -20,13 +20,13 @@
 
     
         
-  CP = c(1,5,10,15,20,25)   #No. of Cost Pools
+  CP = c(1,5,10,15,20,25)                   #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(0.5)                          #Resource cost variation --> base for DISP2
-  Q_VAR = c(0.4)                            #Demand variation
+  Q_VAR = c(0.4,0.7,1)                            #Demand variation
   Error = c(0.1,0.3,0.5)                    #Measurement error
   NUMB_Error = c(0.1,0.5,1)                 #Number of errornoues links
-  DENS = c(0.5)                             #Number of links between products and resources (sharing)
+  DENS = c(0.35,0.5,0.65)                             #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
