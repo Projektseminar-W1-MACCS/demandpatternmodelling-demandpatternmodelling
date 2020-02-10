@@ -175,8 +175,6 @@ MAP_RES_CP_SIZE_CORREL<-function(FIRM){
       
    }
    
-   
-   
    already_assigned<-unlist(RC_to_ACP)          #transforms the list into a vector with all resources that are already assigned
    not_assigned <- setdiff(c(1:RCCn),already_assigned)
    
@@ -250,16 +248,15 @@ MAP_RES_CP_SIZE_CORREL<-function(FIRM){
       
       
    } else{
-      
+   
          ACP <- ACP_pre1                                             #if there was no second assignment of remaining resources (No. of RC = No. of ACP) all RC are in ACP_pre1
    }
    
    
-   
+ 
    
    FIRM$COSTING_SYSTEM$ACP = ACP
    FIRM$COSTING_SYSTEM$RC_ACP = RC_to_ACP
-   
    
    return(FIRM)
 }#
