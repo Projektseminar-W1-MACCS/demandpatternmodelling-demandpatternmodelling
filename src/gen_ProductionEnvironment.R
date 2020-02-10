@@ -3,10 +3,7 @@
 
 gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
 
-
-
-
-
+  
 ## ====================== Set constant or vary =========
 if (set_PE_constant==1) {set.seed(13)} 
   
