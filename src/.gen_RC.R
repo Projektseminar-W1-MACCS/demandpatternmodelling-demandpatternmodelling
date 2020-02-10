@@ -238,6 +238,134 @@
   FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources (1)
   
   
+  #### sourcing
+  FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
+  FIRM$COSTING_SYSTEM$RCC = RCC
+  
+  
+  
+  
+  # '''' checked and compared with Anand et al. 2019 - 30/10/2019
+  
+  return(FIRM)
+  
+}
+
+
+
+
+.gen_RCC_variation <- function(FIRM, unitsize, nonunitsize) {
+  
+  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
+  
+  #RC_VAR =-1
+  if (RC_VAR == -1)
+  {
+    DISP2_MIN = 0.4               #if bounds between 0.5 and 0.8 this could be an equivilent to per_BATCH costs in gen_RCC_unit
+    DISP2_MAX = 0.7
+    DISP2 = runif(1, DISP2_MIN, DISP2_MAX)
+    FIRM$COSTING_SYSTEM$RC_VAR_MIN = DISP2_MIN
+    FIRM$COSTING_SYSTEM$RC_VAR_MAX = DISP2_MAX
+  }else{
+    DISP2 = FIRM$COSTING_SYSTEM$RC_VAR
+  }
+  
+  FIRM$COSTING_SYSTEM$RC_VAR = DISP2
+  #FIRM$PRODUCTION_ENVIRONMENT$CHECK$DISP2 = RC_VAR
+  
+  DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
+  TC = FIRM$COSTING_SYSTEM$TC
+  NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
+  
+  # Step 1
+  r_MIN <- ((1 - DISP2) * TC) / (NUMB_RES - DISP1)
+  
+  #Step 2
+  r1_MAX <- (DISP2 * TC) - ((DISP1 - 1) * r_MIN)
+  
+  # Step 3
+  r_MIN <- r_MIN + (r1_MAX - r_MIN) * 0.025   #0.025?
+  
+  ## Step 4
+  #Initalize Values
+  RCC <- vector(mode = "numeric")
+  r_MAX <- vector(mode = "numeric")
+  temp1_ADD <- vector(mode = "numeric", length = DISP1 - 1)
+  temp1_ADD[1] <- 0
+  
+  
+  for (i in 1:(DISP1 - 1)) {
+    r_MAX[i] <- (DISP2 * TC - sum(temp1_ADD)) - (DISP1 - i) * r_MIN
+    
+    RCC[i] <- runif(1, min = r_MIN, max = r_MAX[i])
+    temp1_ADD[i] <- RCC[i]
+    
+    
+  }
+  
+  ## The final element is computed to ensure that the total rescource cost is exactly DISP2*TC
+  RCC <- c(RCC, DISP2 * TC - sum(temp1_ADD))
+  
+  ## Move the biggest resource to the front
+  largest_RC <-
+    sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
+  RCC <- c(RCC[largest_RC], RCC[-largest_RC])
+  
+  
+  #### Generate Small Rescources ####
+  
+  RC_small <-
+    runif(length((length(RCC) + 1):NUMB_RES), min = 0.05, max =
+            0.95)
+  RC_small <- RC_small / sum(RC_small) #normalize
+  RC_small <- RC_small * (1 - DISP2) * TC
+  
+  
+  ## Some Checks ##
+  # Sum of first DISP1 resources not correct.
+  # if(min(RC)> ((1-DISP2)*TC)/(NUMB_RES-DISP1)){
+  
+  while (max(RC_small) - min(RCC) > 1.0) {
+    RC_small <- sort(RC_small, decreasing = TRUE)
+    min_bigRes <- min(RCC)
+    for (i in 1:(length(RC_small))) {
+      overage <- max(c(RC_small[i] - min_bigRes , 0))
+      RC_small[i] <- RC_small[i] - overage
+      RC_small[length(RC_small) - i + 1] <-
+        RC_small[length(RC_small) - i + 1] + overage
+    }
+  }
+  
+  
+  # Step 6 Schuffle small rescources
+  RC_small <- RC_small[sample(length(RC_small))]
+  RCC <- c(RCC, RC_small)
+  
+  # sum(RC)
+  RCCs <- sort(RCC, decreasing = TRUE, index.return = TRUE)
+  
+  RCC <-
+    list(
+      RCC = RCC,
+      CHECK = list(
+        cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
+        cost_topTEN = sum(RCCs$x[1:10]) / TC,
+        DISP1 = DISP1,
+        DISP2 = DISP2,
+        RC_VAR = RC_VAR
+      )
+    )
+  
+  RCC = RCC$RCC
+  
+  
+  ###CHECK###
+  RCCs = sort(RCC, decreasing = TRUE)
+  
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20 = sum(RCCs[1:(0.2 * length(RCC))])/TC     #size of 20% biggest resources (10)
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources (5)
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources (1)
+  
   
   #### sourcing
   FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
