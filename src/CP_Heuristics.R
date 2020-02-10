@@ -9,7 +9,7 @@
 MAP_RES_CP_RANDOM<-function(FIRM){
 #### RANDOM ALLOCATION OF RESOURCES TO COST POOLS #### 
    
- if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+ if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
  CP = FIRM$COSTING_SYSTEM$CP
  RCC= FIRM$COSTING_SYSTEM$RCC
  RCCn = length(RCC)
@@ -62,7 +62,7 @@ MAP_RES_CP_RANDOM<-function(FIRM){
 
 MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
   
-    if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+    if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    CP = FIRM$COSTING_SYSTEM$CP                  #
    RCC= FIRM$COSTING_SYSTEM$RCC                 #
    RES_CONS_PATp = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
@@ -153,7 +153,7 @@ MAP_RES_CP_SIZE_RANDOM<-function(FIRM){
 
 MAP_RES_CP_SIZE_CORREL<-function(FIRM){
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####    
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = 0
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
@@ -266,7 +266,7 @@ MAP_RES_CP_SIZE_CORREL<-function(FIRM){
 
 MAP_RES_CP_RANDOM_CORREL<-function(FIRM){
    #### Random Allocation of Resources to Cost Pools and then correlative allocation ####    
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
    RCCn = length(RCC)
@@ -387,7 +387,7 @@ MAP_RES_CP_SIZE_MISC<-function(FIRM){
    RCC= FIRM$COSTING_SYSTEM$RCC
    RCCn = length(RCC)
    NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    ####---- pre allocation of largest resorces ----####
    ACP_pre1<-vector(mode="numeric",length = (CP-1))
    RC_to_ACP = list()
@@ -451,7 +451,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE * FIRM$COSTING_SYSTEM$TC
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
    RCCn= length(RCC)
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
    
    ####SIZE RULE####
@@ -576,7 +576,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_ANAND<-function(FIRM){
 MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
     
    #### SIZE-BASED RANDOM ALLOCATION OF RESOURCES TO COST POOLS ####
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    CP = FIRM$COSTING_SYSTEM$CP                  #
    RCC= FIRM$COSTING_SYSTEM$RCC
    NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES#
@@ -678,7 +678,7 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
 MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
   
    ##INIT##
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    CP = FIRM$COSTING_SYSTEM$CP
    RCC= FIRM$COSTING_SYSTEM$RCC
    NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
@@ -805,7 +805,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND<-function(FIRM){
 }# ANAND P==3 like anands currel cutoff ( not one by one) w/ miscpool
 
 MAP_CP_CORREL_MISC<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE
    CC = FIRM$COSTING_SYSTEM$CC #0.4 as in Anand et al. 2019
    CP = FIRM$COSTING_SYSTEM$CP
@@ -918,7 +918,7 @@ MAP_CP_CORREL_MISC<-function(FIRM){
 
 ### Other Heuristics
 MAP_RES_CP_SIZE_CORREL_MISC_OWN<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
    
    #### SOURCE ####
@@ -1051,7 +1051,7 @@ MAP_RES_CP_SIZE_CORREL_MISC_OWN<-function(FIRM){
 } # ANAND p==1 / without CC condition
 
 MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
   
 #### SOURCE ####
@@ -1173,7 +1173,7 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
 } #fully implemented
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
    
    
@@ -1323,7 +1323,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF<-function(FIRM){
 }#like correl misc without miscpool
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
    
    
@@ -1453,7 +1453,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND<-function(FIRM){
 }# like anands currel cutoff (not one by one) w/o miscpool # produces NAs for some firms
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND2<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
    
    
@@ -1577,7 +1577,7 @@ MAP_RES_CP_SIZE_CORREL_CUTOFF_ANAND2<-function(FIRM){
 }# like anands currel cutoff (one by one in correl assignment)
 
 MAP_RES_CP_SIZE_CORREL_RAND_MISC<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
    
    #### SOURCE ####
@@ -1723,7 +1723,7 @@ MAP_RES_CP_SIZE_CORREL_RAND_MISC<-function(FIRM){
 } #with miscpool and trying to minimize it by random assignment
 
 MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND2<-function(FIRM){
-   if (FIRM$COSTING_SYSTEM$set_CSD_constant==1) {set.seed(13)} 
+   if (FIRM$COSTING_SYSTEM$set_CSD_fix==1) {set.seed(13)} 
    
    
    

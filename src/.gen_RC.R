@@ -257,7 +257,7 @@
 .gen_RCC_variation <- function(FIRM, unitsize, nonunitsize) {
   
   FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
-  PRE_BASE = 1000000 #former TC but helps to level our resource cost drivers. 
+  PRE_TC = 1000000 #former TC but helps to level our resource cost drivers. 
   #RC_VAR =-1
   if (RC_VAR == -1)
   {
@@ -278,56 +278,56 @@
   NUMB_RES = FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES
   
   # Step 1
-  r_MIN <- ((1 - DISP2) * TC) / (NUMB_RES - DISP1)
+  r_MIN <- ((1 - DISP2) * PRE_TC) / (NUMB_RES - DISP1)
   
   #Step 2
-  r1_MAX <- (DISP2 * TC) - ((DISP1 - 1) * r_MIN)
+  r1_MAX <- (DISP2 * PRE_TC) - ((DISP1 - 1) * r_MIN)
   
   # Step 3
   r_MIN <- r_MIN + (r1_MAX - r_MIN) * 0.025   #0.025?
   
   ## Step 4
   #Initalize Values
-  RCC <- vector(mode = "numeric")
+  PRE_RCC <- vector(mode = "numeric")
   r_MAX <- vector(mode = "numeric")
   temp1_ADD <- vector(mode = "numeric", length = DISP1 - 1)
   temp1_ADD[1] <- 0
   
   
   for (i in 1:(DISP1 - 1)) {
-    r_MAX[i] <- (DISP2 * TC - sum(temp1_ADD)) - (DISP1 - i) * r_MIN
+    r_MAX[i] <- (DISP2 * PRE_TC - sum(temp1_ADD)) - (DISP1 - i) * r_MIN
     
-    RCC[i] <- runif(1, min = r_MIN, max = r_MAX[i])
-    temp1_ADD[i] <- RCC[i]
+    PRE_RCC[i] <- runif(1, min = r_MIN, max = r_MAX[i])
+    temp1_ADD[i] <- PRE_RCC[i]
     
     
   }
   
   ## The final element is computed to ensure that the total rescource cost is exactly DISP2*TC
-  RCC <- c(RCC, DISP2 * TC - sum(temp1_ADD))
+  PRE_RCC <- c(PRE_RCC, DISP2 * PRE_TC - sum(temp1_ADD))
   
   ## Move the biggest resource to the front
   largest_RC <-
-    sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
-  RCC <- c(RCC[largest_RC], RCC[-largest_RC])
+    sort(PRE_RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
+  PRE_RCC <- c(PRE_RCC[largest_RC], PRE_RCC[-largest_RC])
   
   
   #### Generate Small Rescources ####
   
   RC_small <-
-    runif(length((length(RCC) + 1):NUMB_RES), min = 0.05, max =
+    runif(length((length(PRE_RCC) + 1):NUMB_RES), min = 0.05, max =
             0.95)
   RC_small <- RC_small / sum(RC_small) #normalize
-  RC_small <- RC_small * (1 - DISP2) * TC
+  RC_small <- RC_small * (1 - DISP2) * PRE_TC
   
   
   ## Some Checks ##
   # Sum of first DISP1 resources not correct.
   # if(min(RC)> ((1-DISP2)*TC)/(NUMB_RES-DISP1)){
   
-  while (max(RC_small) - min(RCC) > 1.0) {
+  while (max(RC_small) - min(PRE_RCC) > 1.0) {
     RC_small <- sort(RC_small, decreasing = TRUE)
-    min_bigRes <- min(RCC)
+    min_bigRes <- min(PRE_RCC)
     for (i in 1:(length(RC_small))) {
       overage <- max(c(RC_small[i] - min_bigRes , 0))
       RC_small[i] <- RC_small[i] - overage
@@ -339,42 +339,37 @@
   
   # Step 6 Schuffle small rescources
   RC_small <- RC_small[sample(length(RC_small))]
-  RCC <- c(RCC, RC_small)
+  PRE_RCC <- c(PRE_RCC, RC_small)
   
   # sum(RC)
-  RCCs <- sort(RCC, decreasing = TRUE, index.return = TRUE)
+  PRE_RCCs <- sort(PRE_RCC, decreasing = TRUE, index.return = TRUE)
   
-  RCC <-
+  PRE_RCC <-
     list(
-      RCC = RCC,
+      PRE_RCC = PRE_RCC,
       CHECK = list(
-        cost_largestRCP = RCCs$x[1] / RCCs$x[NUMB_RES],
-        cost_topTEN = sum(RCCs$x[1:10]) / TC,
+        cost_largestRCP = PRE_RCCs$x[1] / PRE_RCCs$x[NUMB_RES],
+        cost_topTEN = sum(PRE_RCCs$x[1:10]) / PRE_TC,
         DISP1 = DISP1,
         DISP2 = DISP2,
         RC_VAR = RC_VAR
       )
     )
   
-  RCC = RCC$RCC
+  PRE_RCC = PRE_RCC$PRE_RCC
   
   
-  ###CHECK###
-  RCCs = sort(RCC, decreasing = TRUE)
-    #### sourcing
-  FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
-  FIRM$COSTING_SYSTEM$RCC = RCC
+  ##GENERATING RCU--> Copied from gen_Q. to set the RCU fix
   
+  PRE_RCU = as.integer(runif(NUMB_RES,100,400))
   
+  RCU = PRE_RCC/PRE_RCU
   
+  print(RCU)
   
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20 = sum(RCCs[1:(0.2 * length(RCC))])/TC     #size of 20% biggest resources (10)
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources (5)
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources (1)
+  #### sourcing
+  FIRM$COSTING_SYSTEM$RCU = RCU
   
-  
-  
-  # '''' checked and compared with Anand et al. 2019 - 30/10/2019
   
   return(FIRM)
   
