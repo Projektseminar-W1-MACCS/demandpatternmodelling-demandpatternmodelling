@@ -95,14 +95,14 @@ ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = interaction(CPH, CDH,
 
 ##4.1. CHOOSING THE HEURISTIC (BASE, SIZE_MISC, SIZE_CORREL_MISC, SIZE_RANDOM_MISC, SIZE_CORREL_MISC_CC, BIGPOOL)
 
-CP_HEURISTIC_R = 'BASE'
-CD_HEURISTIC_R = 'BASE'
+CP_HEURISTIC_B = 'BASE'
+CD_HEURISTIC_B = 'BASE'
 
-CP_HEURISTIC = 'SIZE_MISC'
+CP_HEURISTIC = 'SIZE_CORREL_MISC_CC'
 CD_HEURISTIC = 'BIGPOOL'
 
 
-replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC_R & CDH == CD_HEURISTIC_R)
+replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC & CDH == CD_HEURISTIC)
 
 ##Anand has no base heuristic (0,1,2,3)
 
@@ -132,15 +132,30 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
   ylim(0,1)
 
 
+##5. REGRESSION ANALYSIS
 
+###Standardized regression analysis###
 
+linearReg_repl = lm(replication_data_heuristic$MAPE ~ replication_data_heuristic$CP 
+                    + replication_data_heuristic$RC_VAR + 
+                      replication_data_heuristic$DENS)
 
 
+linearReg_repl_beta = lm.beta(linearReg_repl)   #standardizes the regression coefficients (betas)
 
+###Anand original model as comparison###
 
+linearReg_anand = lm(anand_data_heuristic$MPE ~ anand_data_heuristic$ACP + anand_data_heuristic$g + anand_data_heuristic$d)
 
+linearReg_anand_beta = lm.beta(linearReg_anand)
 
+print('replication')
+summary(linearReg_repl_beta)
+print('anand')
+summary(linearReg_anand_beta)
 
+coef(linearReg_repl_beta)
+coef(linearReg_anand_beta)
 
 
 
@@ -167,96 +182,18 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
 
 
 
-#####Choice of heuristic to analyse####
 
 
-heuristic = 1
 
-####loading the heursitic output####
-file_rep = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/REPLICATION ",heuristic,".xlsx")
 
-replication_output = read.xlsx(file_rep,2)
 
-##loading the outpout directly from R
 
-#replication_output = DATA
 
-##loading the original model output
-file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic,".xlsx")
 
-anand_output = read.xlsx(file_anand, 2)
 
-# file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 3",".csv")
-# 
-# anand_output = read.csv(file_anand, sep =";")
 
-#anand_output[] <- lapply(anand_output, function(x) as.numeric(as.character(x)))
 
-# file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 3",".csv")
-# 
-# anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
 
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC",".xlsx")
-
-anand_output_gdrcc = read.xlsx(file_anand_gdrcc,1)
-#anand_output_gdrcc[] <- lapply(anand_output_gdrcc, function(x) as.numeric(as.character(x)))
-
-
-##merging the two anand files 
-anand_output = merge(anand_output,anand_output_gdrcc, by.x = 'FirmID', by.y ='FirmID')
-##sorting to bring it in same order as replication output
-anand_output = anand_output[order(anand_output$ACP),]
-
-
-#####Plotting measurement error with standard deviation#####
-
-
-boxplot_data_1 = data.frame("REPLICATION",replication_output$CP, replication_output$MAPE, replication_output$nn)
-colnames(boxplot_data_1) = c('Model','CP','MAPE','run')
-
-boxplot_data_2 = data.frame("ANAND",anand_output$ACP, anand_output$MPE, anand_output$FirmID)
-colnames(boxplot_data_2) = c('Model','CP','MAPE','run')
-
-boxplot_data = rbind(boxplot_data_1,boxplot_data_2)     
-
-###boxplot
-boxplot_data$CP = factor(boxplot_data$CP)
-
-ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Model)) +
-  geom_boxplot()+
-  theme(panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.line = element_line(colour = "black"))+
-  theme_bw()+
-  ggtitle('SIZE CORREL MISC')+                              #Adaption required each time heuristic is changes
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
-  ylim(0,1)
-
-
-
-
-
-####descriptive statistics and Check #####
-
-plot(hist(replication_output$CHECK_RCC02, breaks = 7, xlim = c(0.05,0.5)))
-plot(hist(anand_output$CHECK_RCC02, breaks = 7,xlim = c(0.05,0.5)), add = TRUE)
-
-
-ks.test(replication_output$CHECK_RCC02,'rnorm')
-
-plot(sort(anand_output$RCC_0/1000000), type = 'l')
-lines(sort(unique(replication_output$CHECK_RCC02)), type = 'l')
-
-mean(replication_output$CHECK_RCC02)
-mean(replication_output$CHECK_RCC10)
-mean(replication_output$CHECK_RCC20)
-
-
-anand_output$CHECK_RCC02 = as.numeric(anand_output$CHECK_RCC02)
-mean(anand_output$CHECK_RCC02)
-mean(anand_output$CHECK_RCC10)
-mean(anand_output$CHECK_RCC20)
 
 #####Regression Analysis####
 

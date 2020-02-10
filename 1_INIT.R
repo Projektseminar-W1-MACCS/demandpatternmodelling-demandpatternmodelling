@@ -15,7 +15,9 @@
 
 
   ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
-  set_PE_constant=   0                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
+  set_DEMAND_constant=   0                  #Control Variable -  Decide if always the same demand is used
+  set_RES_CONS_PAT_constant = 1             #Control variale - Decide if the resource consumption is constant
+  set_RC_constant = 1                       #Control variable - Decide if the resource costs (and resource costs per unit) are constant
   set_CSD_constant=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
     
@@ -152,6 +154,7 @@
     print(FIRM$COSTING_SYSTEM$CP)
     print((MAPE))
     print((EUCD))
+    print(FIRM$COSTING_SYSTEM$RCU[1])
     
     o=o+1 #Counting for the total number of runs
   }
