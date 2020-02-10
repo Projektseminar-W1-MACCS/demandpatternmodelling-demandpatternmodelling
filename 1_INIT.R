@@ -16,9 +16,9 @@
 
   ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
   
-  set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_fix = 0             #Control variable - Decide if the resource consumption is constant
-  set_RCU_fix = 0                      #Control variable - Decide if the resource costs (and resource costs per unit) are constant
+  set_DEMAND_fix=   0                  #Control Variable -  Decide if always the same demand is used
+  set_RES_CONS_PAT_fix = 1             #Control variable - Decide if the resource consumption is constant
+  set_RCU_fix = 1                      #Control variable - Decide if the resource costs (and resource costs per unit) are constant
   set_CSD_fix=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
     
@@ -68,6 +68,9 @@
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
     FIRM$PRODUCTION_ENVIRONMENT$DISP1 = DISP1
+    FIRM$PRODUCTION_ENVIRONMENT$set_DEMAND_fix = set_DEMAND_fix
+    FIRM$PRODUCTION_ENVIRONMENT$set_RES_CONS_PAT_fix = set_RES_CONS_PAT_fix
+    FIRM$PRODUCTION_ENVIRONMENT$set_RCU_fix = set_RCU_fix
     FIRM$COSTING_SYSTEM$CP = CP[ix_CP]
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
     FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
@@ -77,9 +80,8 @@
     FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC
-    FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
+    FIRM$COSTING_SYSTEM$set_CSD_fix = set_CSD_fix
     FIRM$COSTING_SYSTEM$NUM = NUM
-    FIRM$COSTING_SYSTEM$set_CSD_constant = set_CSD_constant
     FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC[ix_CP_HEURISTIC]
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
 
