@@ -14,229 +14,186 @@ library('reshape2')
 
 ####-------------Plotting the current DATA------------####
 
+##Loading the Data 
 
-check = aggregate(DATA,list(DATA$CP),mean)
-plot(check$MAPE,type ='l')
-#print(check$MAPE)
+##1.  REPLICATION MODEL####
 
+file_link_replication = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/CSD_2020-02-07-1017.csv"
 
 
+replication_data = read.csv(file_link_replication, sep = ",")
 
-rowSums(sweep(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp,1,ncol(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp),"/")) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT
 
-rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC == FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP
 
-sum(rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC)- sum(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP)
+##2. ANAND MODEL####
+##2.1. ANAND MODEL ERROR OUTPUT
 
+file_link_anand_1 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model 20200207.csv"
 
-rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) * FIRM$COSTING_SYSTEM$TC == FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP    #the same
+anand_data_1 = read.csv(file_link_anand_1, sep = ';')
 
-rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)* FIRM$COSTING_SYSTEM$ACP == FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP    #the same
+##2.2. ANAND MODEL DISP2, DENS, RCC02 Output
 
-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCU == FIRM$COSTING_SYSTEM$ACT_CONS_PAT * FIRM$COSTING_SYSTEM$ACP
+file_link_anand_2 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_ResCon 20200207.csv"
 
+anand_data_2 = read.csv(file_link_anand_2, sep = ';')
 
 
-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL %*% FIRM$COSTING_SYSTEM$RCU == FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC
+anand_data = merge(anand_data_1,anand_data_2, by.x = 'FirmID', by.y = 'FirmID')
 
-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL %*% FIRM$COSTING_SYSTEM$RCU == (FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%FIRM$COSTING_SYSTEM$RCU)*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
 
 
-PCH = FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP
-PCB0 = rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC
+##2.3. REPLACING INTEGER WITH NAMES####
+##2.3.1. REPLICATION DATA
+replication_data$CPH = as.character(replication_data$CPH)
+replication_data$CDH = as.character(replication_data$CDH)
 
-PCB1 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL %*% FIRM$COSTING_SYSTEM$RCU
+replication_data$CPH[replication_data$CPH == 'base'] = 'BASE'
+replication_data$CDH[replication_data$CDH == 'base'] = 'BASE'
 
-PCB2 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC
+replication_data$CPH[replication_data$CPH == 0] = 'SIZE_MISC'
+replication_data$CPH[replication_data$CPH == 1] = 'SIZE_CORREL_MISC'
+replication_data$CPH[replication_data$CPH == 2] = 'SIZE_RANDOM_MISC'
+replication_data$CPH[replication_data$CPH == 3] = 'SIZE_CORREL_MISC_CC'
 
-PCB3 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%FIRM$COSTING_SYSTEM$RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+replication_data$CDH[replication_data$CDH == 0] = 'BIGPOOL'
 
-PCB4 = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%(FIRM$COSTING_SYSTEM$RCU*FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
+replication_data$CPH = as.factor(replication_data$CPH)
+replication_data$CDH = as.factor(replication_data$CDH)
 
-#PCB5 = (FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCU) * FIRM$PRODUCTION_ENVIRONMENT$DEMAND
+##2.3.2. ANAND DATA
+#anand_data$PACP = as.character(anand_data$PACP)
+#anand_data$PDR = as.character(anand_data$PDR)
 
-PCB1 == PCB2  #NO
-PCB1 == PCB3  #NO
-PCB1 == PCB4  #COmpletely NO
+anand_data$PACP[anand_data$PACP == 0] = 'SIZE_MISC'
+anand_data$PACP[anand_data$PACP == 1] = 'SIZE_CORREL_MISC'
+anand_data$PACP[anand_data$PACP == 2] = 'SIZE_RANDOM_MISC'
+anand_data$PACP[anand_data$PACP == 3] = 'SIZE_CORREL_MISC_CC'
 
-PCB2 == PCB3  #NO
-PCB2 == PCB4  #Completely NO
+anand_data$PDR[anand_data$PDR == 0] == 'BIGPOOL'
 
-PCB3 == PCB4  #Completely NO
+anand_data$PACP = as.factor(anand_data$PACP)
+anand_data$PDR = as.factor(anand_data$PDR)
 
-PCH == PCB0
-PCH == PCB1   #Completely NO
-PCH == PCB2   #Completely NO
-PCH == PCB3   #Completely NO
-PCH == PCB4   #Completely NO
 
-plot(PCB4,type = 'l')
-plot(PCB3,type = 'l')
-plot(PCH,type = 'l')
 
-PCH-PCB3
+##3. PLOTTING THE WHOLE DATAFRAME####
 
+replication_data_agg = aggregate(.~CP + CPH + CDH, data = replication_data, FUN = mean)
 
-(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC)/colSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT*FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
+ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = interaction(CPH, CDH, sep = ' & ')))+
+  geom_line(size = 1)+labs(color = "Heuristik Kombinationen")+
+  theme_bw()+
+  ggtitle('Überblick alle Heuristiken')+                              
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')
 
 
 
-PCB4 == PCH
 
 
-difference = abs(rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)*FIRM$COSTING_SYSTEM$TC - rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT * FIRM$COSTING_SYSTEM$ACP))
+##4. RESHAPING THE DATAFRAME FOR PLOTTING AND ANALYSIS OF SINGLE HEURISTIC COMBINATIONS####
 
-sum(difference)
+##4.1. CHOOSING THE HEURISTIC (BASE, SIZE_MISC, SIZE_CORREL_MISC, SIZE_RANDOM_MISC, SIZE_CORREL_MISC_CC, BIGPOOL)
 
-rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT * FIRM$COSTING_SYSTEM$ACP
+CP_HEURISTIC_B = 'BASE'
+CD_HEURISTIC_B = 'BASE'
 
-sum(rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp %*% FIRM$COSTING_SYSTEM$RCC)) == FIRM$COSTING_SYSTEM$ACT_CONS_PAT *FIRM$COSTING_SYSTEM$TC
+CP_HEURISTIC = 'SIZE_CORREL_MISC_CC'
+CD_HEURISTIC = 'BIGPOOL'
 
-FIRM$COSTING_SYSTEM$RCC == FIRM$COSTING_SYSTEM$ACP
 
-rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC) == FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
-colSums(FIRM$COSTING_SYSTEM$PCB) == rowSums(FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$RCC)
+replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC & CDH == CD_HEURISTIC)
 
-rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) == rowMeans(FIRM$COSTING_SYSTEM$ACT_CONS_PAT)
+##Anand has no base heuristic (0,1,2,3)
 
-check = matrix(c(2,3,3,3,4,4,5,5),ncol = 4)
+anand_data_heuristic = subset(anand_data, PACP == CP_HEURISTIC)
 
-mean(check[2,])
 
-rowMeans(check)
+boxplot_data_1 = data.frame("Replikations-Modell",replication_data_heuristic$CP, replication_data_heuristic$MAPE, replication_data_heuristic$nn)
+colnames(boxplot_data_1) = c('Modell','CP','MAPE','run')
 
-
-#ANAND RCU * RES_CONS_PAT
-PCB_ANAND = FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT %*% (FIRM$COSTING_SYSTEM$RCC/ FIRM$PRODUCTION_ENVIRONMENT$TRU)*FIRM$PRODUCTION_ENVIRONMENT$DEMAND
-
-sum(FIRM$COSTING_SYSTEM$PCB)
-
-PCH_ANAND = (FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP) / FIRM$PRODUCTION_ENVIRONMENT$DEMAND
-
-sum(FIRM$COSTING_SYSTEM$PCH)
-
-sum(PCB_ANAND)
-
-FIRM$COSTING_SYSTEM$PCH == PCB_ANAND
-
-#RES_CONS_PAT_TOTAL <- RES_CONS_PAT * FIRM$PRODUCTION_ENVIRONMENT$DEMAND     #does this needs to be a matrix multiplication?
-##CALCULATING TCU
-TCU <- colSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT)
-##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
-RES_CONS_PATp <- sweep((FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT),2,TCU,"/")
-
-
-
-
-
-rowMeans(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp) == rowSums(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)/ncol(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#####Choice of heuristic to analyse####
-
-
-heuristic = 1
-
-####loading the heursitic output####
-file_rep = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/REPLICATION ",heuristic,".xlsx")
-
-replication_output = read.xlsx(file_rep,2)
-
-##loading the outpout directly from R
-
-#replication_output = DATA
-
-##loading the original model output
-file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic,".xlsx")
-
-anand_output = read.xlsx(file_anand, 2)
-
-# file_anand = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," 3",".csv")
-# 
-# anand_output = read.csv(file_anand, sep =";")
-
-#anand_output[] <- lapply(anand_output, function(x) as.numeric(as.character(x)))
-
-# file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC"," 3",".csv")
-# 
-# anand_output_gdrcc = read.csv(file_anand_gdrcc,sep =";")
-
-file_anand_gdrcc = paste0("C:/Users/cms9023/Documents/CostSystemDesignSim/output/Third Replication/P==",heuristic,"/ANAND ",heuristic," gdRCC",".xlsx")
-
-anand_output_gdrcc = read.xlsx(file_anand_gdrcc,1)
-#anand_output_gdrcc[] <- lapply(anand_output_gdrcc, function(x) as.numeric(as.character(x)))
-
-
-##merging the two anand files 
-anand_output = merge(anand_output,anand_output_gdrcc, by.x = 'FirmID', by.y ='FirmID')
-##sorting to bring it in same order as replication output
-anand_output = anand_output[order(anand_output$ACP),]
-
-
-#####Plotting measurement error with standard deviation#####
-
-
-boxplot_data_1 = data.frame("REPLICATION",replication_output$CP, replication_output$MAPE, replication_output$nn)
-colnames(boxplot_data_1) = c('Model','CP','MAPE','run')
-
-boxplot_data_2 = data.frame("ANAND",anand_output$ACP, anand_output$MPE, anand_output$FirmID)
-colnames(boxplot_data_2) = c('Model','CP','MAPE','run')
+boxplot_data_2 = data.frame("Original-Modell",anand_data_heuristic$ACP, anand_data_heuristic$MPE, anand_data_heuristic$FirmID)
+colnames(boxplot_data_2) = c('Modell','CP','MAPE','run')
 
 boxplot_data = rbind(boxplot_data_1,boxplot_data_2)     
 
 ###boxplot
 boxplot_data$CP = factor(boxplot_data$CP)
 
-ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Model)) +
+ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
   geom_boxplot()+
   theme(panel.border = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.line = element_line(colour = "black"))+
   theme_bw()+
-  ggtitle('SIZE CORREL MISC')+                              #Adaption required each time heuristic is changes
+  ggtitle(paste0(CP_HEURISTIC," & ",CD_HEURISTIC))+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
   ylim(0,1)
 
 
+##5. REGRESSION ANALYSIS
+
+###Standardized regression analysis###
+
+linearReg_repl = lm(replication_data_heuristic$MAPE ~ replication_data_heuristic$CP 
+                    + replication_data_heuristic$RC_VAR + 
+                      replication_data_heuristic$DENS)
+
+
+linearReg_repl_beta = lm.beta(linearReg_repl)   #standardizes the regression coefficients (betas)
+
+###Anand original model as comparison###
+
+linearReg_anand = lm(anand_data_heuristic$MPE ~ anand_data_heuristic$ACP + anand_data_heuristic$g + anand_data_heuristic$d)
+
+linearReg_anand_beta = lm.beta(linearReg_anand)
+
+print('replication')
+summary(linearReg_repl_beta)
+print('anand')
+summary(linearReg_anand_beta)
+
+coef(linearReg_repl_beta)
+coef(linearReg_anand_beta)
 
 
 
-####descriptive statistics and Check #####
-
-plot(hist(replication_output$CHECK_RCC02, breaks = 7, xlim = c(0.05,0.5)))
-plot(hist(anand_output$CHECK_RCC02, breaks = 7,xlim = c(0.05,0.5)), add = TRUE)
 
 
-ks.test(replication_output$CHECK_RCC02,'rnorm')
-
-plot(sort(anand_output$RCC_0/1000000), type = 'l')
-lines(sort(unique(replication_output$CHECK_RCC02)), type = 'l')
-
-mean(replication_output$CHECK_RCC02)
-mean(replication_output$CHECK_RCC10)
-mean(replication_output$CHECK_RCC20)
 
 
-anand_output$CHECK_RCC02 = as.numeric(anand_output$CHECK_RCC02)
-mean(anand_output$CHECK_RCC02)
-mean(anand_output$CHECK_RCC10)
-mean(anand_output$CHECK_RCC20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #####Regression Analysis####
 
