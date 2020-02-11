@@ -24,8 +24,8 @@
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(0.5)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(0.4)                            #Demand variation
-  Error = c(0.1,0.3,0.5)                    #Measurement error
-  NUMB_Error = c(1)                 #Number of errornoues links
+  Error = c(0)                              #Measurement error
+  NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(0.5)                             #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System

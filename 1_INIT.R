@@ -12,9 +12,6 @@
   SIM_NUMB =         200                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000             #Total costs
 
-
-
-
   ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
 
   set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used

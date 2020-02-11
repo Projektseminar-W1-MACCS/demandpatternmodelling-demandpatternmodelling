@@ -2,94 +2,49 @@
 library(lsr)
 library(dplyr)
 library(QuantPsyc)
-library(QuantPsyc)
+
 library(car)
 library(heplots)
 library(Metrics)
 
-ABC_11$CPH = 1 # RANDOM
-ABC_21$CPH = 2 # CORREL SIZE
-ABC_31$CPH = 3 # CORREL RANDOM
-ABC_51$CPH = 4 # SIZE_RANDOM
 
-RegX = rbind(ABC_11,ABC_21,ABC_31,ABC_51)
-
-summary(RegX)
-
-
+input <- read.csv("C:/Users/kaigm/OneDrive/00 Paperprojects/01 PRODUCT COST _ WORKING PAPER/16 SUBMISSION/01 EXPERIMENTS/03 Regression/ProductCost_2020-02-10-1300.csv")
+summary(input)
 #### DATA WRANGLING AND SETTING ####  #####
-RegX$DELTA <- RegX$DELTA * 100
-RegX$SHARE_UNIT <- ((RegX$PC_B_UNIT)/RegX$PC_B)*100
-RegX$DELTAABS <- abs(RegX$DELTA)
+input$PE <- input$PE * 100
 
 ####GROUPING THE TOTAL DATASET (PIVOT) AND PUT THE ESTIMATE IN IT  ####  ##########
 
-pre = group_by(RegX, RegX$VARSIZE_b_p_T, RegX$DENS, RegX$COR, RegX$Q_VAR, RegX$RC_VAR,
-              RegX$INTER_HET, RegX$INTRA_HET, RegX$TQ,
-              RegX$SHARE_UNIT, RegX$CPH,
-              RegX$CP, RegX$ErrorLEVEL, RegX$ErrorNUMB)
-              #RegX$VARSIZE_b_p_u, RegX$VARSIZE_b_p_T, RegX$VARSIZE_b_T, RegX$VARSIZE_b, ) # Grouping like Pivot tables. 
-RegX_grouped =  (summarize(pre,n=n(), md=median(DELTA), mn=mean(DELTA),sd=sd(DELTA), var=var(DELTA),mse=mean(((PC_B-PC_H)/PC_B*100)^2)))#What is abot --- 
+pre = group_by(input, input$PCb,
+               input$DENS, input$Q_VAR, input$RCC_VAR,
+              input$CP,
+              input$Q,
+              input$Error, input$NUMB_Error)
+              #input$VARSIZE_b_p_u, input$VARSIZE_b_p_T, input$VARSIZE_b_T, input$VARSIZE_b, ) # Grouping like Pivot tables. 
+input_grouped = (summarize(pre,n=n(), md=median(PE), mn=mean(PE),sd=(sd(PE)*1.96), var=var(PE),mse=mean(((PCb-PCh)/PCb*100)^2)))#What is abot --- 
 # var=var(DELTA),mse=mean(((PC_B-PC_H)/PC_B)^2
 rm(pre)
 gc()
 
 
-#### REGRESSION APE #####
+#### REGRESSION WITH input_grouped #####
 
-RegX$CPH_FACTOR = as.factor(RegX$CPH)
+input_grouped$ABSBIAS = abs(input_grouped$mn)
+input_grouped$IMPRECISION = input_grouped$sd
 
-fit <- lm(RegX$DELTAABS ~ (RegX$VARSIZE_b_p_T + 
-                        RegX$TQ+
-                       
-                        RegX$CP +
-                        RegX$DENS +
-                        RegX$Q_VAR +
-                        RegX$COR + 
-                        RegX$RC_VAR +
-                        RegX$ErrorLEVEL       ))
-
-
-summary(fit)
-lm.beta <- lm.beta(fit)
-lm.beta <- round(lm.beta, digits=2)
-print(lm.beta)
-vif(fit)
-
-aov_all <- aov(RegX$DELTAABS ~ (RegX$VARSIZE_b_p_T +  
-                                                  RegX$TQ + 
-                                                  RegX$CP +
-                                                  RegX$DENS +
-                                                  RegX$Q_VAR +
-                                                  RegX$COR + 
-                                                  RegX$RC_VAR +       
-                                                  RegX$ErrorLEVEL))
-drop1(aov_all,~.,test="F") # type III SS and F Test
-summary(aov_all)
-
-eta = etasq(aov_all)
-round(eta, digits=6)
+fit <- lm(input_grouped$IMPRECISION ~ (input_grouped$`input$DENS` + input_grouped$`input$Q_VAR`  +input_grouped$`input$CP` + 
+                                     input_grouped$`input$Q` + input_grouped$`input$PCb`+
+                                     input_grouped$`input$Error` + input_grouped$`input$NUMB_Error`))
 
 
 
-
-#### REGRESSION WITH RegX_grouped #####
-RegX_grouped$CPH_FACTOR = as.factor(RegX_grouped$`RegX$CPH`)
-RegX_grouped$ABSBIAS = abs(RegX_grouped$mn)
-RegX_grouped$IMPRECISION = RegX_grouped$sd
+fit <- lm(input_grouped$ABSBIAS ~ (input_grouped$`input$DENS` + input_grouped$`input$Q_VAR`  +input_grouped$`input$CP` + 
+                                     input_grouped$`input$Q` + input_grouped$`input$PCb`+
+                                     input_grouped$`input$Error` + input_grouped$`input$NUMB_Error`))
 
 
 
-
-
-fit <- lm(RegX_grouped$IMPRECISION ~ (RegX_grouped$`RegX$VARSIZE_b_p_T` + RegX_grouped$`RegX$ErrorLEVEL` + 
-                             RegX_grouped$`RegX$TQ`  + RegX_grouped$`RegX$CP` +
-                             RegX_grouped$`RegX$DENS` + RegX_grouped$`RegX$Q_VAR` +  + RegX_grouped$`RegX$COR` + 
-                             RegX_grouped$`RegX$RC_VAR`))
-
-
-
-#+ RegX_grouped$CPH_FACTOR
+#+ input_grouped$CPH_FACTOR
 
 summary(fit)
 lm.beta <- lm.beta(fit)
@@ -98,9 +53,9 @@ print(lm.beta)
 vif(fit)
 
 
-aov_all <- aov(RegX_grouped$IMPRECISION ~(RegX_grouped$`RegX$VARSIZE_b_p_T` + RegX_grouped$`RegX$ErrorLEVEL` + RegX_grouped$`RegX$TQ`  + RegX_grouped$`RegX$CP` + RegX_grouped$`RegX$ErrorLEVEL`+
-                                 RegX_grouped$`RegX$DENS` + RegX_grouped$`RegX$Q_VAR` +  + RegX_grouped$`RegX$COR` + 
-                                 RegX_grouped$`RegX$RC_VAR` ))
+aov_all <- aov(input_grouped$ABSBIAS ~(input_grouped$`input$DENS` + input_grouped$`input$Q_VAR`  +input_grouped$`input$CP` + 
+                                             input_grouped$`input$Q` + input_grouped$`input$PCb`+
+                                             input_grouped$`input$Error` + input_grouped$`input$NUMB_Error` ))
 drop1(aov_all,~.,test="F") # type III SS and F Test
 summary(aov_all)
 
@@ -110,12 +65,8 @@ print(eta)
 
 
 
-
-
-
-
 #### CORRELATION ####
-t=cor(RegX, method = c("pearson"))
+t=cor(input, method = c("pearson"))
 t= round(t, digits=2) 
 
 
@@ -127,23 +78,45 @@ t= round(t, digits=2)
 
 
 
+#### REGRESSION APE #####
+
+input$CPH_FACTOR = as.factor(input$CPH)
+
+fit <- lm(input$DELTAABS ~ (input$VARSIZE_b_p_T + 
+                        input$TQ+
+                       
+                        input$CP +
+                        input$DENS +
+                        input$Q_VAR +
+                        input$COR + 
+                        input$RC_VAR +
+                        input$ErrorLEVEL       ))
 
 
-#### CLEARING ####
-rm(RegX)
-rm(X)
-rm(fit)
-rm(Z_grouped)
-rm(Z)
-rm(Zdensity)
-rm(EtaSquare)
-rm(TEST)
-rm(Z1)
-rm(zplot1)
-rm(t1)
-rm(t2)
-rm(RegXt)
-rm(LookUP)
-rm(Base)
-rm(RegX_grouped)
-rm(fit)
+summary(fit)
+lm.beta <- lm.beta(fit)
+lm.beta <- round(lm.beta, digits=2)
+print(lm.beta)
+vif(fit)
+
+aov_all <- aov(input$DELTAABS ~ (input$VARSIZE_b_p_T +  
+                                                  input$TQ + 
+                                                  input$CP +
+                                                  input$DENS +
+                                                  input$Q_VAR +
+                                                  input$COR + 
+                                                  input$RC_VAR +       
+                                                  input$ErrorLEVEL))
+drop1(aov_all,~.,test="F") # type III SS and F Test
+summary(aov_all)
+
+eta = etasq(aov_all)
+round(eta, digits=6)
+
+
+
+
+
+
+
+
