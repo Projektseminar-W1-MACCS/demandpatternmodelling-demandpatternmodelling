@@ -4,12 +4,13 @@
 
 ####setup####
 #options(java.parameters = "- Xmx2048m")
-#install.packages("reshape2") #and 'xlsx',robustHD,lm.beta
+install.packages("apaTables") #and 'xlsx',robustHD,lm.beta
 library("xlsx")
 library('ggplot2')
 library('robustHD')
 library('lm.beta')
 library('reshape2')
+library('apaTables')
 
 
 ####-------------Plotting the current DATA------------####
@@ -151,6 +152,7 @@ linearReg_anand_beta = lm.beta(linearReg_anand)
 
 print('replication')
 summary(linearReg_repl_beta)
+anova(linearReg_repl_beta)
 print('anand')
 summary(linearReg_anand_beta)
 
