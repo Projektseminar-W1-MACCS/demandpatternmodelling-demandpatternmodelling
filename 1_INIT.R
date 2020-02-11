@@ -9,10 +9,10 @@
     
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                  #INPUT independent variable - Number of factors
-  SIM_NUMB =         200                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         50                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000             #Total costs
 
-  ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
+  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
 
   set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
   set_RES_CONS_PAT_fix = 1             #Control variable - Decide if the resource consumption is constant
@@ -21,11 +21,11 @@
   set_CSD_fix=  1                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
 
-  CP = c(10)       #No. of Cost Pools
+  CP = c(25)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
-  Error = c(0)                              #Measurement error
+  Error = c(0.1,0.3,0.5)                              #Measurement error
   NUMB_Error = c(1)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
@@ -147,7 +147,6 @@
   #### ======== COLLECTING THE DATA FOR OUTPUT ==== ####
 
     ## DATA LOGGING
-    browser()
     DATA = .system_datalogging(o,nn,FIRM,DATA)
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
 
