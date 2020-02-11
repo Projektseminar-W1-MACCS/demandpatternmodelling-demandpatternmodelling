@@ -89,7 +89,7 @@ MAP_CP_P_RANDOM <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 }
 
 MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
-#set.seed(NULL)
+set.seed(NULL)
 ACP_index_choosen<-vector(mode="numeric")
 # normalize RES_CONS_PAT
 RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
