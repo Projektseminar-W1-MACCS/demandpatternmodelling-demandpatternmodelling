@@ -361,15 +361,13 @@
   
   ##GENERATING RCU--> Copied from gen_Q. to set the RCU fix
   
-  PRE_RCU = as.integer(runif(NUMB_RES,100,400))
+  PRE_RCU = runif(NUMB_RES,100,400)
   
-  RCU = PRE_RCC/PRE_RCU
+  RCU = as.vector(PRE_RCC/PRE_RCU)
   
-  print(RCU)
-  
+  RCU = runif(NUMB_RES,100,400)
   #### sourcing
   FIRM$COSTING_SYSTEM$RCU = RCU
-  
   
   return(FIRM)
   

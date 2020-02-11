@@ -31,13 +31,13 @@
   
   else if(COST_APPROACH=="ANAND"){
     ## ADDING THE COSTS TO THE RESOURCE_CONSUMPTION_MATRIX ORIGINAL in ANAND
-    if(FIRM$PRODUCTION_ENVIRONMENT$set_RCU_fix == 1){
+    if(FIRM$COSTING_SYSTEM$set_RCU_fix == 1){
       
       RCU = FIRM$COSTING_SYSTEM$RCU
       
       RCC = FIRM$PRODUCTION_ENVIRONMENT$TRU * FIRM$COSTING_SYSTEM$RCU
       
-      
+      FIRM$COSTING_SYSTEM$RCC = RCC
       ###CHECK###
       RCCs = sort(RCC, decreasing = TRUE)
       
@@ -46,11 +46,19 @@
       FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10 = sum(RCCs[1:(0.1 * length(RCC))])/TC     #size of 10% biggest resources (5)
       FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02 = sum(RCCs[1:(0.02 * length(RCC))])/TC    #size of 2% biggest resources (1)
     }  #if this is set fix, the RCC vector is adapted to the acutal Demand and resource consumption so that the sum is alwas equal to TC
+    else if(FIRM$COSTING_SYSTEM$set_RCU_fix == 0){
+      # Total Resource Units -> Amount Needed to produce mix QT = ProductionEnvironment[['DEMAND']]
+      TRU = FIRM$PRODUCTION_ENVIRONMENT$TRU
+      
+      # RES_CONS_PAT Anand et al. 2019
+      
+      FIRM$COSTING_SYSTEM$RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
+      
+    }
    
 
     
     ###TOTAL COST CONS PAT###
-    
     COST_CONS_PAT_TOTAL = sweep(FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT_TOTAL, MARGIN=2, FIRM$COSTING_SYSTEM$RCC, `*`)
 
     TCU = colSums(COST_CONS_PAT_TOTAL)
@@ -63,14 +71,7 @@
     
     
     
-    
-    # Total Resource Units -> Amount Needed to produce mix QT = ProductionEnvironment[['DEMAND']]
-    TRU = FIRM$PRODUCTION_ENVIRONMENT$TRU
-    
-    # RES_CONS_PAT Anand et al. 2019
-    
-    FIRM$COSTING_SYSTEM$RCU<- FIRM$COSTING_SYSTEM$RCC/TRU # BUILDING RESOURCE COST DRIVERS (Unit Resource Costs) BY DIVIDING RCC THROUGH THE TOTAL RESOURCE UNITS (TRU)
-    RCU = FIRM$COSTING_SYSTEM$RCU
+
     # Benchmark product costs
     FIRM$COSTING_SYSTEM$PCB <- FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT%*%FIRM$COSTING_SYSTEM$RCU * FIRM$PRODUCTION_ENVIRONMENT$DEMAND #BENCHMARK PRODUCT COSTS (TOTAL)
     
