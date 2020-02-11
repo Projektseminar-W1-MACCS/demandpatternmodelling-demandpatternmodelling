@@ -46,11 +46,9 @@ ridgeplot2=ggplot(DATAb, aes(x = DATAb$PE, y = DATAb$PRODUCT))+
 multiplot(ridgeplot1,ridgeplot2,cols=2)
 
 
-
-
 ###### Ridge 2 PROBABILITIES #######
 
-DATAa <- read.csv("output/ProductCost_2020-02-11-1709.csv")
+DATAa <- read.csv("output/ProductCost_2020-02-11-1714.csv")
 
 DATAa = (subset(DATAa, DATAa$PRODUCT<=25))
 DATAa$PRODUCT <- as.factor(DATAa$PRODUCT)
@@ -75,7 +73,7 @@ ridgeplot1 <- ggplot(DATAa, aes(x = DATAa$PE, y = DATAa$PRODUCT, fill=factor(sta
   theme(legend.position = "none")
 ridgeplot1
 
-DATAb <- read.csv("output/ProductCost_2020-02-11-1709.csv")
+DATAb <- read.csv("output/ProductCost_2020-02-11-1714.csv")
 
 DATAb = (subset(DATAb, DATAb$PRODUCT>25))
 DATAb$PRODUCT <- as.factor(DATAb$PRODUCT)
