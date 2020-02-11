@@ -8,7 +8,7 @@ library(ggridges)
 
 
 ###### Ridge 1 GREY ####
-DATAa <- read.csv("output/ProductCost_2020-02-11-1632.csv")
+DATAa <- read.csv("output/ProductCost_2020-02-11-1636.csv")
 DATAa = (subset(DATAa, DATAa$PRODUCT<=25))
 DATAa$PRODUCT <- as.factor(DATAa$PRODUCT)
 DATAa$PE <- DATAa$PE * 100
@@ -49,7 +49,8 @@ multiplot(ridgeplot1,ridgeplot2,cols=2)
 
 
 ###### Ridge 2 PROBABILITIES #######
-DATAa <- read.csv("output/ProductCost_2020-02-11-1632.csv")
+
+DATAa <- read.csv("output/ProductCost_2020-02-11-1709.csv")
 
 DATAa = (subset(DATAa, DATAa$PRODUCT<=25))
 DATAa$PRODUCT <- as.factor(DATAa$PRODUCT)
@@ -59,10 +60,10 @@ ridgeplot1 <- ggplot(DATAa, aes(x = DATAa$PE, y = DATAa$PRODUCT, fill=factor(sta
   xlim(-50,50) +
   #stat_density_ridges(quantile_lines = TRUE, quantiles = 2,rel_min_height=0.01,scale=5, alpha=1)+
   stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE,
-                      quantile_lines = FALSE, quantiles = c(0.1587,0.8413),rel_min_height=0.01,scale=5,) +
+                      quantile_lines = TRUE, quantiles = c(0.1587,0.5,0.8413),rel_min_height=0.01,scale=5,) +
   scale_fill_manual(
-    name = "Probability", values = c("#FF0000A0", "#A0A0A0A0", "#FF0000A0"),
-    labels = c("(0, 0.1587]", "(0.1587, 0.8413]", "(0.8413, 1]")
+    name = "Probability", values = c("#FF0000A0", "#A0A0A0A0","#A0A0A0A0", "#FF0000A0"),
+    labels = c("(0, 0.1587]","(0.1587, Mean]", "(Mean, 0.8413]", "(0.8413, 1]")
   )+
   geom_vline(xintercept = 5, linetype="dashed")+
   geom_vline(xintercept = -5, linetype="dashed")+
@@ -70,11 +71,11 @@ ridgeplot1 <- ggplot(DATAa, aes(x = DATAa$PE, y = DATAa$PRODUCT, fill=factor(sta
   ggtitle("")+
   theme(text = element_text(size=18)) +
   theme(plot.title = element_text(hjust = 0.5)) +
-  theme_ridges( center_axis_labels = TRUE)+ 
+  theme_ridges( center_axis_labels = TRUE)+
   theme(legend.position = "none")
 ridgeplot1
 
-DATAb <- read.csv("output/ProductCost_2020-02-11-1632.csv")
+DATAb <- read.csv("output/ProductCost_2020-02-11-1709.csv")
 
 DATAb = (subset(DATAb, DATAb$PRODUCT>25))
 DATAb$PRODUCT <- as.factor(DATAb$PRODUCT)
@@ -84,10 +85,10 @@ ridgeplot2 <- ggplot(DATAb, aes(x = DATAb$PE, y = DATAb$PRODUCT, fill=factor(sta
   xlim(-50,50) +
   #stat_density_ridges(quantile_lines = TRUE, quantiles = 2,rel_min_height=0.01,scale=5, alpha=1)+
   stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE,
-                      quantile_lines = FALSE, quantiles = c(0.1587,0.8413),rel_min_height=0.01,scale=5,) +
+                      quantile_lines = TRUE, quantiles = c(0.1587,0.5,0.8413),rel_min_height=0.01,scale=5,) +
   scale_fill_manual(
-    name = "Probability", values = c("#FF0000A0", "#A0A0A0A0", "#FF0000A0"),
-    labels = c("(0, 0.1587]", "(0.1587, 0.8413]", "(0.8413, 1]")
+    name = "Probability", values = c("#FF0000A0", "#A0A0A0A0","#A0A0A0A0", "#FF0000A0"),
+    labels = c("(0, 0.1587]","(0.1587, Mean]", "(Mean, 0.8413]", "(0.8413, 1]")
   )+
   geom_vline(xintercept = 5, linetype="dashed")+
   geom_vline(xintercept = -5, linetype="dashed")+
@@ -96,7 +97,7 @@ ridgeplot2 <- ggplot(DATAb, aes(x = DATAb$PE, y = DATAb$PRODUCT, fill=factor(sta
   theme(text = element_text(size=18)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   theme_ridges( center_axis_labels = TRUE)
-  #ridgeplot2  
+  ridgeplot2  
 
 
 multiplot(ridgeplot1,ridgeplot2,cols=2)

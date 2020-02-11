@@ -9,6 +9,7 @@ library(Metrics)
 
 
 input <- read.csv("C:/Users/kaigm/OneDrive/00 Paperprojects/01 PRODUCT COST _ WORKING PAPER/16 SUBMISSION/01 EXPERIMENTS/03 Regression/ProductCost_2020-02-10-1300.csv")
+input <- read.csv("output/ProductCost_2020-02-11-1709.csv")
 summary(input)
 #### DATA WRANGLING AND SETTING ####  #####
 input$PE <- input$PE * 100
@@ -28,7 +29,7 @@ gc()
 
 
 #### REGRESSION WITH input_grouped #####
-
+input_grouped
 input_grouped$ABSBIAS = abs(input_grouped$mn)
 input_grouped$IMPRECISION = input_grouped$sd
 

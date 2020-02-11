@@ -9,15 +9,15 @@
     
   NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                  #INPUT independent variable - Number of factors
-  SIM_NUMB =         50                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         300                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000             #Total costs
 
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
 
-  set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_fix = 1             #Control variable - Decide if the resource consumption is constant
-  set_RCU_fix = 0                      #Control variable - Decide if the resource costs (and resource costs per unit) are constant
-  set_RCC_fix = 0                    # Control Variable - Decide if the reosurce costs vector is the same
+  set_DEMAND_fix=   1                 #Control Variable -  Decide if always the same demand is used
+  set_RES_CONS_PAT_fix = 1            #Control variable - Decide if the resource consumption is constant
+  set_RCU_fix = 0                     #Control variable - Decide if the resource costs (and resource costs per unit) are constant
+  set_RCC_fix = 1                     # Control Variable - Decide if the reosurce costs vector is the same
   set_CSD_fix=  1                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
 
