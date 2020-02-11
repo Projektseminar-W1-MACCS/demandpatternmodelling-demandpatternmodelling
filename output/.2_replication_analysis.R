@@ -4,14 +4,15 @@
 
 ####setup####
 #options(java.parameters = "- Xmx2048m")
-install.packages("apaTables") #and 'xlsx',robustHD,lm.beta
+install.packages("tibble") #and 'xlsx',robustHD,lm.beta
 library("xlsx")
 library('ggplot2')
 library('robustHD')
 library('lm.beta')
 library('reshape2')
 library('apaTables')
-
+library('MBESS')
+library('tibble')
 
 ####-------------Plotting the current DATA------------####
 
@@ -99,7 +100,7 @@ ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = interaction(CPH, CDH,
 CP_HEURISTIC_B = 'BASE'
 CD_HEURISTIC_B = 'BASE'
 
-CP_HEURISTIC = 'SIZE_CORREL_MISC_CC'
+CP_HEURISTIC = 'SIZE_MISC'
 CD_HEURISTIC = 'BIGPOOL'
 
 
@@ -135,7 +136,41 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
 
 ##5. REGRESSION ANALYSIS
 
-###Standardized regression analysis###
+##5.1. STANDARDIZING THE REQUIRED COEFFICIENTS FOR AN ANALYSIS
+
+
+##Choosing the independent and dependent coefficients of each model
+anand_model = MPE ~ ACP + g + d
+
+replication_model = MAPE ~ CP + RC_VAR + DENS
+
+##Standardizing the respective columns of the datasets
+
+anand_data_heuristic = lapply(anand_data_heuristic[,all.vars(anand_model)], scale)
+
+replication_data_heuristic = lapply(replication_data_heuristic[,all.vars(replication_model)], scale)
+
+##calculating the regression model and coefficients
+
+linearReg_anand_std = lm(MPE ~ACP+g+d, data = anand_data_heuristic)
+
+linearReg_repl_std = lm(MAPE ~ CP+RC_VAR+DENS, data = replication_data_heuristic)
+
+
+
+###Creating the results
+#REPLICATION
+apa.reg.table(linearReg_repl_std,filename = paste0("reg_replication_",CP_HEURISTIC,".doc"), table.number = 1)
+apa.aov.table(linearReg_repl_std,filename = paste0("anova_replication_",CP_HEURISTIC,".doc"), table.number = 1)
+
+#ANAND
+apa.reg.table(linearReg_anand_std,filename = paste0("reg_anand_",CP_HEURISTIC,".doc"), table.number = 1)
+apa.aov.table(linearReg_anand_std,filename = paste0("anova_anand_",CP_HEURISTIC,".doc"), table.number = 1)
+
+
+
+apa.reg.table(linearReg_repl,filename = paste0("anova_replicatiodddn_",CP_HEURISTIC,".doc"), table.number = 1)
+
 
 linearReg_repl = lm(replication_data_heuristic$MAPE ~ replication_data_heuristic$CP 
                     + replication_data_heuristic$RC_VAR + 
@@ -144,6 +179,9 @@ linearReg_repl = lm(replication_data_heuristic$MAPE ~ replication_data_heuristic
 
 linearReg_repl_beta = lm.beta(linearReg_repl)   #standardizes the regression coefficients (betas)
 
+
+linearReg_repl_s = lm(scale(replication_data_heuristic$MAPE)~scale(replication_data_heuristic$CP)+scale(replication_data_heuristic$RC_VAR)+scale(replication_data_heuristic$DENS))
+
 ###Anand original model as comparison###
 
 linearReg_anand = lm(anand_data_heuristic$MPE ~ anand_data_heuristic$ACP + anand_data_heuristic$g + anand_data_heuristic$d)
@@ -151,18 +189,22 @@ linearReg_anand = lm(anand_data_heuristic$MPE ~ anand_data_heuristic$ACP + anand
 linearReg_anand_beta = lm.beta(linearReg_anand)
 
 print('replication')
-summary(linearReg_repl_beta)
+summary(linearReg_repl_std)
 anova(linearReg_repl_beta)
+
+
 print('anand')
 summary(linearReg_anand_beta)
 
 coef(linearReg_repl_beta)
 coef(linearReg_anand_beta)
 
+print(linearReg_repl_beta)
 
 
+###ANOVA####
 
-
+apa.reg.table(linearReg_repl_s,filename = "first_test_APA1.doc", table.number = 3)
 
 
 
