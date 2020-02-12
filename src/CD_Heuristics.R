@@ -174,6 +174,10 @@ return(FIRM)
 MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
   stop("Average driver is still producing an MAPE >0.")
+  #in discussion ; 
+  
+  
+  
   #FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_AVERAGE, == 1'
   ACP_index_choosen<-vector(mode="numeric")
   # normalize RES_CONS_PAT

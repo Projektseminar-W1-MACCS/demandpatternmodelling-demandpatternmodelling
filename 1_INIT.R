@@ -7,9 +7,9 @@
   DATA = data.frame()
   DATAp = data.frame()
     
-  NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
+  NUMB_PRO =         20                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                  #INPUT independent variable - Number of factors
-  SIM_NUMB =         300                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         1000                #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000             #Total costs
 
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
@@ -21,8 +21,8 @@
   set_CSD_fix=  1                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
 
-  CP = c(25)       #No. of Cost Pools
-  COR = c(0.6)                              #Correlation between resources
+  CP = c(25)                               #No. of Cost Pools
+  COR = c(0.6)                             #Correlation between resources
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
   Error = c(0.1,0.3,0.5)                              #Measurement error

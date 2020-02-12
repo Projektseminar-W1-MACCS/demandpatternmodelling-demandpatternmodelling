@@ -7,8 +7,10 @@ library(dplyr)
 library(ggridges)
 
 
+##### 20 Products ####
 ###### Ridge 1 GREY ####
-DATAa <- read.csv("output/ProductCost_2020-02-11-1636.csv")
+
+DATAa <- read.csv("output/ProductCost_2020-02-12-0941.csv")
 DATAa = (subset(DATAa, DATAa$PRODUCT<=25))
 DATAa$PRODUCT <- as.factor(DATAa$PRODUCT)
 DATAa$PE <- DATAa$PE * 100
@@ -17,13 +19,42 @@ ridgeplot1=ggplot(DATAa, aes(x = DATAa$PE, y = DATAa$PRODUCT))+
   #geom_density_ridges(scale=5, rel_min_height=0.01, alpha=0.5) +
   xlim(-100,100) +
 
-  stat_density_ridges(quantile_lines = TRUE, quantiles = 2,rel_min_height=0.01,scale=5, alpha=1)+
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 2,rel_min_height=0.01,scale=5, alpha=1, fill ="lightblue")+
   #coord_cartesian(ylim=c(lower.limit, upper.limit)) + 
-  labs(x = "Percentage Error (PE) [%]", y ="Product [#]") + 
+  geom_vline(xintercept = 5, linetype="dashed")+
+  geom_vline(xintercept = -5, linetype="dashed")+
+  labs(x = "Percentage Error (PE) [%]", y ="") + 
   ggtitle("")+
   theme(text = element_text(size=18)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   theme_ridges( center_axis_labels = TRUE)
+ridgeplot1
+
+###### 50 PRODUCTS ####
+
+
+###### Ridge 1 Grey ####
+DATAa <- read.csv("output/ProductCost_2020-02-12-0909.csv")
+DATAa = (subset(DATAa, DATAa$PRODUCT<=25))
+DATAa$PRODUCT <- as.factor(DATAa$PRODUCT)
+DATAa$PE <- DATAa$PE * 100
+
+ridgeplot1=ggplot(DATAa, aes(x = DATAa$PE, y = DATAa$PRODUCT))+
+  #geom_density_ridges(scale=5, rel_min_height=0.01, alpha=0.5) +
+  xlim(-100,100) +
+  
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 2,rel_min_height=0.01,scale=5, alpha=1, fill ="lightblue")+
+  #coord_cartesian(ylim=c(lower.limit, upper.limit)) + 
+  geom_vline(xintercept = 5, linetype="dashed")+
+  geom_vline(xintercept = -5, linetype="dashed")+
+  labs(x = "Percentage Error (PE) [%]", y ="") + 
+  ggtitle("")+
+  theme(text = element_text(size=18)) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_ridges( center_axis_labels = TRUE)
+ridgeplot1
+
+
 
 DATAb <- read.csv("output/ProductCost_2020-02-11-1632.csv")
 DATAb = (subset(DATAb, DATAb$PRODUCT>25))
@@ -36,7 +67,9 @@ ridgeplot2=ggplot(DATAb, aes(x = DATAb$PE, y = DATAb$PRODUCT))+
   
   stat_density_ridges(quantile_lines = TRUE, quantiles = 2,rel_min_height=0.01,scale=5, alpha=1)+
   #coord_cartesian(ylim=c(lower.limit, upper.limit)) + 
-  labs(x = "Percentage Error (PE) [%]", y ="Product [#]") + 
+  geom_vline(xintercept = 5, linetype="dashed")+
+  geom_vline(xintercept = -5, linetype="dashed")+
+  labs(x = "Percentage Error (PE) [%]", y ="") + 
   ggtitle("")+
   theme(text = element_text(size=18)) +
   theme(plot.title = element_text(hjust = 0.5)) +
@@ -147,13 +180,6 @@ ridgeplot2 <- ggplot(DATAb, aes(x = DATAb$PE, y = DATAb$PRODUCT, fill=stat(x)))+
   theme(plot.title = element_text(hjust = 0.5)) +
   theme_ridges( center_axis_labels = TRUE)
 #ridgeplot2  
-#####
-
-multiplot(ridgeplot1,ridgeplot2,cols=2)
-
-#####
-
-
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)
   
@@ -188,4 +214,4 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
                                       layout.pos.col = matchidx$col))
     }
   }
-}   ##########
+}   
