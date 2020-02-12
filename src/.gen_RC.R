@@ -8,7 +8,7 @@
   TC = FIRM$COSTING_SYSTEM$TC
   RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
   
-  if (RC_VAR[1] == -1)
+  if (RC_VAR == -1)
   {
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
@@ -127,10 +127,9 @@
 
 .gen_RCC_Anand <- function(FIRM, unitsize, nonunitsize) {
   
-  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   
   #RC_VAR =-1
-  if (RC_VAR == -1)
+  if (FIRM$COSTING_SYSTEM$RC_VAR == -1)
   {
     DISP2_MIN = 0.4               #if bounds between 0.5 and 0.8 this could be an equivilent to per_BATCH costs in gen_RCC_unit
     DISP2_MAX = 0.7

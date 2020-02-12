@@ -18,24 +18,24 @@
   ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
 
   set_DEMAND_fix=   0                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_fix = 1             #Control variable - Decide if the resource consumption is constant
-  set_RCU_fix = 1                      #Control variable - Decide if the resource costs per unit are constant
-  set_RCC_fix = 1                    # Control Variable - Decide if the reosurce costs vector is the same
-  set_CSD_fix=  1                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  set_RES_CONS_PAT_fix = 0             #Control variable - Decide if the resource consumption is constant
+  set_RCU_fix = 0                      #Control variable - Decide if the resource costs per unit are constant
+  set_RCC_fix = 0                    # Control Variable - Decide if the reosurce costs vector is the same
+  set_CSD_fix=  0                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
-
-  CP = c(10)       #No. of Cost Pools
+  CP = c(4)
+  #CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,50)       #No. of Cost Pools
   COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(0.5)                          #Resource cost variation --> base for DISP2
+  RC_VAR =  c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
   Error = c(0)                              #Measurement error
   NUMB_Error = c(0)                         #Number of errornoues links
-  DENS = c(0.5)                              #Number of links between products and resources (sharing)
+  DENS = c(-1)                              #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(1)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c(5)                       #Which Heuristic for pooling resources? # 0-6
+  CP_HEURISTIC = c(2)                       #Which Heuristic for pooling resources? # 0-6
   CD_HEURISTIC = c(0)                       #which Heuristic for selecting a driver? #0-1
 
 

@@ -4,7 +4,7 @@
 
 ####setup####
 #options(java.parameters = "- Xmx2048m")
-install.packages("tibble") #and 'xlsx',robustHD,lm.beta
+#install.packages("tibble") #and 'xlsx',robustHD,lm.beta
 library("xlsx")
 library('ggplot2')
 library('robustHD')
@@ -12,13 +12,13 @@ library('lm.beta')
 library('reshape2')
 library('apaTables')
 library('MBESS')
-library('tibble')
 
-####-------------Plotting the current DATA------------####
+
+####_________________________________REPLICATION TEST____________________####------------####
 
 ##Loading the Data 
 
-##1.  REPLICATION MODEL####
+##1.  REPLICATION MODEL###
 
 file_link_replication = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/CSD_2020-02-07-1017.csv"
 
@@ -27,16 +27,16 @@ replication_data = read.csv(file_link_replication, sep = ",")
 
 
 
-##2. ANAND MODEL####
+##2. ANAND MODEL###
 ##2.1. ANAND MODEL ERROR OUTPUT
 
-file_link_anand_1 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model 20200207.csv"
+file_link_anand_1 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_20200212_200_SIM_NUMB.csv"
 
 anand_data_1 = read.csv(file_link_anand_1, sep = ';')
 
 ##2.2. ANAND MODEL DISP2, DENS, RCC02 Output
 
-file_link_anand_2 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_ResCon 20200207.csv"
+file_link_anand_2 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_ResCon_20200212_200_SIM_NUMB.csv"
 
 anand_data_2 = read.csv(file_link_anand_2, sep = ';')
 
@@ -45,7 +45,7 @@ anand_data = merge(anand_data_1,anand_data_2, by.x = 'FirmID', by.y = 'FirmID')
 
 
 
-##2.3. REPLACING INTEGER WITH NAMES####
+##2.3. REPLACING INTEGER WITH NAMES##
 ##2.3.1. REPLICATION DATA
 replication_data$CPH = as.character(replication_data$CPH)
 replication_data$CDH = as.character(replication_data$CDH)
@@ -79,7 +79,7 @@ anand_data$PDR = as.factor(anand_data$PDR)
 
 
 
-##3. PLOTTING THE WHOLE DATAFRAME####
+##3. PLOTTING THE WHOLE DATAFRAME##
 
 replication_data_agg = aggregate(.~CP + CPH + CDH, data = replication_data, FUN = mean)
 
@@ -93,14 +93,14 @@ ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = interaction(CPH, CDH,
 
 
 
-##4. RESHAPING THE DATAFRAME FOR PLOTTING AND ANALYSIS OF SINGLE HEURISTIC COMBINATIONS####
+##4. RESHAPING THE DATAFRAME FOR PLOTTING AND ANALYSIS OF SINGLE HEURISTIC COMBINATIONS##
 
 ##4.1. CHOOSING THE HEURISTIC (BASE, SIZE_MISC, SIZE_CORREL_MISC, SIZE_RANDOM_MISC, SIZE_CORREL_MISC_CC, BIGPOOL)
 
 CP_HEURISTIC_B = 'BASE'
 CD_HEURISTIC_B = 'BASE'
 
-CP_HEURISTIC = 'SIZE_MISC'
+CP_HEURISTIC = 'SIZE_CORREL_MISC_CC'
 CD_HEURISTIC = 'BIGPOOL'
 
 
@@ -134,7 +134,19 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
   ylim(0,1)
 
 
+
+
+
+
+
 ##5. REGRESSION ANALYSIS
+#Data building
+CP_HEURISTIC = 'SIZE_CORREL_MISC_CC'
+CD_HEURISTIC = 'BIGPOOL'
+create_tables = 0
+replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC & CDH == CD_HEURISTIC)
+anand_data_heuristic = subset(anand_data, PACP == CP_HEURISTIC)##Anand has no base heuristic (0,1,2,3)
+
 
 ##5.1. STANDARDIZING THE REQUIRED COEFFICIENTS FOR AN ANALYSIS
 
@@ -157,54 +169,181 @@ linearReg_anand_std = lm(MPE ~ACP+g+d, data = anand_data_heuristic)
 linearReg_repl_std = lm(MAPE ~ CP+RC_VAR+DENS, data = replication_data_heuristic)
 
 
-
-###Creating the results
-#REPLICATION
-apa.reg.table(linearReg_repl_std,filename = paste0("reg_replication_",CP_HEURISTIC,".doc"), table.number = 1)
-apa.aov.table(linearReg_repl_std,filename = paste0("anova_replication_",CP_HEURISTIC,".doc"), table.number = 1)
-
-#ANAND
-apa.reg.table(linearReg_anand_std,filename = paste0("reg_anand_",CP_HEURISTIC,".doc"), table.number = 1)
-apa.aov.table(linearReg_anand_std,filename = paste0("anova_anand_",CP_HEURISTIC,".doc"), table.number = 1)
-
-
-
-apa.reg.table(linearReg_repl,filename = paste0("anova_replicatiodddn_",CP_HEURISTIC,".doc"), table.number = 1)
+if(create_tables == 1){
+  ###Creating the results
+  #REPLICATION
+  apa.reg.table(linearReg_repl_std,filename = paste0("reg_replication_",CP_HEURISTIC,".doc"), table.number = 1)
+  apa.aov.table(linearReg_repl_std,filename = paste0("anova_replication_",CP_HEURISTIC,".doc"), table.number = 1)
+  
+  #ANAND
+  apa.reg.table(linearReg_anand_std,filename = paste0("reg_anand_",CP_HEURISTIC,".doc"), table.number = 1)
+  apa.aov.table(linearReg_anand_std,filename = paste0("anova_anand_",CP_HEURISTIC,".doc"), table.number = 1)
+  
+}
 
 
-linearReg_repl = lm(replication_data_heuristic$MAPE ~ replication_data_heuristic$CP 
-                    + replication_data_heuristic$RC_VAR + 
-                      replication_data_heuristic$DENS)
+##5.2. KOLMOGOROV-SMIRNOV TEST
+
+ks.test(replication_data_heuristic$MAPE,anand_data_heuristic$MPE)
 
 
-linearReg_repl_beta = lm.beta(linearReg_repl)   #standardizes the regression coefficients (betas)
 
 
-linearReg_repl_s = lm(scale(replication_data_heuristic$MAPE)~scale(replication_data_heuristic$CP)+scale(replication_data_heuristic$RC_VAR)+scale(replication_data_heuristic$DENS))
-
-###Anand original model as comparison###
-
-linearReg_anand = lm(anand_data_heuristic$MPE ~ anand_data_heuristic$ACP + anand_data_heuristic$g + anand_data_heuristic$d)
-
-linearReg_anand_beta = lm.beta(linearReg_anand)
-
-print('replication')
-summary(linearReg_repl_std)
-anova(linearReg_repl_beta)
 
 
-print('anand')
-summary(linearReg_anand_beta)
-
-coef(linearReg_repl_beta)
-coef(linearReg_anand_beta)
-
-print(linearReg_repl_beta)
 
 
-###ANOVA####
+####_________________________________Q_VAR_VARIATION_____________________########
+##LOADING REPLICATION_DATA
 
-apa.reg.table(linearReg_repl_s,filename = "first_test_APA1.doc", table.number = 3)
+loading_from_data = 0
+
+if(loading_from_data==1){replication_data = DATA}else{
+  file_link_q_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/Q_VAR/CSD_2020-02-12-1653.csv"
+  replication_data = read.csv(file_link_q_var,sep = ',')}
+
+replication_data$CPH = as.character(replication_data$CPH)
+replication_data$CDH = as.character(replication_data$CDH)
+
+replication_data$CPH[replication_data$CPH == 'base'] = 'BASE'
+replication_data$CDH[replication_data$CDH == 'base'] = 'BASE'
+
+replication_data$CPH[replication_data$CPH == 0] = 'SIZE_MISC'
+replication_data$CPH[replication_data$CPH == 1] = 'SIZE_CORREL_MISC'
+replication_data$CPH[replication_data$CPH == 2] = 'SIZE_RANDOM_MISC'
+replication_data$CPH[replication_data$CPH == 3] = 'SIZE_CORREL_MISC_CC'
+
+replication_data$CDH[replication_data$CDH == 0] = 'BIGPOOL'
+
+replication_data$CPH = as.factor(replication_data$CPH)
+replication_data$CDH = as.factor(replication_data$CDH)
+
+##ANAND als Vergleich:
+file_link_anand_1 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_20200212_200_SIM_NUMB.csv"
+anand_data_1 = read.csv(file_link_anand_1, sep = ';')
+##2.2. ANAND MODEL DISP2, DENS, RCC02 Output
+file_link_anand_2 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_ResCon_20200212_200_SIM_NUMB.csv"
+anand_data_2 = read.csv(file_link_anand_2, sep = ';')
+anand_data = merge(anand_data_1,anand_data_2, by.x = 'FirmID', by.y = 'FirmID')
+##NAME REPLACEMENT
+anand_data$PACP[anand_data$PACP == 0] = 'SIZE_MISC'
+anand_data$PACP[anand_data$PACP == 1] = 'SIZE_CORREL_MISC'
+anand_data$PACP[anand_data$PACP == 2] = 'SIZE_RANDOM_MISC'
+anand_data$PACP[anand_data$PACP == 3] = 'SIZE_CORREL_MISC_CC'
+
+anand_data$PDR[anand_data$PDR == 0] == 'BIGPOOL'
+
+anand_data$PACP = as.factor(anand_data$PACP)
+anand_data$PDR = as.factor(anand_data$PDR)
+
+
+
+##bringing it down to one heuristic
+CP_HEURISTIC = 'SIZE_RANDOM_MISC'
+CD_HEURISTIC = 'BIGPOOL'
+replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC & CDH == CD_HEURISTIC)
+anand_data_heuristic = subset(anand_data, PACP == CP_HEURISTIC)
+
+
+###
+rep_q_var_output = data.frame(replication_data_heuristic$CP, replication_data_heuristic$MAPE, replication_data_heuristic$Q_VAR)
+colnames(rep_q_var_output) = c('CP','MAPE','Q_VAR')
+anand_q_var_output = data.frame(anand_data_heuristic$ACP, anand_data_heuristic$MPE, Q_VAR = ('ANAND'))
+colnames(anand_q_var_output) = c('CP','MAPE', 'Q_VAR')
+
+q_var_output = rbind(rep_q_var_output,anand_q_var_output)
+
+
+###aggregated datae - mean over CP and Q_VAR ###
+q_var_output_agg = aggregate(.~CP + Q_VAR, data = q_var_output, FUN = mean)
+
+
+ggplot(q_var_output_agg, aes(x = CP, y = MAPE, color = Q_VAR, group = Q_VAR))+geom_line(size = 1)+
+  ggtitle('SIZE_RANDOM_MISC Q_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
+  ylim(0,1)+xlim(0,40)+geom_line(data= q_var_output_agg[q_var_output_agg$Q_VAR == 'ANAND',], color = 'black', size = 1)
+
+
+
+
+
+####_________________________________RC_VAR_VARIATION_____________________####
+##LOADING REPLICATION_DATA
+
+loading_from_data = 1
+
+if(loading_from_data==1){replication_data = DATA}else{
+  file_link_q_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-12-1628.csv"
+  replication_data = read.csv(file_link_q_var,sep = ',')}
+
+replication_data$CPH = as.character(replication_data$CPH)
+replication_data$CDH = as.character(replication_data$CDH)
+
+replication_data$CPH[replication_data$CPH == 'base'] = 'BASE'
+replication_data$CDH[replication_data$CDH == 'base'] = 'BASE'
+
+replication_data$CPH[replication_data$CPH == 0] = 'SIZE_MISC'
+replication_data$CPH[replication_data$CPH == 1] = 'SIZE_CORREL_MISC'
+replication_data$CPH[replication_data$CPH == 2] = 'SIZE_RANDOM_MISC'
+replication_data$CPH[replication_data$CPH == 3] = 'SIZE_CORREL_MISC_CC'
+
+replication_data$CDH[replication_data$CDH == 0] = 'BIGPOOL'
+
+replication_data$CPH = as.factor(replication_data$CPH)
+replication_data$CDH = as.factor(replication_data$CDH)
+
+##ANAND als Vergleich:
+file_link_anand_1 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_20200212_200_SIM_NUMB.csv"
+anand_data_1 = read.csv(file_link_anand_1, sep = ';')
+##2.2. ANAND MODEL DISP2, DENS, RCC02 Output
+file_link_anand_2 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_ResCon_20200212_200_SIM_NUMB.csv"
+anand_data_2 = read.csv(file_link_anand_2, sep = ';')
+anand_data = merge(anand_data_1,anand_data_2, by.x = 'FirmID', by.y = 'FirmID')
+##NAME REPLACEMENT
+anand_data$PACP[anand_data$PACP == 0] = 'SIZE_MISC'
+anand_data$PACP[anand_data$PACP == 1] = 'SIZE_CORREL_MISC'
+anand_data$PACP[anand_data$PACP == 2] = 'SIZE_RANDOM_MISC'
+anand_data$PACP[anand_data$PACP == 3] = 'SIZE_CORREL_MISC_CC'
+
+anand_data$PDR[anand_data$PDR == 0] == 'BIGPOOL'
+
+anand_data$PACP = as.factor(anand_data$PACP)
+anand_data$PDR = as.factor(anand_data$PDR)
+
+
+
+##bringing it down to one heuristic
+CP_HEURISTIC = 'SIZE_RANDOM_MISC'
+CD_HEURISTIC = 'BIGPOOL'
+replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC & CDH == CD_HEURISTIC)
+anand_data_heuristic = subset(anand_data, PACP == CP_HEURISTIC)
+
+
+###
+rep_rc_var_output = data.frame(replication_data_heuristic$CP, replication_data_heuristic$MAPE, replication_data_heuristic$RC_VAR)
+colnames(rep_rc_var_output) = c('CP','MAPE','RC_VAR')
+anand_rc_var_output = data.frame(anand_data_heuristic$ACP, anand_data_heuristic$MPE, RC_VAR = ('ANAND'))
+colnames(anand_rc_var_output) = c('CP','MAPE', 'RC_VAR')
+
+rc_var_output = rbind(rep_rc_var_output,anand_rc_var_output)
+
+
+###aggregated datae - mean over CP and Q_VAR ###
+rc_var_output_agg = aggregate(.~CP + RC_VAR, data = rc_var_output, FUN = mean)
+
+
+ggplot(rc_var_output_agg, aes(x = CP, y = MAPE, color = RC_VAR, group = RC_VAR))+geom_line(size = 1)+
+  ggtitle('SIZE_RANDOM_MISC RC_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
+  ylim(0,1)+xlim(0,20)+geom_line(data= q_var_output_agg[q_var_output_agg$Q_VAR == 'ANAND',], color = 'black', size = 1)
+
+
+
+
+
+
+
+
 
 
 
