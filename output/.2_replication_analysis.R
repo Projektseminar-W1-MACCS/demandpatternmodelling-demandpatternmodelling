@@ -252,7 +252,7 @@ anand_q_var_output = data.frame(anand_data_heuristic$ACP, anand_data_heuristic$M
 colnames(anand_q_var_output) = c('CP','MAPE', 'Q_VAR')
 
 q_var_output = rbind(rep_q_var_output,anand_q_var_output)
-
+q_var_output$Q_VAR = as.factor(q_var_output$Q_VAR)
 
 ###aggregated datae - mean over CP and Q_VAR ###
 q_var_output_agg = aggregate(.~CP + Q_VAR, data = q_var_output, FUN = mean)
@@ -270,11 +270,17 @@ ggplot(q_var_output_agg, aes(x = CP, y = MAPE, color = Q_VAR, group = Q_VAR))+ge
 ####_________________________________RC_VAR_VARIATION_____________________####
 ##LOADING REPLICATION_DATA
 
-loading_from_data = 1
+loading_from_data = 0
+mapping_RCC01_to_BASE = 1
 
-if(loading_from_data==1){replication_data = DATA}else{
-  file_link_q_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-12-1628.csv"
-  replication_data = read.csv(file_link_q_var,sep = ',')}
+if(loading_from_data==1){replication_data = DATA}else if(mapping_RCC01_to_BASE ==1){
+  file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-13-1021_gen_RCC_basic.csv"
+  replication_data = read.csv(file_link_rc_var,sep = ',')
+  }else
+    {
+    file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-13-0958_gen_RCC_no mapping of RCC01 to BASE.csv"
+    replication_data = read.csv(file_link_rc_var,sep = ',')
+  }
 
 replication_data$CPH = as.character(replication_data$CPH)
 replication_data$CDH = as.character(replication_data$CDH)
@@ -326,7 +332,7 @@ anand_rc_var_output = data.frame(anand_data_heuristic$ACP, anand_data_heuristic$
 colnames(anand_rc_var_output) = c('CP','MAPE', 'RC_VAR')
 
 rc_var_output = rbind(rep_rc_var_output,anand_rc_var_output)
-
+rc_var_output$RC_VAR = as.factor(rc_var_output$RC_VAR)
 
 ###aggregated datae - mean over CP and Q_VAR ###
 rc_var_output_agg = aggregate(.~CP + RC_VAR, data = rc_var_output, FUN = mean)
@@ -335,7 +341,7 @@ rc_var_output_agg = aggregate(.~CP + RC_VAR, data = rc_var_output, FUN = mean)
 ggplot(rc_var_output_agg, aes(x = CP, y = MAPE, color = RC_VAR, group = RC_VAR))+geom_line(size = 1)+
   ggtitle('SIZE_RANDOM_MISC RC_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
-  ylim(0,1)+xlim(0,20)+geom_line(data= q_var_output_agg[q_var_output_agg$Q_VAR == 'ANAND',], color = 'black', size = 1)
+  ylim(0,1)+geom_line(data= rc_var_output_agg[rc_var_output_agg$RC_VAR == 'ANAND',], color = 'black', size = 1)
 
 
 
@@ -373,6 +379,90 @@ ggplot(rc_var_output_agg, aes(x = CP, y = MAPE, color = RC_VAR, group = RC_VAR))
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####_________________________________COR_VARIATION_____________________########
+##LOADING REPLICATION_DATA
+
+loading_from_data = 1
+
+if(loading_from_data==1){replication_data = DATA}else{
+  file_link_cor_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/COR_VAR/CSD_2020-02-12-1653.csv"
+  replication_data = read.csv(file_link_cor_var,sep = ',')}
+
+replication_data$CPH = as.character(replication_data$CPH)
+replication_data$CDH = as.character(replication_data$CDH)
+
+replication_data$CPH[replication_data$CPH == 'base'] = 'BASE'
+replication_data$CDH[replication_data$CDH == 'base'] = 'BASE'
+
+replication_data$CPH[replication_data$CPH == 0] = 'SIZE_MISC'
+replication_data$CPH[replication_data$CPH == 1] = 'SIZE_CORREL_MISC'
+replication_data$CPH[replication_data$CPH == 2] = 'SIZE_RANDOM_MISC'
+replication_data$CPH[replication_data$CPH == 3] = 'SIZE_CORREL_MISC_CC'
+
+replication_data$CDH[replication_data$CDH == 0] = 'BIGPOOL'
+
+replication_data$CPH = as.factor(replication_data$CPH)
+replication_data$CDH = as.factor(replication_data$CDH)
+
+##ANAND als Vergleich:
+file_link_anand_1 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_20200212_200_SIM_NUMB.csv"
+anand_data_1 = read.csv(file_link_anand_1, sep = ';')
+##2.2. ANAND MODEL DISP2, DENS, RCC02 Output
+file_link_anand_2 = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND_Model_ResCon_20200212_200_SIM_NUMB.csv"
+anand_data_2 = read.csv(file_link_anand_2, sep = ';')
+anand_data = merge(anand_data_1,anand_data_2, by.x = 'FirmID', by.y = 'FirmID')
+##NAME REPLACEMENT
+anand_data$PACP[anand_data$PACP == 0] = 'SIZE_MISC'
+anand_data$PACP[anand_data$PACP == 1] = 'SIZE_CORREL_MISC'
+anand_data$PACP[anand_data$PACP == 2] = 'SIZE_RANDOM_MISC'
+anand_data$PACP[anand_data$PACP == 3] = 'SIZE_CORREL_MISC_CC'
+
+anand_data$PDR[anand_data$PDR == 0] == 'BIGPOOL'
+
+anand_data$PACP = as.factor(anand_data$PACP)
+anand_data$PDR = as.factor(anand_data$PDR)
+
+
+
+##bringing it down to one heuristic
+CP_HEURISTIC = 'SIZE_RANDOM_MISC'
+CD_HEURISTIC = 'BIGPOOL'
+replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC & CDH == CD_HEURISTIC)
+anand_data_heuristic = subset(anand_data, PACP == CP_HEURISTIC)
+
+
+###
+rep_cor_var_output = data.frame(replication_data_heuristic$CP, replication_data_heuristic$MAPE, replication_data_heuristic$COR1,replication_data_heuristic$COR2)
+colnames(rep_rc_var_output) = c('CP','MAPE','COR1','COR2')
+
+anand_q_var_output = data.frame(anand_data_heuristic$ACP, anand_data_heuristic$MPE, Q_VAR = ('ANAND'))
+colnames(anand_q_var_output) = c('CP','MAPE', 'Q_VAR')
+
+q_var_output = rbind(rep_q_var_output,anand_q_var_output)
+q_var_output$Q_VAR = as.factor(q_var_output$Q_VAR)
+
+###aggregated datae - mean over CP and Q_VAR ###
+q_var_output_agg = aggregate(.~CP + Q_VAR, data = q_var_output, FUN = mean)
+
+
+ggplot(q_var_output_agg, aes(x = CP, y = MAPE, color = Q_VAR, group = Q_VAR))+geom_line(size = 1)+
+  ggtitle('SIZE_RANDOM_MISC Q_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
+  ylim(0,1)+xlim(0,40)+geom_line(data= q_var_output_agg[q_var_output_agg$Q_VAR == 'ANAND',], color = 'black', size = 1)
 
 
 

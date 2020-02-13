@@ -36,6 +36,8 @@
   
 ## ====================== STEP 1 BASELINE NORM ========================= 
 
+COR1= FIRM$PRODUCTION_ENVIRONMENT$COR1
+COR2= FIRM$PRODUCTION_ENVIRONMENT$COR2
 repeat    {
     
 BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
@@ -51,11 +53,18 @@ RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIR
 # Rows Products Colums Resources
 
 # Correlation of the top [DISP1] resources
-COR1 <- runif(1, -0.2, 0.8);
+if(FIRM$PRODUCTION_ENVIRONMENT$COR1 == -1){
+  COR1 <- runif(1, -0.2, 0.8)
+}
+
 sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
 
 # Correlation of the remaining resources
-COR2 <- runif(1, -0.2, 0.8);
+
+if(FIRM$PRODUCTION_ENVIRONMENT$COR2 == -1){
+  COR2 <- runif(1, -0.2, 0.8);
+}
+COR2 = FIRM$PRODUCTION_ENVIRONMENT$COR2
 sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
 
 for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) #unitsize+1
@@ -199,13 +208,18 @@ return(FIRM)
     # Rows Products Colums Resources
     
     # Correlation of the top [DISP1] resources
-    COR1 <- runif(1, -0.2, 0.8);
-    
+    if(FIRM$PRODUCTION_ENVIRONMENT$COR1 == -1){
+      COR1 <- runif(1, -0.2, 0.8)
+    }
+    FIRM$PRODUCTION_ENVIRONMENT$COR1 = COR1
     sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
     
     # Correlation of the remaining resources
-    COR2 <- runif(1, -0.2, 0.8);
     
+    if(FIRM$PRODUCTION_ENVIRONMENT$COR2 == -1){
+      COR2 <- runif(1, -0.2, 0.8);
+    }
+    FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
     
     DISP1= FIRM$PRODUCTION_ENVIRONMENT$DISP1
