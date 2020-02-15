@@ -22,7 +22,7 @@
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
-  if(DENS[1] == -1)
+  if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
@@ -36,8 +36,9 @@
   
 ## ====================== STEP 1 BASELINE NORM ========================= 
 
-COR1= FIRM$PRODUCTION_ENVIRONMENT$COR1
-COR2= FIRM$PRODUCTION_ENVIRONMENT$COR2
+COR= FIRM$PRODUCTION_ENVIRONMENT$COR
+
+
 repeat    {
     
 BASE = rnorm(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO) #creates for every CO (product) a random number
@@ -53,28 +54,24 @@ RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIR
 # Rows Products Colums Resources
 
 # Correlation of the top [DISP1] resources
-if(FIRM$PRODUCTION_ENVIRONMENT$COR1 == -1){
+if(COR == -1){
   COR1 <- runif(1, -0.2, 0.8)
+  COR2 <- runif(1, -0.2, 0.8)
 }
+
+FIRM$PRODUCTION_ENVIRONMENT$COR1 = COR1
+FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
 
 sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
-
-# Correlation of the remaining resources
-
-if(FIRM$PRODUCTION_ENVIRONMENT$COR2 == -1){
-  COR2 <- runif(1, -0.2, 0.8);
-}
-COR2 = FIRM$PRODUCTION_ENVIRONMENT$COR2
 sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
 
-for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) #unitsize+1
+for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) #unitsize+1
 {
-  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i - 1)];
+  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,i];
 }
-
-for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES+1) #nonunitsize+1 (34+1)
+for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES) #nonunitsize+1 (34+1)
 {
-  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i - 1)];
+  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,i];
 }
 
 ## ====================== STEP 1.b DENSITY ========================= 
@@ -96,7 +93,7 @@ FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PAT = RES_CONS_PAT
 RES_CONS_PAT[,1] <- (BASE)
 RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
 ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
-RES_CONS_PAT_TOTAL <- RES_CONS_PAT * FIRM$PRODUCTION_ENVIRONMENT$DEMAND       
+RES_CONS_PAT_TOTAL <- sweep(RES_CONS_PAT,MARGIN = 1,FIRM$PRODUCTION_ENVIRONMENT$DEMAND,'*')       
 ##CALCULATING TCU
 TCU <- colSums(RES_CONS_PAT_TOTAL)
 ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
@@ -146,12 +143,6 @@ FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp = RES_CONS_PATp
 ## OPEN ´´
 # for schliefe? 
 
-print(COR1)
-print(FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1)
-print(COR2)
-print(FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR2)
-#
-#
 #
 return(FIRM)
 
@@ -176,9 +167,12 @@ return(FIRM)
   FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
   
   
+  COR = FIRM$PRODUCTION_ENVIRONMENT$COR
+  
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
-  if(DENS[1] == -1)
+  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
+  if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
@@ -187,7 +181,6 @@ return(FIRM)
     FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
-  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   
   ## ====================== STEP 1 BASELINE NORM ========================= 
   
@@ -208,18 +201,18 @@ return(FIRM)
     # Rows Products Colums Resources
     
     # Correlation of the top [DISP1] resources
-    if(FIRM$PRODUCTION_ENVIRONMENT$COR1 == -1){
+    if(COR == -1){
       COR1 <- runif(1, -0.2, 0.8)
+      COR2 <- runif(1, -0.2, 0.8)
     }
+    
+    
     FIRM$PRODUCTION_ENVIRONMENT$COR1 = COR1
+    FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
     sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
     
     # Correlation of the remaining resources
     
-    if(FIRM$PRODUCTION_ENVIRONMENT$COR2 == -1){
-      COR2 <- runif(1, -0.2, 0.8);
-    }
-    FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
     
     DISP1= FIRM$PRODUCTION_ENVIRONMENT$DISP1
@@ -254,7 +247,7 @@ return(FIRM)
     RES_CONS_PAT[,1] <- (BASE)
     RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
     ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
-    RES_CONS_PAT_TOTAL <- sweep(RES_CONS_PAT,MARGIN = 1,FIRM$PRODUCTION_ENVIRONMENT$DEMAND,'*')     #does this needs to be a matrix multiplication?
+    RES_CONS_PAT_TOTAL <- sweep(RES_CONS_PAT,MARGIN = 1,FIRM$PRODUCTION_ENVIRONMENT$DEMAND,'*')   
     ##CALCULATING TCU
     TCU <- colSums(RES_CONS_PAT_TOTAL)
     ##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)

@@ -24,11 +24,10 @@
   set_CSD_fix=  0                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
   
-  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,50)       #No. of Cost Pools
-  COR1 = c(-0.8,-0.6,-0.4,-0.2,0.2,0.4,0.6,0.8)                              #Correlation between big resources
-  COR2 = c(-0.8,-0.6,-0.4,-0.2,0.2,0.4,0.6,0.8)
+  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
+  COR = c(-1)                              #Correlation between big resources
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
-  Q_VAR = c(-1)                            #Demand variation
+  Q_VAR = c(-1)                        #Demand variation
   Error = c(0)                              #Measurement error
   NUMB_Error = c(0)                         #Number of errornoues links
   DENS = c(-1)                              #Number of links between products and resources (sharing)
@@ -36,8 +35,8 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(1)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c(2)                       #Which Heuristic for pooling resources? # 0-6
-  CD_HEURISTIC = c(0)                       #which Heuristic for selecting a driver? #0-1
+  CP_HEURISTIC = c('base')                       #Which Heuristic for pooling resources? # 0-6
+  CD_HEURISTIC = c('base')                       #which Heuristic for selecting a driver? #0-1
 
 
 
@@ -49,8 +48,7 @@
 ## ======================================DESIGN OF EXPERIMENTS ==================================================
 ## EVIRONMENTAL FACTORS []
   for (ix_CP in seq_along(CP)) {
-     for (ix_COR1 in seq_along(COR1)) {
-       for (ix_COR2 in seq_along(COR2)){
+     for (ix_COR in seq_along(COR)) {
         for (ix_RC_VAR in seq_along(RC_VAR)) {
           for (ix_Q_VAR in seq_along(Q_VAR)) {
             for (ix_Error in seq_along(Error)) {
@@ -67,8 +65,7 @@
 
     FIRM$PRODUCTION_ENVIRONMENT$CP = CP[ix_CP]
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]
-    FIRM$PRODUCTION_ENVIRONMENT$COR1  = COR1[ix_COR1]
-    FIRM$PRODUCTION_ENVIRONMENT$COR2  = COR2[ix_COR2]
+    FIRM$PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
     FIRM$PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
@@ -90,15 +87,10 @@
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
 
 
-  
-
    #### ============================== SIMULATION ======================================
-   print(FIRM$COSTING_SYSTEM$CP)
    nn=1 # necessary for repeating the SIM_NUMB loop
    for (nn in 1:SIM_NUMB) {
 
-    #print(FIRM$COSTING_SYSTEM$CP)
-    #print(FIRM$COSTING_SYSTEM$Error)
 
 
     FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
@@ -158,14 +150,13 @@
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
 
 
-    # print(o)
-    # print(FIRM$COSTING_SYSTEM$CP)
-    # print((MAPE))
+    print(o)
+    print(FIRM$COSTING_SYSTEM$CP)
+    print((MAPE))
     # print((EUCD))
 
     o=o+1 #Counting for the total number of runs
    }
-                        }
                       }
                     }
                   }
@@ -192,3 +183,15 @@ if (ProductCostOutput==1)
   write.csv(DATAp, file = output)
   print("Product costs FILE has been written")
 }
+
+
+#### ====================================PlOT WRITING ===================================
+replication_data = DATA
+replication_data_agg = aggregate(.~CP+CPH+CDH, data = replication_data, FUN = mean)
+
+ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = interaction(CPH, CDH, sep = ' & ')))+
+  geom_line(size = 1)+labs(color = "Heuristik Kombinationen")+
+  theme_bw()+
+  ggtitle(paste("CSD_",format(Sys.time(),"%Y-%m-%d-%H%M")))+                              
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
+  scale_y_continuous(labels = scales::percent)

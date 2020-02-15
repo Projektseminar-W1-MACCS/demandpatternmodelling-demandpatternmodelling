@@ -21,6 +21,8 @@ FIRM = .gen_RES_CONS_PAT_Anand(FIRM) ## Building Demand, RES_CONS_PAT, RCC and P
 
 if (FIRM$PRODUCTION_ENVIRONMENT$set_RES_CONS_PAT_fix ==1) {set.seed(NULL)}
 
+
+
 ##SET THE RESOURCE COSTS FIX
 
 if (FIRM$COSTING_SYSTEM$set_RCU_fix==1) {
