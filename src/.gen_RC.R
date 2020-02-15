@@ -17,6 +17,9 @@
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
+  FIRM$COSTING_SYSTEM$RC_VAR_MIN = 0.4
+  FIRM$COSTING_SYSTEM$RC_VAR_MAX = 0.7
+  
   preRCC = rlnorm(NUMB_RES, meanlog = 1, sdlog = RC_VAR)
   #preRCC = rbeta(NUMB_RES, 0.025,1)
   
@@ -37,7 +40,7 @@
   
   #plot(sort(RCC))
   #### sourcing
-  
+  FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
   FIRM$COSTING_SYSTEM$RCC = RCC
   return(FIRM)
   
@@ -49,9 +52,8 @@
   
   unitsize = FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE
   nonunitsize =FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE
-  RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
   
-  if (RC_VAR == -1)
+  if (FIRM$COSTING_SYSTEM$RC_VAR == -1)
   {
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
@@ -125,21 +127,20 @@
 
 .gen_RCC_Anand <- function(FIRM, unitsize, nonunitsize) {
   
-  RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
+  
   #RC_VAR =-1
-  if (RC_VAR == -1)
+  if (FIRM$COSTING_SYSTEM$RC_VAR == -1)
   {
     DISP2_MIN = 0.4               #if bounds between 0.5 and 0.8 this could be an equivilent to per_BATCH costs in gen_RCC_unit
     DISP2_MAX = 0.7
     DISP2 = runif(1, DISP2_MIN, DISP2_MAX)
     FIRM$COSTING_SYSTEM$RC_VAR_MIN = DISP2_MIN
     FIRM$COSTING_SYSTEM$RC_VAR_MAX = DISP2_MAX
-    FIRM$COSTING_SYSTEM$RC_VAR = DISP2
   }else{
-    DISP2 = RC_VAR
+    DISP2 = FIRM$COSTING_SYSTEM$RC_VAR
   }
   
-  
+  FIRM$COSTING_SYSTEM$RC_VAR = DISP2
   #FIRM$PRODUCTION_ENVIRONMENT$CHECK$DISP2 = RC_VAR
   
   DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
@@ -237,6 +238,7 @@
   
   
   #### sourcing
+  FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
   FIRM$COSTING_SYSTEM$RCC = RCC
   
   

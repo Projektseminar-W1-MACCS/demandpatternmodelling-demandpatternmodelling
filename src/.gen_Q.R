@@ -71,10 +71,6 @@
 .gen_Demand <- function(FIRM){
   # This has been used in the Mertens (2020) for modeling dispersed realized demand
   Q_VAR = FIRM$PRODUCTION_ENVIRONMENT$Q_VAR
-  if(Q_VAR ==-1){
-    Q_VAR = runif(1,0.2,1)
-    FIRM$PRODUCTION_ENVIRONMENT$Q_VAR = Q_VAR
-  }
   NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
   units = 10^3
   preDemand = rlnorm(NUMB_PRO, meanlog = 1, sdlog = Q_VAR) #preDemand is buildup as a -> LogNormal Distribution 
