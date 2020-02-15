@@ -580,6 +580,7 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
    RCCn = length(RCC)                           #number of resources that need to be allocated to cost pools
    MISCPOOLSIZE = FIRM$COSTING_SYSTEM$MISCPOOLSIZE * FIRM$COSTING_SYSTEM$TC
    
+   
    if (CP > 1){
       ####---- pre allocation of largest resorces ----####
       ACP_pre1<-vector(mode="numeric")                      #empty vector for ACP-biggest resource assignment
@@ -608,15 +609,13 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
          ####Random Assignment####
          CP_ohne_misc = CP-1
          x = sum(RCC[unlist(RC_to_ACP)])
-         y = length(not_assigned)
          
-         while(x < FIRM$COSTING_SYSTEM$TC-MISCPOOLSIZE | y > 1){
+         while(x < FIRM$COSTING_SYSTEM$TC-MISCPOOLSIZE){
             not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
             random_cp = sample(length(c(1:CP_ohne_misc)),1)
             RC_to_ACP[[random_cp]] = c(RC_to_ACP[[random_cp]],sample(not_assigned,1))
             not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
             x = sum(RCC[unlist(RC_to_ACP)])
-            y = length(not_assigned)
          }
          
          

@@ -23,11 +23,10 @@
   set_RCC_fix = 0                    # Control Variable - Decide if the reosurce costs vector is the same
   set_CSD_fix=  0                     #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
-  
-  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,50)       #No. of Cost Pools
-  COR1 = c(-0.8,-0.6,-0.4,-0.2,0.2,0.4,0.6,0.8)                              #Correlation between big resources
-  COR2 = c(-0.8,-0.6,-0.4,-0.2,0.2,0.4,0.6,0.8)
-  RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
+  CP = c(4)
+  #CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,50)       #No. of Cost Pools
+  COR = c(0.6)                              #Correlation between resources
+  RC_VAR =  c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
   Error = c(0)                              #Measurement error
   NUMB_Error = c(0)                         #Number of errornoues links
@@ -49,11 +48,10 @@
 ## ======================================DESIGN OF EXPERIMENTS ==================================================
 ## EVIRONMENTAL FACTORS []
   for (ix_CP in seq_along(CP)) {
-     for (ix_COR1 in seq_along(COR1)) {
-       for (ix_COR2 in seq_along(COR2)){
-        for (ix_RC_VAR in seq_along(RC_VAR)) {
-          for (ix_Q_VAR in seq_along(Q_VAR)) {
-            for (ix_Error in seq_along(Error)) {
+     for (ix_COR in seq_along(COR)) {
+       for (ix_RC_VAR in seq_along(RC_VAR)) {
+         for (ix_Q_VAR in seq_along(Q_VAR)) {
+           for (ix_Error in seq_along(Error)) {
                for (ix_NUMB_Error in seq_along(NUMB_Error)) {
                  for (ix_DENS in seq_along(DENS)) {
                    for(ix_CC in seq_along(CC)){
@@ -67,8 +65,7 @@
 
     FIRM$PRODUCTION_ENVIRONMENT$CP = CP[ix_CP]
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]
-    FIRM$PRODUCTION_ENVIRONMENT$COR1  = COR1[ix_COR1]
-    FIRM$PRODUCTION_ENVIRONMENT$COR2  = COR2[ix_COR2]
+    FIRM$PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
     FIRM$PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
@@ -90,10 +87,9 @@
     FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC[ix_CD_HEURISTIC]
 
 
-  
+
 
    #### ============================== SIMULATION ======================================
-   print(FIRM$COSTING_SYSTEM$CP)
    nn=1 # necessary for repeating the SIM_NUMB loop
    for (nn in 1:SIM_NUMB) {
 
@@ -158,14 +154,13 @@
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
 
 
-    # print(o)
-    # print(FIRM$COSTING_SYSTEM$CP)
-    # print((MAPE))
-    # print((EUCD))
+    print(o)
+    print(FIRM$COSTING_SYSTEM$CP)
+    print((MAPE))
+    print((EUCD))
 
     o=o+1 #Counting for the total number of runs
-   }
-                        }
+  }
                       }
                     }
                   }
