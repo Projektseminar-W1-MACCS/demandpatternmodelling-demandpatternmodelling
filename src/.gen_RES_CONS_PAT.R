@@ -21,17 +21,15 @@
   
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
-  #Randomization and setting clear design points. 
-  if(DENS[1] == -1)
+  #Randomization and setting clear design points.
+  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
+  if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN = DENS_MIN
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
-  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   
   
 ## ====================== STEP 1 BASELINE NORM ========================= 
@@ -58,14 +56,14 @@ sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
 COR2 <- runif(1, -0.2, 0.8);
 sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
 
-for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) #unitsize+1
+for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) #unitsize+1
 {
-  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i - 1)];
+  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,i];
 }
 
-for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES+1) #nonunitsize+1 (34+1)
+for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES) #nonunitsize+1 (34+1)
 {
-  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i - 1)];
+  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,i];
 }
 
 ## ====================== STEP 1.b DENSITY ========================= 
@@ -169,16 +167,14 @@ return(FIRM)
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
-  if(DENS[1] == -1)
+  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
+  if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN = DENS_MIN
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
-  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   
   ## ====================== STEP 1 BASELINE NORM ========================= 
   

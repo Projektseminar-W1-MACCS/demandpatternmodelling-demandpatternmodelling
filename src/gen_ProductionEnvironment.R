@@ -2,7 +2,7 @@
 
 gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
 
-  
+
 ## ====================== Set constant or vary =================
    
 
