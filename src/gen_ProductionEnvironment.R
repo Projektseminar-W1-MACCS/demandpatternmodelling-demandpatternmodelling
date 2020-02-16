@@ -33,7 +33,7 @@ if (FIRM$COSTING_SYSTEM$set_RCU_fix==1) {
 
 if(FIRM$COSTING_SYSTEM$set_RCU_fix==0){
 if(FIRM$COSTING_SYSTEM$set_RCC_fix==0){ 
-   FIRM = .gen_RCC_Anand(FIRM) 
+   FIRM = .gen_RCC(FIRM) 
    
 }
    if(FIRM$COSTING_SYSTEM$set_RCC_fix==1){

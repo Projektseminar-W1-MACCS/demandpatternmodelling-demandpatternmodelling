@@ -25,8 +25,9 @@
 
 
   CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
-  COR = c(0.6)                              #Correlation between resources
-  RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
+  COR1 = c(-1)                              #Correlation between resources
+  COR2 = c(-1)
+  RC_VAR =  c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
   Error = c(0)                              #Measurement error
   NUMB_Error = c(0)                         #Number of errornoues links
@@ -35,7 +36,7 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(1)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c(1)                       #Which Heuristic for pooling resources? # 0-6
+  CP_HEURISTIC = c(2)                       #Which Heuristic for pooling resources? # 0-6
   CD_HEURISTIC = c(0)                       #which Heuristic for selecting a driver? #0-1
 
 
@@ -48,10 +49,11 @@
 ## ======================================DESIGN OF EXPERIMENTS ==================================================
 ## EVIRONMENTAL FACTORS []
   for (ix_CP in seq_along(CP)) {
-     for (ix_COR in seq_along(COR)) {
-       for (ix_RC_VAR in seq_along(RC_VAR)) {
-         for (ix_Q_VAR in seq_along(Q_VAR)) {
-           for (ix_Error in seq_along(Error)) {
+     for (ix_COR1 in seq_along(COR1)) {
+       for (ix_COR2 in seq_along(COR2)) {
+         for (ix_RC_VAR in seq_along(RC_VAR)) {
+          for (ix_Q_VAR in seq_along(Q_VAR)) {
+            for (ix_Error in seq_along(Error)) {
                for (ix_NUMB_Error in seq_along(NUMB_Error)) {
                  for (ix_DENS in seq_along(DENS)) {
                    for(ix_CC in seq_along(CC)){
@@ -65,7 +67,8 @@
 
     FIRM$PRODUCTION_ENVIRONMENT$CP = CP[ix_CP]
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]
-    FIRM$PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
+    FIRM$PRODUCTION_ENVIRONMENT$COR1  = COR1[ix_COR1]
+    FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2[ix_COR2]
     FIRM$PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
     FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
@@ -160,6 +163,7 @@
 
     o=o+1 #Counting for the total number of runs
    }
+                        }
                       }
                     }
                   }
@@ -186,6 +190,8 @@ if (ProductCostOutput==1)
   write.csv(DATAp, file = output)
   print("Product costs FILE has been written")
 }
+
+
 
 replication_data = DATA
 replication_data_agg = aggregate(.~CP, data = replication_data, FUN = mean)

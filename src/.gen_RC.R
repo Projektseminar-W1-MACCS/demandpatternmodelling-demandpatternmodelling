@@ -25,9 +25,9 @@
   
   
   ## Move the biggest resource to the front
-  largest_RC <-
-    sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
-  RCC <- c(RCC[largest_RC], RCC[-largest_RC])
+  # largest_RC <-
+  #   sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
+  # RCC <- c(RCC[largest_RC], RCC[-largest_RC])
   
   ###CHECK###
   RCCs = sort(RCC, decreasing = TRUE)
@@ -250,6 +250,7 @@
 
 
 
+###IF RCU IS SET FIX#####
 
 .gen_RCC_variation <- function(FIRM, unitsize, nonunitsize) {
   

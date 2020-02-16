@@ -23,12 +23,8 @@ library('MBESS')
 loading_from_data = 0
 if(loading_from_data == 0){
   file_link_replication = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/CSD_2020-02-07-1017.csv"
-  
-  
   replication_data = read.csv(file_link_replication, sep = ",")
 }else{replication_data = DATA}
-
-replication_data = DATA
 
 
 ##2. ANAND MODEL###
@@ -135,7 +131,7 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
         axis.line = element_line(colour = "black"))+
   theme_bw()+
   ggtitle(paste0(CP_HEURISTIC," & ",CD_HEURISTIC))+                              #Adaption required each time heuristic is changes
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'right')+
   ylim(0,1)+
   scale_y_continuous(labels = scales::percent)
 
@@ -190,7 +186,11 @@ if(create_tables == 1){
 
 ##5.2. KOLMOGOROV-SMIRNOV TEST
 
-ks.test(replication_data_heuristic$MAPE,anand_data_heuristic$MPE)
+CP = 50
+subset_replication_data = subset(replication_data_heuristic, CP ==CP)
+subset_anand_data = subset(anand_data_heuristic, ACP ==CP)
+
+ks.test(subset_replication_data$MAPE,subset_anand_data$MPE)
 
 
 
@@ -277,15 +277,15 @@ ggplot(subset(q_var_output_agg,Q_VAR != 'ANAND'), aes(x = CP, y = MAPE, color = 
 ####_________________________________RC_VAR_VARIATION_____________________####
 ##LOADING REPLICATION_DATA
 
-loading_from_data = 1
-mapping_RCC01_to_BASE = 0
+loading_from_data = 0
+mapping_RCC01_to_BASE = 1
 
 if(loading_from_data==1){replication_data = DATA}else if(mapping_RCC01_to_BASE ==1){
-  file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-13-1020_gen_RCC_basic.csv"
+  file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-16-1601.csv"
   replication_data = read.csv(file_link_rc_var,sep = ',')
 }else
 {
-  file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-13-0958_gen_RCC_no mapping of RCC01 to BASE.csv"
+  file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-16-1617_no mapping to base.csv"
   replication_data = read.csv(file_link_rc_var,sep = ',')
 }
 
@@ -357,10 +357,10 @@ ggplot(rc_var_output_agg, aes(x = CP, y = MAPE, color = RC_VAR, group = RC_VAR))
 ####_________________________________COR_VARIATION_____________________########
 ##LOADING REPLICATION_DATA
 
-loading_from_data = 1
+loading_from_data = 0
 
 if(loading_from_data==1){replication_data = DATA}else{
-  file_link_cor_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/COR_VAR/CSD_2020-02-14-1502-1.csv"
+  file_link_cor_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/COR_VAR/CSD_2020-02-16-1543.csv"
   replication_data = read.csv(file_link_cor_var,sep = ';')}
 
 replication_data$CPH = as.character(replication_data$CPH)
@@ -407,36 +407,36 @@ anand_data_heuristic = subset(anand_data, PACP == CP_HEURISTIC)
 
 
 ###
-rep_cor_var_output = data.frame(replication_data_heuristic$CP, replication_data_heuristic$MAPE, replication_data_heuristic$COR)
-colnames(rep_cor_var_output) = c('CP','MAPE','COR1')
+rep_cor_var_output = data.frame(replication_data_heuristic$CP, replication_data_heuristic$MAPE, replication_data_heuristic$COR1,replication_data_heuristic$COR2)
+colnames(rep_cor_var_output) = c('CP','MAPE','COR1','COR2')
 
 anand_cor_var_output = data.frame(anand_data_heuristic$ACP, anand_data_heuristic$MPE)
 colnames(anand_cor_var_output) = c('CP','MAPE')
 
 #q_var_output = rbind(rep_q_var_output,anand_q_var_output)
 rep_cor_var_output$COR1 = as.factor(rep_cor_var_output$COR1)
-#rep_cor_var_output$COR2 = as.factor(rep_cor_var_output$COR2)
+rep_cor_var_output$COR2 = as.factor(rep_cor_var_output$COR2)
 
 ###aggregated datae - mean over CP and Q_VAR ###
-rep_cor_var_output_agg = aggregate(.~CP + COR1, data = rep_cor_var_output, FUN = mean)
+rep_cor_var_output_agg = aggregate(.~CP + COR1+COR2, data = rep_cor_var_output, FUN = mean)
 anand_cor_var_output_agg = aggregate(.~CP, data = anand_cor_var_output,FUN = mean)
 
 ggplot(rep_cor_var_output_agg, aes(x = CP, y = MAPE, color = COR1, group = COR1))+geom_line(size = 1)+
   ggtitle('SIZE_RANDOM_MISC COR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
   ylim(0,1)+
-  scale_y_continuous(labels = scales::percent)+geom_line(data= anand_cor_var_output_agg, color = 'black', group = 'ANAND',size = 1)
+  scale_y_continuous(labels = scales::percent)+
+  facet_wrap('COR2')+geom_line(data= anand_cor_var_output_agg, color = 'black', group = 'ANAND',size = 1)
 
-#facet_wrap(COR2)
 
 
 ####_________________________________DENS_VARIATION_____________________########
 
 
-loading_from_data = 
+loading_from_data = 1
 
 if(loading_from_data==1){replication_data = DATA}else{
-  file_link_dens_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/DENS_VAR/CSD_2020-02-15-1658.csv"
+  file_link_dens_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/DENS_VAR/CSD_2020-02-15-1024.csv"
   replication_data = read.csv(file_link_dens_var,sep = ',')}
 
 replication_data$CPH = as.character(replication_data$CPH)
@@ -503,9 +503,9 @@ ggplot(dens_var_output_agg, aes(x = CP, y = MAPE, color = DENS,group = DENS))+ge
 
 
 
-
-
-
+####_________________________________OLD ANALYSIS_____________________########
+replication_data_agg = aggregate(.~CP+DENS, data = replication_data,FUN = mean)
+plot(replication_data_agg$MAPE)
 
 #####Regression Analysis####
 
