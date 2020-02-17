@@ -20,11 +20,10 @@
   FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
   FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
   DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS #Necessary transition for check.
-  
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
 
   #Randomization and setting clear design points. 
-
+  
   if(DENS == -1)
   {
     DENS_MIN = 0.4;
@@ -181,7 +180,6 @@ return(FIRM)
   FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
   DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
 
-  
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
   #FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
@@ -192,9 +190,10 @@ return(FIRM)
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
   }
-  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
-  
-  
+print(DENS)
+
+FIRM$PRODUCTION_ENVIRONMENT$DENS_draw = DENS
+
   ## ====================== STEP 1 BASELINE NORM ========================= 
   
   repeat    {

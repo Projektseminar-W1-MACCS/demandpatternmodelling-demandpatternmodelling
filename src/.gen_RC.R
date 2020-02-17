@@ -127,7 +127,6 @@
 
 .gen_RCC_Anand <- function(FIRM, unitsize, nonunitsize) {
 
-  browser()
   RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
   #RC_VAR =-1
   if (RC_VAR == -1)
