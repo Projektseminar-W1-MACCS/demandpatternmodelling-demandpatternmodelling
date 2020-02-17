@@ -608,24 +608,43 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
       if(NUMB_RES > CP){
          
          ####Random Assignment####
-         not_assigned = sample(not_assigned)
-         ACP_pre2 = vector(mode = 'numeric', length = CP-1)
          
+         CP_ohne_misc = CP-1
+         x = sum(RCC[unlist(RC_to_ACP)])
+         y = length(not_assigned)
          
-         x = sample(length(RC_to_ACP),length(not_assigned), replace = TRUE)
-         RCC_not_assigned = RCC[not_assigned]
-         random_assign = data.frame(x,not_assigned, RCC_not_assigned)
-         
-         i=1
-         while (sum(RCC)-sum(RCC[already_assigned])-sum(random_assign$RCC_not_assigned[c(1:i)])> MISCPOOLSIZE-random_assign$RCC_not_assigned[i]){
-            
-            RC_to_ACP[[random_assign$x[i]]] = c(RC_to_ACP[[random_assign$x[i]]],as.integer(random_assign$not_assigned[i]))
-            ACP_pre2[[random_assign$x[i]]] = sum(ACP_pre2[[random_assign$x[i]]],random_assign$RCC_not_assigned[i])
-            not_assigned = as.integer(random_assign$not_assigned[i+1:(length(random_assign$not_assigned)-i)])
-            i = i+1
+         while(x < FIRM$COSTING_SYSTEM$TC-MISCPOOLSIZE & y > 1){
+            not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+            random_cp = sample(length(c(1:CP_ohne_misc)),1)
+            RC_to_ACP[[random_cp]] = c(RC_to_ACP[[random_cp]],sample(not_assigned,1))
+            not_assigned = setdiff(c(1:NUMB_RES),unlist(RC_to_ACP))
+            x = sum(RCC[unlist(RC_to_ACP)])
+            y = length(not_assigned)
          }
          
          
+         
+         
+         
+         
+         # not_assigned = sample(not_assigned)
+         # ACP_pre2 = vector(mode = 'numeric', length = CP-1)
+         # 
+         # 
+         # x = sample(length(RC_to_ACP),length(not_assigned), replace = TRUE)
+         # RCC_not_assigned = RCC[not_assigned]
+         # random_assign = data.frame(x,not_assigned, RCC_not_assigned)
+         # 
+         # i=1
+         # while (sum(RCC)-sum(RCC[already_assigned])-sum(random_assign$RCC_not_assigned[c(1:i)])> MISCPOOLSIZE-random_assign$RCC_not_assigned[i]){
+         #    
+         #    RC_to_ACP[[random_assign$x[i]]] = c(RC_to_ACP[[random_assign$x[i]]],as.integer(random_assign$not_assigned[i]))
+         #    ACP_pre2[[random_assign$x[i]]] = sum(ACP_pre2[[random_assign$x[i]]],random_assign$RCC_not_assigned[i])
+         #    not_assigned = as.integer(random_assign$not_assigned[i+1:(length(random_assign$not_assigned)-i)])
+         #    i = i+1
+         # }
+         # 
+         # 
          
          ###Miscpool building
          
@@ -635,9 +654,14 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
          RC_to_ACP = append(RC_to_ACP,RC_to_ACP_misc)
          
          
-         #Adding the misc pool value to ACP
-         ACP_misc = sum(RCC[not_assigned])
-         ACP = append((ACP_pre1 + ACP_pre2),ACP_misc)
+         # #Adding the misc pool value to ACP
+         # ACP_misc = sum(RCC[not_assigned])
+         # ACP = append((ACP_pre1 + ACP_pre2),ACP_misc)
+         ACP = vector(mode = 'numeric')
+         
+         for (i in 1:CP){
+            ACP[i] = sum(RCC[unlist(RC_to_ACP[i])])
+         }
          
       } else{
          
@@ -646,9 +670,16 @@ MAP_RES_CP_SIZE_RANDOM_MISC<-function(FIRM){
          
          
          #Adding the misc pool value to ACP
-         ACP_misc = sum(RCC[not_assigned])
-         ACP = append(ACP_pre1,ACP_misc)                                      #if there was no second assignment of remaining resources (No. of RC = No. of ACP) all RC are in ACP_pre1
+         # ACP_misc = sum(RCC[not_assigned])
+         # ACP = append(ACP_pre1,ACP_misc)                                      #if there was no second assignment of remaining resources (No. of RC = No. of ACP) all RC are in ACP_pre1
+         
+         ACP = vector(mode = 'numeric')
+         
+         for (i in 1:CP){
+            ACP[i] = sum(RCC[unlist(RC_to_ACP[i])])
+         }
       }
+      
       
       
    }else if(CP ==1){

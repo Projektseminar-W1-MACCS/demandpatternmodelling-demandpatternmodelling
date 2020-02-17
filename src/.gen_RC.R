@@ -8,7 +8,7 @@
   TC = FIRM$COSTING_SYSTEM$TC
   RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
   
-  if (RC_VAR[1] == -1)
+  if (RC_VAR == -1)
   {
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
@@ -17,9 +17,7 @@
     FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
   
-  FIRM$COSTING_SYSTEM$RC_VAR_MIN = 0.4
-  FIRM$COSTING_SYSTEM$RC_VAR_MAX = 0.7
-  
+
   preRCC = rlnorm(NUMB_RES, meanlog = 1, sdlog = RC_VAR)
   #preRCC = rbeta(NUMB_RES, 0.025,1)
   
@@ -27,9 +25,9 @@
   
   
   ## Move the biggest resource to the front
-  largest_RC <-
-    sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
-  RCC <- c(RCC[largest_RC], RCC[-largest_RC])
+  # largest_RC <-
+  #   sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
+  # RCC <- c(RCC[largest_RC], RCC[-largest_RC])
   
   ###CHECK###
   RCCs = sort(RCC, decreasing = TRUE)
@@ -52,6 +50,8 @@
   
   unitsize = FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE
   nonunitsize =FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE
+  RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
+  
   
   if (FIRM$COSTING_SYSTEM$RC_VAR == -1)
   {
@@ -126,9 +126,9 @@
 }
 
 .gen_RCC_Anand <- function(FIRM, unitsize, nonunitsize) {
-  
-  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
-  
+
+  browser()
+  RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
   #RC_VAR =-1
   if (RC_VAR == -1)
   {
@@ -141,7 +141,7 @@
     DISP2 = FIRM$COSTING_SYSTEM$RC_VAR
   }
   
-  FIRM$COSTING_SYSTEM$RC_VAR = DISP2
+  
   #FIRM$PRODUCTION_ENVIRONMENT$CHECK$DISP2 = RC_VAR
   
   DISP1 = FIRM$PRODUCTION_ENVIRONMENT$DISP1
@@ -239,7 +239,6 @@
   
   
   #### sourcing
-  FIRM$COSTING_SYSTEM$RCU = RCC/FIRM$PRODUCTION_ENVIRONMENT$TRU
   FIRM$COSTING_SYSTEM$RCC = RCC
   
   
@@ -253,6 +252,7 @@
 
 
 
+###IF RCU IS SET FIX#####
 
 .gen_RCC_variation <- function(FIRM, unitsize, nonunitsize) {
   
@@ -361,15 +361,13 @@
   
   ##GENERATING RCU--> Copied from gen_Q. to set the RCU fix
   
-  PRE_RCU = as.integer(runif(NUMB_RES,100,400))
+  PRE_RCU = runif(NUMB_RES,100,400)
   
-  RCU = PRE_RCC/PRE_RCU
+  RCU = as.vector(PRE_RCC/PRE_RCU)
   
-  print(RCU)
-  
+  RCU = runif(NUMB_RES,100,400)
   #### sourcing
   FIRM$COSTING_SYSTEM$RCU = RCU
-  
   
   return(FIRM)
   
