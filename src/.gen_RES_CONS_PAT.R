@@ -19,10 +19,11 @@
   
   FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
   FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
+  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
-  if(DENS[1] == -1)
+  if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
@@ -32,12 +33,9 @@
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
  
-  
-  
    FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   
   
-
 ## ====================== STEP 1 BASELINE NORM ========================= 
 
 repeat    {
