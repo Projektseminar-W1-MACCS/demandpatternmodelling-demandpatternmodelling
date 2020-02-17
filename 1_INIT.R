@@ -7,13 +7,10 @@
   DATA = data.frame()
   DATAp = data.frame()
     
-  NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
+  NUMB_PRO =         20                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                  #INPUT independent variable - Number of factors
-  SIM_NUMB =         200                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         100                #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000             #Total costs
-
-
-
 
   ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
 

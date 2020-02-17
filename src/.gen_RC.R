@@ -50,6 +50,8 @@
   
   unitsize = FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE
   nonunitsize =FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE
+  RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
+  
   
   if (FIRM$COSTING_SYSTEM$RC_VAR == -1)
   {
@@ -124,9 +126,9 @@
 }
 
 .gen_RCC_Anand <- function(FIRM, unitsize, nonunitsize) {
-  
-  FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
-  
+
+  browser()
+  RC_VAR = FIRM$COSTING_SYSTEM$RC_VAR
   #RC_VAR =-1
   if (RC_VAR == -1)
   {

@@ -1,5 +1,6 @@
-#####################################################
-# BUILDING THE ACT_CONS_PAT  /  RES_CONS_PAT 
+#BUILDING THE ACT_CONS_PAT  /  RES_CONS_PAT 
+
+
 #####################################################
 
 .gen_RES_CONS_PAT <- function(FIRM) {
@@ -18,11 +19,12 @@
   
   FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
   FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
-  
+  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS #Necessary transition for check.
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
-  #Randomization and setting clear design points.
-  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
+  #Randomization and setting clear design points. 
+
   if(DENS == -1)
   {
     DENS_MIN = 0.4;
@@ -30,6 +32,8 @@
     DENS = runif(1, DENS_MIN, DENS_MAX);
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
+  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
   
 
   
@@ -176,24 +180,22 @@ return(FIRM)
   
   FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
   FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
-  
+  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
+
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
   #FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 
-  if(DENS[1] == -1)
+  if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
-  }else{
-    DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
   }
-  
-  
-  
+  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
   ## ====================== STEP 1 BASELINE NORM ========================= 
   
   repeat    {

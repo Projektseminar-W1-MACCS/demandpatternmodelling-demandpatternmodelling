@@ -43,12 +43,13 @@ MAP_CP_P_RANDOM <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
       if(length(RC_ACP_index)==1){        #if there is only one cost pool
         ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
         
-        ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
+       # ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
         
       }else{                              # when therer are more than one cost pools, every cost pool is weighed with the measurement error
         err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*(length(RC_ACP_index)),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
         ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
-        ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
+        
+      #  ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
       }
       ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
     }
@@ -88,7 +89,7 @@ MAP_CP_P_RANDOM <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
 }
 
 MAP_CP_P_BIGPOOL <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
-#set.seed(NULL)
+set.seed(NULL)
 ACP_index_choosen<-vector(mode="numeric")
 # normalize RES_CONS_PAT
 RES_CONS_PAT<-FIRM$PRODUCTION_ENVIRONMENT$RES_CONS_PATp
@@ -126,12 +127,12 @@ if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error 
     if(length(RC_ACP_index)==1){        #if there is only one cost pool
       ACT_CONS_PAT<-ACT_CONS_PAT*runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,min=(1-ME_AD),max=(1+ME_AD))
       
-      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
+     # ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
       
     }else{                              # when therer are more than one cost pools, every cost pool is weighed with the measurement error
       err_MAT<-matrix(runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*(length(RC_ACP_index)),min=(1-ME_AD),max=(1+ME_AD)),ncol=length(RC_ACP_index))
       ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
-      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
+      #ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
     }
     ACP_index_choosen[i]<-RC_ACP_index[[i]][1]
   }
@@ -144,7 +145,7 @@ if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error 
       error_links = round(runif(ceiling(ME_AD_NUMB* FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),1,FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO),0)
       ACT_CONS_PAT[error_links] = ACT_CONS_PAT[error_links]*runif(length(error_links),min=(1-ME_AD),max=(1+ME_AD))
       
-      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
+      #ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/") ####durch AC_CONS_PAT teilen?
       
     }else{                              # when therer are more than one cost pools, every cost pool is weighed with the measurement error
       
@@ -156,7 +157,7 @@ if (is.null(ME_AD_NUMB)){     #if the numb_error is zero, the measurement error 
       }
        
       ACT_CONS_PAT<-ACT_CONS_PAT*err_MAT
-      ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
+      #ACT_CONS_PAT = sweep((ACT_CONS_PAT),2,colSums(ACT_CONS_PAT),"/")
     }
     ACP_index_choosen[i]<-RC_ACP_index[[i]][1]}
 
@@ -173,6 +174,10 @@ return(FIRM)
 MAP_CP_P_AVERAGE <-function(FIRM,ME_AD=NULL,ME_NUM=NULL){
   
   stop("Average driver is still producing an MAPE >0.")
+  #in discussion ; 
+  
+  
+  
   #FIRM$COSTING_SYSTEM$CD_HEURISTIC = 'MAP_CP_P_AVERAGE, == 1'
   ACP_index_choosen<-vector(mode="numeric")
   # normalize RES_CONS_PAT
