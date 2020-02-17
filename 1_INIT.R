@@ -9,7 +9,7 @@
     
   NUMB_PRO =         20                     #INPUT independent Variable - Number of products 
   NUMB_RES  =        50                  #INPUT independent variable - Number of factors
-  SIM_NUMB =         50                #Control Variable - Number of Simulations for every single environment (standard: 30)     
+  SIM_NUMB =         100                #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000             #Total costs
 
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level

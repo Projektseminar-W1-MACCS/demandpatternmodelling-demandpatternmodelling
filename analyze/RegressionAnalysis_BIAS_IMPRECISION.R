@@ -2,7 +2,6 @@
 library(lsr)
 library(dplyr)
 library(QuantPsyc)
-
 library(car)
 library(heplots)
 library(Metrics)
@@ -17,7 +16,7 @@ input$PE <- input$PE * 100
 ####GROUPING THE TOTAL DATASET (PIVOT) AND PUT THE ESTIMATE IN IT  ####  ##########
 
 pre = group_by(input, input$PCb,
-               input$DENS, input$Q_VAR, input$RCC_VAR,
+              input$DENS, input$Q_VAR, input$RCC_VAR,
               input$CP,
               input$Q,
               input$Error, input$NUMB_Error)
@@ -59,7 +58,7 @@ print(lm.beta)
 vif(fit)
 
 
-aov_all <- aov(input_grouped$ABSBIAS ~(input_grouped$`input$DENS` + input_grouped$`input$Q_VAR`  +input_grouped$`input$CP` + 
+aov_all <- aov(input_grouped$IMPRECISION ~(input_grouped$`input$DENS` +input_grouped$`input$CP` + 
                                              input_grouped$`input$Q` + input_grouped$`input$PCb`+
                                              input_grouped$`input$Error` + input_grouped$`input$NUMB_Error` ))
 
@@ -81,7 +80,7 @@ print(eta)
 
 
 interaction.plot(input_grouped$`input$NUMB_Error`, input_grouped$`input$Error`, input_grouped$IMPRECISION)
-
+interaction.plot(input_grouped$`input$CP`, input_grouped$`input$Error`, input_grouped$IMPRECISION)
 
 #### CORRELATION ####
 t=cor(input, method = c("pearson"))

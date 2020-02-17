@@ -3,8 +3,8 @@ library(RColorBrewer)
 library(ggplot2)
 library(dplyr)
 library(reshape)
-
-
+DATAp <- read.csv("output/ProductCost_2020-02-12-1118.csv")
+summary(DATAp)
 DATAa = DATAp
 
 ### ESTIMATE IMPRECISION AND BIAS  #############################################################################################################
@@ -42,8 +42,8 @@ rm(DATAa_grouped)
 ### FULL DISAGGREGATION PICTURE  ######
 
 DATAap$ABSBIAS = abs(DATAap$BIAS)
-DATAap$ABSPE = abs(DATAap$PE)
-DATAap.m <- melt(DATAap,id.vars = 'CP', measure.vars=c('ABSPE','ABSBIAS','IMPRECISION'))
+DATAap$APE = abs(DATAap$PE)
+DATAap.m <- melt(DATAap,id.vars = 'CP', measure.vars=c('APE','ABSBIAS','IMPRECISION'))
 DATAap.m <- na.omit(DATAap.m)
 
 
