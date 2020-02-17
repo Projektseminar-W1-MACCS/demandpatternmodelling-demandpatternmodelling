@@ -13,10 +13,8 @@
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
     RC_VAR = runif(1, RC_VAR_MIN, RC_VAR_MAX)
-    
-    FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
-  
+  FIRM$COSTING_SYSTEM$RC_VAR_draw = RC_VAR
 
   preRCC = rlnorm(NUMB_RES, meanlog = 1, sdlog = RC_VAR)
   #preRCC = rbeta(NUMB_RES, 0.025,1)
@@ -58,9 +56,8 @@
     RC_VAR_MIN = 0.4
     RC_VAR_MAX = 0.7
     RC_VAR = runif(1, RC_VAR_MIN, RC_VAR_MAX)
-    FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR
   }
-  
+  FIRM$COSTING_SYSTEM$RC_VAR_draw = RC_VAR
   
   
   
@@ -140,6 +137,7 @@
     DISP2 = FIRM$COSTING_SYSTEM$RC_VAR
   }
   
+  FIRM$COSTING_SYSTEM$RC_VAR_draw = DISP2
   
   #FIRM$PRODUCTION_ENVIRONMENT$CHECK$DISP2 = RC_VAR
   

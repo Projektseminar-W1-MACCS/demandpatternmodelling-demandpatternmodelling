@@ -182,7 +182,6 @@ return(FIRM)
 
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
-  #FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 
   if(DENS == -1)
   {
@@ -220,17 +219,15 @@ FIRM$PRODUCTION_ENVIRONMENT$DENS_draw = DENS
     # Correlation of the top [DISP1] resources
     if(COR1 == -1){
       COR1 <- runif(1, -0.2, 0.8)
-      FIRM$PRODUCTION_ENVIRONMENT$COR1 = COR1
     }
-    
+    FIRM$PRODUCTION_ENVIRONMENT$COR1_draw = COR1
     sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
     
     # Correlation of the remaining resources
     if(COR2 == -1){
       COR2 <- runif(1, -0.2, 0.8)
-      FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
     }
-    
+    FIRM$PRODUCTION_ENVIRONMENT$COR2_draw = COR2
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
     
     DISP1= FIRM$PRODUCTION_ENVIRONMENT$DISP1
