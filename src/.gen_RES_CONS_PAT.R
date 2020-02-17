@@ -19,24 +19,26 @@
   
   FIRM$PRODUCTION_ENVIRONMENT$UNITSIZE = unitsize
   FIRM$PRODUCTION_ENVIRONMENT$NONUNITSIZE = nonunitsize
-  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS
+  DENS = FIRM$PRODUCTION_ENVIRONMENT$DENS #Necessary transition for check.
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
+
   #Randomization and setting clear design points. 
+
   if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN = DENS_MIN
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
- 
-   FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
   
+
   
 ## ====================== STEP 1 BASELINE NORM ========================= 
+
 
 repeat    {
     
@@ -52,29 +54,40 @@ RES_CONS_PAT = matrix(0, nrow = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO, ncol = FIR
 # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
 # Rows Products Colums Resources
 
+FIRM$PRODUCTION_ENVIRONMENT$COR1 = COR1
+FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
+
 # Correlation of the top [DISP1] resources
-COR1 <- runif(1, -0.2, 0.8);
+if(COR1 == -1){
+  COR1 <- runif(1, -0.2, 0.8)
+  FIRM$PRODUCTION_ENVIRONMENT$COR1 = COR1
+}
+
 sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
 
 # Correlation of the remaining resources
-COR2 <- runif(1, -0.2, 0.8);
-sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
-
-for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) #unitsize+1
-{
-  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,(i - 1)];
+if(COR2 == -1){
+  COR2 <- runif(1, -0.2, 0.8)
+  FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
 }
 
-for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES+1) #nonunitsize+1 (34+1)
+sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
+
+for (i in 1:(FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)) #unitsize+1
 {
-  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,(i - 1)];
+  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,i];
+}
+
+for (i in ((FIRM$PRODUCTION_ENVIRONMENT$UNITLEVEL_ACT_SHARE*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)+1) : FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES) #nonunitsize+1 (34+1)
+{
+  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,i];
 }
 
 ## ====================== STEP 1.b DENSITY ========================= 
 res_cons_pat_b_pre = runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 
 ## 1/0 DENSITY
-res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > FIRM$PRODUCTION_ENVIRONMENT$DENS, 0,1),
+res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > DENS, 0,1),
                           FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
 
 
@@ -172,17 +185,16 @@ return(FIRM)
   
   ## ====================== STEP 0.b Determining the density (DENS)  =========================
   #Randomization and setting clear design points. 
-  if(DENS[1] == -1)
+  #FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+
+  if(DENS == -1)
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MIN = DENS_MIN
-    FIRM$PRODUCTION_ENVIRONMENT$DENS_MAX = DENS_MAX
     FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
-
-   FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
+  FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 
   ## ====================== STEP 1 BASELINE NORM ========================= 
   
@@ -202,13 +214,24 @@ return(FIRM)
     # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
     # Rows Products Colums Resources
     
+    
+    COR1 = FIRM$PRODUCTION_ENVIRONMENT$COR1
+    COR2 = FIRM$PRODUCTION_ENVIRONMENT$COR2
+    
+    
     # Correlation of the top [DISP1] resources
-    COR1 <- runif(1, -0.2, 0.8);
+    if(COR1 == -1){
+      COR1 <- runif(1, -0.2, 0.8)
+      FIRM$PRODUCTION_ENVIRONMENT$COR1 = COR1
+    }
     
     sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
     
     # Correlation of the remaining resources
-    COR2 <- runif(1, -0.2, 0.8);
+    if(COR2 == -1){
+      COR2 <- runif(1, -0.2, 0.8)
+      FIRM$PRODUCTION_ENVIRONMENT$COR2 = COR2
+    }
     
     sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
     
@@ -229,7 +252,7 @@ return(FIRM)
     
     res_cons_pat_b_pre = runif(FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO*FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
     ## 1/0 DENSITY
-    res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > FIRM$PRODUCTION_ENVIRONMENT$DENS, 0,1),
+    res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > DENS, 0,1),
                                 FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES)
     
     RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
