@@ -1,4 +1,3 @@
-################################################
 # TRACKING THE DATA
 ################################################
 
@@ -14,7 +13,7 @@
                        FIRM$COSTING_SYSTEM$RC_VAR,
                        FIRM$COSTING_SYSTEM$NUMB_Error,
                        FIRM$COSTING_SYSTEM$Error,
-                       FIRM$PRODUCTION_ENVIRONMENT$DENS,
+                       FIRM$PRODUCTION_ENVIRONMENT$DENS_draw,
                        FIRM$PRODUCTION_ENVIRONMENT$COR1,
                        FIRM$PRODUCTION_ENVIRONMENT$COR2,
                        FIRM$PRODUCTION_ENVIRONMENT$Q_VAR,
@@ -81,7 +80,7 @@
   
   CPH[PRODUCT]= FIRM$COSTING_SYSTEM$CP_HEURISTIC
   CDH[PRODUCT] =FIRM$COSTING_SYSTEM$CD_HEURISTIC
-  DENS[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$DENS #Scaling firm parameter to products.
+  DENS[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$DENS_draw #Scaling firm parameter to products.
   Q_VAR[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$Q_VAR #Scaling firm parameter to products.
   RCC_VAR[PRODUCT] = FIRM$COSTING_SYSTEM$RC_VAR #Scaling firm parameter to products.
   CP[PRODUCT] = FIRM$COSTING_SYSTEM$CP #Scaling firm parameter to products.
