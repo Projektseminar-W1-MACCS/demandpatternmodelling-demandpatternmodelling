@@ -30,7 +30,6 @@
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
-    FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
   FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
 
@@ -192,10 +191,10 @@ return(FIRM)
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
-    FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
   }
   FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS
-
+  
+  
   ## ====================== STEP 1 BASELINE NORM ========================= 
   
   repeat    {
