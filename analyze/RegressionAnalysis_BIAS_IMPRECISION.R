@@ -8,23 +8,34 @@ library(Metrics)
 
 
 #input <- read.csv("C:/Users/kaigm/OneDrive/00 Paperprojects/01 PRODUCT COST _ WORKING PAPER/16 SUBMISSION/01 EXPERIMENTS/03 Regression/ProductCost_2020-02-10-1300.csv")
-input <- read.csv("output/ProductCost_2020-02-12-1118.csv")
-summary(input)
+input <- read.csv("output/ProductCost_2020-02-18-1244.csv")
+
+
 #### DATA WRANGLING AND SETTING ####  #####
 input$PE <- input$PE * 100
 
 ####GROUPING THE TOTAL DATASET (PIVOT) AND PUT THE ESTIMATE IN IT  ####  ##########
 
 pre = group_by(input, input$PCb,
-              input$DENS, input$Q_VAR, input$RCC_VAR,
+              input$DENS,
               input$CP,
               input$Q,
               input$Error, input$NUMB_Error)
               #input$VARSIZE_b_p_u, input$VARSIZE_b_p_T, input$VARSIZE_b_T, input$VARSIZE_b, ) # Grouping like Pivot tables. 
 input_grouped = (summarize(pre,n=n(), md=median(PE), mn=mean(PE),sd=(sd(PE)*1.96), var=var(PE),mse=mean(((PCb-PCh)/PCb*100)^2)))#What is abot --- 
 # var=var(DELTA),mse=mean(((PC_B-PC_H)/PC_B)^2
+summary(input_grouped)
+
+
 rm(pre)
 gc()
+
+
+
+input_grouped$n <- as.factor(input_grouped$n)
+summary(input_grouped$n)
+
+
 
 
 #### REGRESSION WITH input_grouped #####
@@ -47,8 +58,6 @@ fit <- lm(input_grouped$ABSBIAS ~ (input_grouped$`input$DENS` +input_grouped$`in
                                      input_grouped$`input$Q` + input_grouped$`input$PCb`+
                                      input_grouped$`input$Error` + input_grouped$`input$NUMB_Error`))
 
-
-
 #+ input_grouped$CPH_FACTOR
 
 summary(fit)
@@ -68,8 +77,6 @@ aov_all <- aov(input$APE ~(input$DENS + input$CP +
                                              input$Q + input$PCb + input$Error + input$NUMB_Error))
 
 
-
-
 drop1(aov_all,~.,test="F") # type III SS and F Test
 summary(aov_all)
 
@@ -86,5 +93,8 @@ interaction.plot(input_grouped$`input$CP`, input_grouped$`input$Error`, input_gr
 t=cor(input, method = c("pearson"))
 t= round(t, digits=2) 
 
-
+###### 
+summary(input_grouped)
+zplot2 <- ggplot(input_grouped, aes(x=input_grouped$`input$PCb`, y=input_grouped$IMPRECISION)) +
+  geom_point(size=2, shape=23)
 

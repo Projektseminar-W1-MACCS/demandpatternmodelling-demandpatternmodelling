@@ -27,7 +27,7 @@
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
   Error = c(0)                    #Measurement error
-  NUMB_Error = c(0)                 #Number of errornoues links
+  NUMB_Error = c(1)                 #Number of errornoues links
   DENS = c(-1)                     #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
@@ -153,9 +153,9 @@
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
    
     print(o)
-    print(FIRM$COSTING_SYSTEM$CP)
-    print((MAPE))
-    print((EUCD))
+    #print(FIRM$COSTING_SYSTEM$CP)
+    #print((MAPE))
+    #print((EUCD))
 
     o=o+1 #Counting for the total number of runs
    }
