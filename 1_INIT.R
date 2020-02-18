@@ -14,11 +14,11 @@
 
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
 
-  set_DEMAND_fix=   0                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_fix = 0            #Control variable - Decide if the resource consumption is constant
+  set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
+  set_RES_CONS_PAT_fix = 1            #Control variable - Decide if the resource consumption is constant
   set_RCU_fix = 0                      #Control variable - Decide if the resource costs per unit are constant
-  set_RCC_fix = 0                      # Control Variable - Decide if the reosurce costs vector is the same
-  set_CSD_fix=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  set_RCC_fix = 1                      # Control Variable - Decide if the reosurce costs vector is the same
+  set_CSD_fix=  1                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
 
   CP = c(1,5,10,15,20,25,30,35,40,45,50)       #No. of Cost Pools
@@ -26,9 +26,9 @@
   COR2 = c(-1)
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
   Q_VAR = c(-1)                            #Demand variation
-  Error = c(0)                    #Measurement error
-  NUMB_Error = c(0)                 #Number of errornoues links
-  DENS = c(-1)                     #Number of links between products and resources (sharing)
+  Error = c(0.1,0.3,0.5)                    #Measurement error
+  NUMB_Error = c(0.1,0.5,1)                 #Number of errornoues links
+  DENS = c(0.3,0.5,0.7)                     #Number of links between products and resources (sharing)
   CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
@@ -153,9 +153,9 @@
     if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
    
     print(o)
-    print(FIRM$COSTING_SYSTEM$CP)
-    print((MAPE))
-    print((EUCD))
+    #print(FIRM$COSTING_SYSTEM$CP)
+    #print((MAPE))
+    #print((EUCD))
 
     o=o+1 #Counting for the total number of runs
    }
