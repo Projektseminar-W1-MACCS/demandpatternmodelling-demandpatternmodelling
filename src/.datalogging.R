@@ -10,13 +10,13 @@
                        FIRM$COSTING_SYSTEM$CP_HEURISTIC,
                        FIRM$COSTING_SYSTEM$CD_HEURISTIC,
                        FIRM$COSTING_SYSTEM$CP,
-                       FIRM$COSTING_SYSTEM$RC_VAR,
+                       FIRM$COSTING_SYSTEM$RC_VAR_draw,
                        FIRM$COSTING_SYSTEM$NUMB_Error,
                        FIRM$COSTING_SYSTEM$Error,
                        FIRM$PRODUCTION_ENVIRONMENT$DENS_draw,
-                       FIRM$PRODUCTION_ENVIRONMENT$COR1,
-                       FIRM$PRODUCTION_ENVIRONMENT$COR2,
-                       FIRM$PRODUCTION_ENVIRONMENT$Q_VAR,
+                       FIRM$PRODUCTION_ENVIRONMENT$COR1_draw,
+                       FIRM$PRODUCTION_ENVIRONMENT$COR2_draw,
+                       FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO,
                        FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES,
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20,
@@ -81,8 +81,8 @@
   CPH[PRODUCT]= FIRM$COSTING_SYSTEM$CP_HEURISTIC
   CDH[PRODUCT] =FIRM$COSTING_SYSTEM$CD_HEURISTIC
   DENS[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$DENS_draw #Scaling firm parameter to products.
-  Q_VAR[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$Q_VAR #Scaling firm parameter to products.
-  RCC_VAR[PRODUCT] = FIRM$COSTING_SYSTEM$RC_VAR #Scaling firm parameter to products.
+  Q_VAR[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw #Scaling firm parameter to products.
+  RCC_VAR[PRODUCT] = FIRM$COSTING_SYSTEM$RC_VAR_draw #Scaling firm parameter to products.
   CP[PRODUCT] = FIRM$COSTING_SYSTEM$CP #Scaling firm parameter to products.
   Error[PRODUCT] = FIRM$COSTING_SYSTEM$Error #Scaling firm parameter to products.
   NUMB_Error[PRODUCT] = FIRM$COSTING_SYSTEM$NUMB_Error #Scaling firm parameter to products.
