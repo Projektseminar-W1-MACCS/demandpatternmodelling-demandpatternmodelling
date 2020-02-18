@@ -14,7 +14,7 @@ min.mean.sd.max <- function(x) {
 }
 
 #### PREPARING DATASET ####
-#DATAp <- read.csv("output/ProductCost_2020-02-06-1315.csv")
+DATAp <- read.csv("output/ProductCost_2020-02-18-1244.csv")
 DATAa <- DATAp
 DATAa$PRODUCT <- as.factor(DATAp$PRODUCT)
 DATAa$PE <- DATAp$PE * 100
@@ -34,3 +34,5 @@ zplot1 <- ggplot(DATAa, aes(x=DATAa$PRODUCT, y=DATAa$PE)) +
   geom_hline(yintercept=-5,  color="lightgrey") + 
   geom_hline(yintercept=5,  color="lightgrey" )  
 zplot1
+
+

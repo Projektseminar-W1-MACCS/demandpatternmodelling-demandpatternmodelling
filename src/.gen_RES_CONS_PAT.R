@@ -1,8 +1,5 @@
 #BUILDING THE ACT_CONS_PAT  /  RES_CONS_PAT 
 
-
-#####################################################
-
 .gen_RES_CONS_PAT <- function(FIRM) {
 
   ## ====================== STEP 1 Determining the activities =========================
