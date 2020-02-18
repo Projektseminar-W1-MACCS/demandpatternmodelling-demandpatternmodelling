@@ -53,7 +53,7 @@
   
   FIRM$PRODUCTION_ENVIRONMENT$DEMAND = as.vector(DEMAND)
   
-  #FIRM$PRODUCTION_ENVIRONMENT$Q_VAR = sd(DEMAND)/mean(DEMAND)
+  FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw = sd(DEMAND)/mean(DEMAND)
   
   ###CHECK###
   
@@ -76,7 +76,7 @@
   preDemand = rlnorm(NUMB_PRO, meanlog = 1, sdlog = Q_VAR) #preDemand is buildup as a -> LogNormal Distribution 
   FIRM$PRODUCTION_ENVIRONMENT$DEMAND = ceiling((preDemand/sum(preDemand))*units)
   
-  
+  FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw = Q_VAR
   #FIRM$PRODUCTION_ENVIRONMENT$Q_VAR = sd(FIRM$PRODUCTION_ENVIRONMENT$DEMAND)/mean(FIRM$PRODUCTION_ENVIRONMENT$DEMAND)
   ###CHECK###
   

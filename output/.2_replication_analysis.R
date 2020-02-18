@@ -81,15 +81,26 @@ anand_data$PDR = as.factor(anand_data$PDR)
 
 ##3. PLOTTING THE WHOLE DATAFRAME##
 
+replication_data = subset(replication_data, CPH != 'BASE' & CDH != 'BASE')
+
 replication_data_agg = aggregate(.~CP+CPH+CDH, data = replication_data, FUN = mean)
 
-ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = interaction(CPH, CDH, sep = ' & ')))+
-  geom_line(size = 1)+labs(color = "Heuristik Kombinationen")+
-  theme_bw()+
-  ggtitle('Überblick alle Heuristiken')+                              
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
-  scale_y_continuous(labels = scales::percent)
+ggplot(replication_data_agg, aes(x = CP, y = MAPE, shape = CPH))+labs(color = "Heuristik Kombinationen",shape = 'Heuristik Kombinationen')+
+  ggtitle('Überblick über alle Heuristiken')+ theme_bw()+                             
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text((size = 20)), legend.direction = 'vertical')+
+  scale_y_continuous(labels = scales::percent, limits = c(0,1))+
+  geom_point(aes(shape = CPH), size = 3)+geom_line(aes(color = CPH))
+  guides(fill = guide_legend(override.aes = list(shape =NA)),
+         shape = FALSE)
 
+
+ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = CPH))+geom_line(size=1)+
+  labs(color = "Heuristik Kombinationen", shape = 'Heuristik Kombinationen')+
+  ggtitle('Überblick über alle Heuristiken')+ 
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text(size = 20), legend.direction = 'vertical')+
+  scale_y_continuous(labels = scales::percent, limits = c(0,1))+
+  geom_point(aes(shape = CPH),size = 3)
 
 
 
@@ -132,8 +143,7 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
   theme_bw()+
   ggtitle(paste0(CP_HEURISTIC," & ",CD_HEURISTIC))+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'right')+
-  ylim(0,1)+
-  scale_y_continuous(labels = scales::percent)
+  scale_y_continuous(labels = scales::percent, limits = c(0,1))
 
 
 
@@ -185,18 +195,25 @@ if(create_tables == 1){
 
 
 ##5.2. KOLMOGOROV-SMIRNOV TEST
+#ohne subset
+r = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48)
+subset_replication_data = subset(replication_data_heuristic, CP ==r)
+subset_anand_data = subset(anand_data_heuristic, ACP ==r)
+ks.test(subset_replication_data$MAPE,subset_anand_data$MPE)
 
-CP = 50
-subset_replication_data = subset(replication_data_heuristic, CP ==CP)
-subset_anand_data = subset(anand_data_heuristic, ACP ==CP)
+#mit subset für bestimmte CP
+s = 40
 
+subset_replication_data = subset(replication_data_heuristic, CP ==s)
+subset_anand_data = subset(anand_data_heuristic, ACP ==s)
 ks.test(subset_replication_data$MAPE,subset_anand_data$MPE)
 
 
+#aggregated
+replication_data_agg = aggregate(.~CP, data = replication_data_heuristic, FUN = mean)
+anand_data_agg = aggregate(.~ACP, data = anand_data_heuristic, FUN = mean)
 
-
-
-
+ks.test(replication_data_agg$MAPE,anand_data_agg$ACP)
 
 
 ####_________________________________Q_VAR_VARIATION_____________________########
