@@ -2,10 +2,16 @@
 library(dplyr)
 
 
-input <- read.csv("analyze/ProductCost_2020-02-12-0946_CP25.csv")
-
+input <- read.csv("output/ProductCost_2020-02-18-1244.csv")
+input = subset(input, input$CP==25)
+input = subset(input, input$DENS==0.5)
 input$PRODUCT <- as.factor(DATAa$PRODUCT)
 input$PE <- input$PE * 100
+
+
+
+
+
 
 ###### Calculating +-5% after Anderson for botch datasets ####
 input$OVERCOSTED = input$PE > 5
@@ -25,9 +31,9 @@ summarize(input,n=n())
 tapply(input$OVERCOSTED,  list(input$PRODUCT), sum)
 tapply(input$UNDERCOSTED,  list(input$PRODUCT), sum)
 
-tapply(input$OVERCOSTED,  list(input$PRODUCT), sum)*100/3000
-tapply(input$UNDERCOSTED, list(input$PRODUCT), sum)*100/3000
-tapply(input$WITHINRANGE, list(input$PRODUCT), sum)*100/3000
+tapply(input$OVERCOSTED,  list(input$PRODUCT), sum)*100/1800
+tapply(input$UNDERCOSTED, list(input$PRODUCT), sum)*100/1800
+tapply(input$WITHINRANGE, list(input$PRODUCT), sum)*100/1800
 
 ###### Computing Bias +- Imprecision
 
