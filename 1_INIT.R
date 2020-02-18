@@ -21,7 +21,7 @@
   set_CSD_fix=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
 
-  CP = c(1,5,10,15,20,25,30,35,40,45,50)       #No. of Cost Pools
+  CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
   COR1 = c(-1)                              #Correlation between resources
   COR2 = c(-1)
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
@@ -33,7 +33,7 @@
   MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
   DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
   NUM = c(1)                                #No. of Resources used for indexed driver
-  CP_HEURISTIC = c(5)                       #Which Heuristic for pooling resources? # 0-6
+  CP_HEURISTIC = c(7)                       #Which Heuristic for pooling resources? # 0-6
   CD_HEURISTIC = c(0)                       #which Heuristic for selecting a driver? #0-1
 
 
@@ -114,6 +114,8 @@
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL(FIRM)}
 
     else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 6){FIRM = MAP_RES_CP_SIZE_RANDOM(FIRM)}
+    
+    else if(FIRM$COSTING_SYSTEM$CP_HEURISTIC == 7){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_OWN(FIRM)}
 
     else{print("error CP_Heuristic")}
 

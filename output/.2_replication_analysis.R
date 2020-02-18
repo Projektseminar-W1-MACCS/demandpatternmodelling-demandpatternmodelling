@@ -3,7 +3,8 @@
 #############################################################
 
 ####setup####
-#options(java.parameters = "- Xmx2048m")
+#nstall.packages("extrafont")
+library('extrafont')
 #install.packages("tibble") #and 'xlsx',robustHD,lm.beta
 library("xlsx")
 library('ggplot2')
@@ -85,22 +86,28 @@ replication_data = subset(replication_data, CPH != 'BASE' & CDH != 'BASE')
 
 replication_data_agg = aggregate(.~CP+CPH+CDH, data = replication_data, FUN = mean)
 
-ggplot(replication_data_agg, aes(x = CP, y = MAPE, shape = CPH))+labs(color = "Heuristik Kombinationen",shape = 'Heuristik Kombinationen')+
-  ggtitle('Überblick über alle Heuristiken')+ theme_bw()+                             
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text((size = 20)), legend.direction = 'vertical')+
-  scale_y_continuous(labels = scales::percent, limits = c(0,1))+
-  geom_point(aes(shape = CPH), size = 3)+geom_line(aes(color = CPH))
-  guides(fill = guide_legend(override.aes = list(shape =NA)),
-         shape = FALSE)
+# ggplot(replication_data_agg, aes(x = CP, y = MAPE, shape = CPH))+labs(color = "Heuristik Kombinationen",shape = 'Heuristik Kombinationen')+
+#   ggtitle('Überblick über alle Heuristiken')+ theme_bw()+                             
+#   theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text((size = 20)), legend.direction = 'vertical')+
+#   scale_y_continuous(labels = scales::percent, limits = c(0,1))+
+#   geom_point(aes(shape = CPH), size = 3)+geom_line(aes(color = CPH))
+#   guides(fill = guide_legend(override.aes = list(shape =NA)),
+#          shape = FALSE)
 
-
-ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = CPH))+geom_line(size=1)+
+loadfonts(device="win")
+ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = CPH))+
+  geom_line(size=1)+
   labs(color = "Heuristik Kombinationen", shape = 'Heuristik Kombinationen')+
   ggtitle('Überblick über alle Heuristiken')+ 
   theme_bw()+
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text(size = 20), legend.direction = 'vertical')+
+  theme(plot.title = element_text(hjust = 0.5, size = 20,family = 'Times New Roman'), legend.position = 'bottom', 
+        legend.text = element_text(family = 'Times New Roman',size = 16), legend.direction = 'vertical', 
+        axis.title.x = element_text(family = 'Times New Roman',size = 16),
+        axis.title.y = element_text(family = 'Times New Roman',size= 16),
+        text = element_text(family = 'Times New Roman'))+
   scale_y_continuous(labels = scales::percent, limits = c(0,1))+
-  geom_point(aes(shape = CPH),size = 3)
+  geom_point(aes(shape = CPH),size = 4)+
+  scale_color_grey(start = 0, end = .8)
 
 
 
@@ -112,7 +119,7 @@ ggplot(replication_data_agg, aes(x = CP, y = MAPE, color = CPH))+geom_line(size=
 CP_HEURISTIC_B = 'BASE'
 CD_HEURISTIC_B = 'BASE'
 
-CP_HEURISTIC = 'SIZE_MISC'
+CP_HEURISTIC = 'SIZE_RANDOM_MISC'
 CD_HEURISTIC = 'BIGPOOL'
 
 
@@ -136,11 +143,14 @@ boxplot_data$CP = factor(boxplot_data$CP)
 
 ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
   geom_boxplot()+
-  theme(panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.line = element_line(colour = "black"))+
   theme_bw()+
+  theme(panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black"),
+        text = element_text(family = 'Times New Roman',size =16),
+        legend.text = element_text(size= 16),
+        axis.title = element_text(size=16),
+        title = element_text(size=18),
+        axis.text.x = element_text(size = 12))+
   ggtitle(paste0(CP_HEURISTIC," & ",CD_HEURISTIC))+                              #Adaption required each time heuristic is changes
   theme(plot.title = element_text(hjust = 0.5), legend.position = 'right')+
   scale_y_continuous(labels = scales::percent, limits = c(0,1))
@@ -148,7 +158,47 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
 
 
 
+##4.2. ANAND FEHLER 
 
+CP_HEURISTIC = 'SIZE_CORREL_MISC'
+CD_HEURISTIC = 'BIGPOOL'
+
+
+replication_data_heuristic = subset(replication_data, CPH == CP_HEURISTIC & CDH == CD_HEURISTIC)
+
+file_link_replication_correct = 'C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Replication/Third Replication/ANAND Fehler/CSD_2020-02-18-1033.csv'
+
+replication_data_correct = read.csv(file_link_replication_correct)
+
+replication_data_correct$CPH = as.character(replication_data_correct$CPH)
+replication_data_correct$CDH = as.character(replication_data_correct$CDH)
+
+replication_data_correct$CPH[replication_data_correct$CPH == 7] = 'SIZE_CORREL_MISC (ohne CC)'
+replication_data_correct$CDH[replication_data_correct$CDH == 0] = 'BIGPOOL'
+
+replication_data_correct$CPH = as.factor(replication_data_correct$CPH)
+replication_data_correct$CDH = as.factor(replication_data_correct$CDH)
+
+replication_data_correct$COR1 = NULL
+replication_data_correct$COR2 = NULL
+replication_data_heuristic$COR = NULL
+
+replication_data_comp = rbind(replication_data_heuristic,replication_data_correct)
+
+replication_data_comp_agg = aggregate(.~ CP+CPH+CDH, data =replication_data_comp, FUN = mean)
+
+ggplot(replication_data_comp_agg, aes(x = CP, y = MAPE, color = CPH))+geom_line(size=1)+
+  labs(color = "Heuristik Kombinationen", shape = 'Heuristik Kombinationen')+
+  ggtitle('Programmfehler des Original-Modells')+ 
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5, size = 20,family = 'Times New Roman'), legend.position = 'bottom', 
+        legend.text = element_text(family = 'Times New Roman',size = 16), legend.direction = 'vertical', 
+        axis.title.x = element_text(family = 'Times New Roman',size = 16),
+        axis.title.y = element_text(family = 'Times New Roman',size= 16),
+        text = element_text(family = 'Times New Roman',size = 16))+
+  scale_y_continuous(labels = scales::percent, limits = c(0,1))+
+  geom_point(aes(shape = CPH),size = 4)+
+  scale_color_grey(start = 0, end = .8)
 
 
 ##5. REGRESSION ANALYSIS
@@ -281,13 +331,24 @@ q_var_output$Q_VAR = as.factor(q_var_output$Q_VAR)
 q_var_output_agg = aggregate(.~CP + Q_VAR, data = q_var_output, FUN = mean)
 
 
-ggplot(subset(q_var_output_agg,Q_VAR != 'ANAND'), aes(x = CP, y = MAPE, color = Q_VAR, group = Q_VAR))+geom_line(size = 1)+
-  ggtitle('SIZE_RANDOM_MISC Q_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
-  ylim(0,1)+xlim(0,40)+geom_line(data= q_var_output_agg[q_var_output_agg$Q_VAR == 'ANAND',], color = 'black', size = 1)+
+ggplot(subset(q_var_output_agg,Q_VAR != 'ANAND'), aes(x = CP, y = MAPE, color = Q_VAR, group = Q_VAR))+
+  geom_line(size = 1)+
+  ggtitle('SIZE_RANDOM_MISC Q_VAR VARIATION')+
+  theme_bw()+                             
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text(size = 16, family = 'Times New Roman'))+
+  ylim(0,1)+
+  geom_line(data= q_var_output_agg[q_var_output_agg$Q_VAR == 'ANAND',], color = 'black', size = 1)+
   scale_y_continuous(labels = scales::percent)
 
 
+
+##Q_VAR Regression
+
+replication_model = MAPE ~ CP + Q_VAR
+replication_data_heuristic = lapply(replication_data_heuristic[,all.vars(replication_model)], scale)
+linearReg_repl_std = lm(MAPE ~ CP+Q_VAR, data = replication_data_heuristic)
+apa.reg.table(linearReg_repl_std,filename = paste0("reg_Q_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
+apa.aov.table(linearReg_repl_std,filename = paste0("anova_Q_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
 
 
 
@@ -295,7 +356,7 @@ ggplot(subset(q_var_output_agg,Q_VAR != 'ANAND'), aes(x = CP, y = MAPE, color = 
 ##LOADING REPLICATION_DATA
 
 loading_from_data = 0
-mapping_RCC01_to_BASE = 1
+mapping_RCC01_to_BASE = 0
 
 if(loading_from_data==1){replication_data = DATA}else if(mapping_RCC01_to_BASE ==1){
   file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-16-1601.csv"
@@ -362,12 +423,24 @@ rc_var_output$RC_VAR = as.factor(rc_var_output$RC_VAR)
 rc_var_output_agg = aggregate(.~CP + RC_VAR, data = rc_var_output, FUN = mean)
 
 
-ggplot(rc_var_output_agg, aes(x = CP, y = MAPE, color = RC_VAR, group = RC_VAR))+geom_line(size = 1)+
-  ggtitle('SIZE_RANDOM_MISC RC_VAR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
-  ylim(0,1)+geom_line(data= rc_var_output_agg[rc_var_output_agg$RC_VAR == 'ANAND',], color = 'black', size = 1)+
+ggplot(subset(rc_var_output_agg,RC_VAR != 'ANAND'), aes(x = CP, y = MAPE, color = RC_VAR, group = RC_VAR))+
+  geom_line(size = 1)+
+  ggtitle('SIZE_RANDOM_MISC RC_VAR VARIATION - ohne Sortierung')+
+  theme_bw()+                             
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text(size = 16, family = 'Times New Roman'))+
+  ylim(0,1)+
+  geom_line(data= rc_var_output_agg[rc_var_output_agg$RC_VAR == 'ANAND',], color = 'black', size = 1)+
   scale_y_continuous(labels = scales::percent)
 
+
+
+##Q_VAR Regression
+
+replication_model = MAPE ~ CP + RC_VAR
+replication_data_heuristic = lapply(replication_data_heuristic[,all.vars(replication_model)], scale)
+linearReg_repl_std = lm(MAPE ~ CP+RC_VAR, data = replication_data_heuristic)
+apa.reg.table(linearReg_repl_std,filename = paste0("reg_RC_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
+apa.aov.table(linearReg_repl_std,filename = paste0("anova_RC_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
 
 
 
@@ -378,7 +451,7 @@ loading_from_data = 0
 
 if(loading_from_data==1){replication_data = DATA}else{
   file_link_cor_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/COR_VAR/CSD_2020-02-16-1543.csv"
-  replication_data = read.csv(file_link_cor_var,sep = ';')}
+  replication_data = read.csv(file_link_cor_var,sep = ',')}
 
 replication_data$CPH = as.character(replication_data$CPH)
 replication_data$CDH = as.character(replication_data$CDH)
@@ -439,21 +512,31 @@ rep_cor_var_output_agg = aggregate(.~CP + COR1+COR2, data = rep_cor_var_output, 
 anand_cor_var_output_agg = aggregate(.~CP, data = anand_cor_var_output,FUN = mean)
 
 ggplot(rep_cor_var_output_agg, aes(x = CP, y = MAPE, color = COR1, group = COR1))+geom_line(size = 1)+
-  ggtitle('SIZE_RANDOM_MISC COR VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
+  ggtitle('SIZE_RANDOM_MISC COR1 Variation für jedes COR2')+
+  theme_bw()+                              #Adaption required each time heuristic is changes
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text(size = 16, family = 'Times New Roman'))+
   ylim(0,1)+
   scale_y_continuous(labels = scales::percent)+
   facet_wrap('COR2')+geom_line(data= anand_cor_var_output_agg, color = 'black', group = 'ANAND',size = 1)
 
 
 
+
+replication_model = MAPE ~ CP + CHECK_COR1 + CHECK_COR2
+replication_data_heuristic = lapply(replication_data_heuristic[,all.vars(replication_model)], scale)
+linearReg_repl_std = lm(MAPE ~ CP+ CHECK_COR1+ CHECK_COR2, data = replication_data_heuristic)
+apa.reg.table(linearReg_repl_std,filename = paste0("reg_COR_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
+apa.aov.table(linearReg_repl_std,filename = paste0("anova_COR_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
+
+
+
 ####_________________________________DENS_VARIATION_____________________########
 
 
-loading_from_data = 1
+loading_from_data = 0
 
 if(loading_from_data==1){replication_data = DATA}else{
-  file_link_dens_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/DENS_VAR/CSD_2020-02-15-1024.csv"
+  file_link_dens_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/DENS_VAR/CSD_2020-02-15-1658.csv"
   replication_data = read.csv(file_link_dens_var,sep = ',')}
 
 replication_data$CPH = as.character(replication_data$CPH)
@@ -512,11 +595,23 @@ dens_var_output$DENS = as.factor(dens_var_output$DENS)
 dens_var_output_agg = aggregate(.~CP + DENS, data = dens_var_output, FUN = mean)
 dens_var_output_agg$DENS = as.factor(dens_var_output_agg$DENS)
 
-ggplot(dens_var_output_agg, aes(x = CP, y = MAPE, color = DENS,group = DENS))+geom_line(size = 1)+
-  ggtitle('SIZE_RANDOM_MISC DENS VARIATION')+theme_bw()+                              #Adaption required each time heuristic is changes
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'left')+
-  geom_line(data=dens_var_output_agg[dens_var_output_agg$DENS == 'ANAND',], color = 'black', size = 1)+
+ggplot(subset(dens_var_output_agg, DENS != 'ANAND'), aes(x = CP, y = MAPE, color = DENS, group = DENS))+
+  geom_line(size = 1)+
+  ggtitle('SIZE_RANDOM_MISC DENS VARIATION')+
+  theme_bw()+                             
+  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom', text = element_text(size = 16, family = 'Times New Roman'))+
+  ylim(0,1)+
+  geom_line(data= dens_var_output_agg[dens_var_output_agg$DENS == 'ANAND',], color = 'black', size = 1)+
   scale_y_continuous(labels = scales::percent)
+
+
+
+replication_model = MAPE ~ CP + DENS
+replication_data_heuristic = lapply(replication_data_heuristic[,all.vars(replication_model)], scale)
+linearReg_repl_std = lm(MAPE ~ CP+DENS, data = replication_data_heuristic)
+apa.reg.table(linearReg_repl_std,filename = paste0("reg_DENS_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
+apa.aov.table(linearReg_repl_std,filename = paste0("anova_DENS_VAR_",CP_HEURISTIC,".doc"), table.number = 1)
+
 
 
 
