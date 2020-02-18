@@ -1,8 +1,5 @@
 #BUILDING THE ACT_CONS_PAT  /  RES_CONS_PAT 
 
-
-#####################################################
-
 .gen_RES_CONS_PAT <- function(FIRM) {
 
   ## ====================== STEP 1 Determining the activities =========================
@@ -189,7 +186,6 @@ return(FIRM)
     DENS_MAX = 0.7;
     DENS = runif(1, DENS_MIN, DENS_MAX);
   }
-print(DENS)
 
 FIRM$PRODUCTION_ENVIRONMENT$DENS_draw = DENS
 
