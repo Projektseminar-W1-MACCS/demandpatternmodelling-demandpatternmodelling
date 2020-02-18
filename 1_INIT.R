@@ -14,11 +14,11 @@
 
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
 
-  set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_fix = 1            #Control variable - Decide if the resource consumption is constant
+  set_DEMAND_fix=   0                  #Control Variable -  Decide if always the same demand is used
+  set_RES_CONS_PAT_fix = 0            #Control variable - Decide if the resource consumption is constant
   set_RCU_fix = 0                      #Control variable - Decide if the resource costs per unit are constant
-  set_RCC_fix = 1                      # Control Variable - Decide if the reosurce costs vector is the same
-  set_CSD_fix=  1                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
+  set_RCC_fix = 0                      # Control Variable - Decide if the reosurce costs vector is the same
+  set_CSD_fix=  0                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
 
 
   CP = c(1,5,10,15,20,25,30,35,40,45,50)       #No. of Cost Pools
