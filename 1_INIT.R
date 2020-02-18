@@ -186,15 +186,3 @@ if (ProductCostOutput==1)
   write.csv(DATAp, file = output)
   print("Product costs FILE has been written")
 }
-
-
-
-replication_data = DATA
-replication_data_agg = aggregate(.~CP, data = replication_data, FUN = mean)
-
-ggplot(replication_data_agg, aes(x = CP, y = MAPE))+
-  geom_line(size = 1)+labs(color = "Heuristik Kombinationen")+
-  theme_bw()+
-  ggtitle('Überblick alle Heuristiken')+                              
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
-  scale_y_continuous(labels = scales::percent)
