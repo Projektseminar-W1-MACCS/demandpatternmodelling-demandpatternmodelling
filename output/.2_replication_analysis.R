@@ -156,7 +156,7 @@ ggplot(boxplot_data, aes(x= CP,y=MAPE, fill=Modell)) +
   scale_y_continuous(labels = scales::percent, limits = c(0,1))
 
 
-
+mean(replication_data_heuristic$CHECK_COR1)
 
 ##4.2. ANAND FEHLER 
 
@@ -342,6 +342,8 @@ ggplot(subset(q_var_output_agg,Q_VAR != 'ANAND'), aes(x = CP, y = MAPE, color = 
 
 
 
+replication_data_heuristic_agg = aggregate(.~Q_VAR, data = replication_data_heuristic, FUN = mean)
+
 ##Q_VAR Regression
 
 replication_model = MAPE ~ CP + Q_VAR
@@ -356,7 +358,7 @@ apa.aov.table(linearReg_repl_std,filename = paste0("anova_Q_VAR_",CP_HEURISTIC,"
 ##LOADING REPLICATION_DATA
 
 loading_from_data = 0
-mapping_RCC01_to_BASE = 0
+mapping_RCC01_to_BASE = 1
 
 if(loading_from_data==1){replication_data = DATA}else if(mapping_RCC01_to_BASE ==1){
   file_link_rc_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/RC_VAR/CSD_2020-02-16-1601.csv"
@@ -433,8 +435,11 @@ ggplot(subset(rc_var_output_agg,RC_VAR != 'ANAND'), aes(x = CP, y = MAPE, color 
   scale_y_continuous(labels = scales::percent)
 
 
+replication_data_heuristic_agg = aggregate(.~RC_VAR, data = replication_data_heuristic, FUN = mean)
 
-##Q_VAR Regression
+
+
+##RC_VAR Regression
 
 replication_model = MAPE ~ CP + RC_VAR
 replication_data_heuristic = lapply(replication_data_heuristic[,all.vars(replication_model)], scale)
@@ -447,7 +452,7 @@ apa.aov.table(linearReg_repl_std,filename = paste0("anova_RC_VAR_",CP_HEURISTIC,
 ####_________________________________COR_VARIATION_____________________########
 ##LOADING REPLICATION_DATA
 
-loading_from_data = 0
+loading_from_data = 1
 
 if(loading_from_data==1){replication_data = DATA}else{
   file_link_cor_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/COR_VAR/CSD_2020-02-16-1543.csv"
@@ -522,6 +527,7 @@ ggplot(rep_cor_var_output_agg, aes(x = CP, y = MAPE, color = COR1, group = COR1)
 
 
 
+
 replication_model = MAPE ~ CP + CHECK_COR1 + CHECK_COR2
 replication_data_heuristic = lapply(replication_data_heuristic[,all.vars(replication_model)], scale)
 linearReg_repl_std = lm(MAPE ~ CP+ CHECK_COR1+ CHECK_COR2, data = replication_data_heuristic)
@@ -533,7 +539,7 @@ apa.aov.table(linearReg_repl_std,filename = paste0("anova_COR_VAR_",CP_HEURISTIC
 ####_________________________________DENS_VARIATION_____________________########
 
 
-loading_from_data = 0
+loading_from_data = 1
 
 if(loading_from_data==1){replication_data = DATA}else{
   file_link_dens_var = "C:/Users/cms9023/Documents/CostSystemDesignSim PROJECT/MARK/Robustness Analysis/DENS_VAR/CSD_2020-02-15-1658.csv"
