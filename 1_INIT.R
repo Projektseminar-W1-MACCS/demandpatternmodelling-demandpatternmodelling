@@ -7,15 +7,15 @@
   DATA = data.frame()
   DATAp = data.frame()
     
-  NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
-  NUMB_RES  =        50                  #INPUT independent variable - Number of factors
+  NUMB_PRO =         20                 #INPUT independent Variable - Number of products 
+  NUMB_RES  =        50                 #INPUT independent variable - Number of factors
   SIM_NUMB =         200                #Control Variable - Number of Simulations for every single environment (standard: 30)     
-  TC =               1000000             #Total costs
+  TC =               1000000            #Total costs
 
   ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
 
   set_DEMAND_fix=   1                  #Control Variable -  Decide if always the same demand is used
-  set_RES_CONS_PAT_fix = 1            #Control variable - Decide if the resource consumption is constant
+  set_RES_CONS_PAT_fix = 1             #Control variable - Decide if the resource consumption is constant
   set_RCU_fix = 0                      #Control variable - Decide if the resource costs per unit are constant
   set_RCC_fix = 1                      # Control Variable - Decide if the reosurce costs vector is the same
   set_CSD_fix=  1                      #Control Variable -  Decide if CD_Heuristic always uses the same resources.
@@ -188,13 +188,3 @@ if (ProductCostOutput==1)
 }
 
 
-
-replication_data = DATA
-replication_data_agg = aggregate(.~CP, data = replication_data, FUN = mean)
-
-ggplot(replication_data_agg, aes(x = CP, y = MAPE))+
-  geom_line(size = 1)+labs(color = "Heuristik Kombinationen")+
-  theme_bw()+
-  ggtitle('Überblick alle Heuristiken')+                              
-  theme(plot.title = element_text(hjust = 0.5), legend.position = 'bottom')+
-  scale_y_continuous(labels = scales::percent)

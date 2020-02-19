@@ -10,7 +10,8 @@ library(ggridges)
 ##### 20 Products ####
 ###### Ridge 1 GREY ####
 
-DATAa <- read.csv("output/ProductCost_2020-02-18-1244.csv")
+DATAa <- read.csv("output/ProductCost_2020-02-18-2127.csv")
+
 #summary(DATAa)
 DATAa$PRODUCT <- as.factor(DATAa$PRODUCT)
 DATAa = subset(DATAa, DATAa$CP==25)
@@ -21,7 +22,7 @@ DATAa$PE <- DATAa$PE * 100
 
 ridgeplot1=ggplot(DATAa, aes(x = DATAa$PE, y = DATAa$PRODUCT))+
   #geom_density_ridges(scale=5, rel_min_height=0.01, alpha=0.5) +
-  xlim(-70,50) +
+  xlim(-30,30) +
 
   stat_density_ridges(quantile_lines = TRUE, quantiles = 2,rel_min_height=0.01,scale=5, alpha=1, fill ="lightblue")+
   #coord_cartesian(ylim=c(lower.limit, upper.limit)) + 
@@ -33,6 +34,8 @@ ridgeplot1=ggplot(DATAa, aes(x = DATAa$PE, y = DATAa$PRODUCT))+
   theme(plot.title = element_text(hjust = 0.5)) +
   theme_ridges( center_axis_labels = TRUE)
 ridgeplot1
+
+
 
 
 

@@ -3,9 +3,8 @@ library(RColorBrewer)
 library(ggplot2)
 library(dplyr)
 library(reshape)
-DATAp <- read.csv("output/ProductCost_2020-02-12-1118.csv")
-summary(DATAp)
-DATAa = DATAp
+DATAa <- read.csv("output/ProductCost_2020-02-18-2127.csv")
+#summary(DATAp)
 
 ### ESTIMATE IMPRECISION AND BIAS  #############################################################################################################
 
@@ -36,6 +35,10 @@ DATAap = merge(Base,LookUP , by.x = c("PC_B","CP","ERROR"), by.y =c("PCB","cp","
 rm(LookUP)
 rm(Base)
 rm(DATAa_grouped)
+
+
+
+
 
 
 
