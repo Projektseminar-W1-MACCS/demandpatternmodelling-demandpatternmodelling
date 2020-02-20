@@ -10,7 +10,7 @@ gen_ProductionEnvironment <- function(FIRM,set_PE_constant) {
    
 if (FIRM$PRODUCTION_ENVIRONMENT$set_DEMAND_fix ==1) {set.seed(13)} 
   
-FIRM = .gen_Demand_Anand(FIRM) #gen_Demand_Anand and gen_Demand
+FIRM = .gen_Demand(FIRM) #gen_Demand_Anand and gen_Demand
 
 if (FIRM$PRODUCTION_ENVIRONMENT$set_DEMAND_fix==1) {set.seed(NULL)} # This removes the seed of the firm allowing random cost system design
 

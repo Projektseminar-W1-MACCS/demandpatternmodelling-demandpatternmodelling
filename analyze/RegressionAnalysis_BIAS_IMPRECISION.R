@@ -10,7 +10,7 @@ library(ggplot2)
 
 
 #input <- read.csv("C:/Users/kaigm/OneDrive/00 Paperprojects/01 PRODUCT COST _ WORKING PAPER/16 SUBMISSION/01 EXPERIMENTS/03 Regression/ProductCost_2020-02-10-1300.csv")
-input <- read.csv("output/ProductCost_2020-02-19-1407.csv")
+input <- read.csv("output/Imprecision/ProductCost_2020-02-19-1407.csv")
 
 
 #### DATA WRANGLING AND SETTING ####

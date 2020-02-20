@@ -3,7 +3,7 @@ library(RColorBrewer)
 library(ggplot2)
 library(dplyr)
 library(reshape)
-DATAa <- read.csv("output/ProductCost_2020-02-18-2127.csv")
+DATAa <-  read.csv("output/Imprecision/ProductCost_2020-02-19-1407.csv")
 #summary(DATAp)
 
 ### ESTIMATE IMPRECISION AND BIAS  #############################################################################################################
