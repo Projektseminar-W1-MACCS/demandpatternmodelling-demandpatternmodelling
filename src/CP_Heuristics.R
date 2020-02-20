@@ -1192,6 +1192,9 @@ MAP_RES_CP_SIZE_CORREL_MISC<-function(FIRM){
    }
    
    
+   
+   ###CHECK####
+   FIRM$PRODUCTION_ENVIRONMENT$CHECK$MISCPOOL = sum(RCC[unlist(RC_to_ACP[CP])])/FIRM$COSTING_SYSTEM$TC
    #### SOURCING ####  
       
       FIRM$COSTING_SYSTEM$ACP = ACP

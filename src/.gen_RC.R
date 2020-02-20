@@ -22,11 +22,11 @@
   RCC = (preRCC/sum(preRCC))*TC #normalizing it #ceiled realized demand for each product
   
   
-  ## Move the biggest resource to the front
-  # largest_RC <-
-  #   sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
-  # RCC <- c(RCC[largest_RC], RCC[-largest_RC])
-  
+  # Move the biggest resource to the front
+  largest_RC <-
+     sort(RCC, decreasing = TRUE, index.return = TRUE)$ix[1]
+  RCC <- c(RCC[largest_RC], RCC[-largest_RC])
+
   ###CHECK###
   RCCs = sort(RCC, decreasing = TRUE)
   
