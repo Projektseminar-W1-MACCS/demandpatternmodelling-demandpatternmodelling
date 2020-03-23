@@ -3,7 +3,8 @@
 
 .gen_Demand_Pattern <- function(FIRM){
   ####Implementing Demand Pattern into the Production Simulation####
-  #...
+  
+  ### Marco legt los ###
   
   
   
