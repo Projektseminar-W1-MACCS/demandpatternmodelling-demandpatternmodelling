@@ -97,7 +97,7 @@
   
   
   
-  ### 4. VERSUCH HOHE NACHFRAGEDIFFERENZ ###
+  ### 4. VERSUCH HOHE NACHFRAGEDIFFERENZ (5 mal 100 und 45 mal 10) ###
   # 
   #   NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
   # 
@@ -135,26 +135,26 @@
   
   
   
-  ### 5. GELEICHE NACHFRAGE FÜR JEDES PRODUKT ###
+  ### 5. GELEICHE NACHFRAGE FÜR JEDES PRODUKT (konstant 20)###
   
   
-  NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
-  
-  units = 10^3
-  
-  a = 20
-  
-  preDemand = a
-  
-  for (i in 1: (NUMB_PRO-1)) {
-    preDemand = c(preDemand, a) 
-  }
-  
-  DEMAND = ceiling((preDemand/sum(preDemand))*units) #normalizing it #ceiled realized demand for each product
-  
-  FIRM$PRODUCTION_ENVIRONMENT$DEMAND = as.vector(DEMAND)
-  
-  FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw = sd(DEMAND)/mean(DEMAND)
+  # NUMB_PRO = FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO
+  # 
+  # units = 10^3
+  # 
+  # a = 20
+  # 
+  # preDemand = a
+  # 
+  # for (i in 1: (NUMB_PRO-1)) {
+  #   preDemand = c(preDemand, a) 
+  # }
+  # 
+  # DEMAND = ceiling((preDemand/sum(preDemand))*units) #normalizing it #ceiled realized demand for each product
+  # 
+  # FIRM$PRODUCTION_ENVIRONMENT$DEMAND = as.vector(DEMAND)
+  # 
+  # FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw = sd(DEMAND)/mean(DEMAND)
   
   
   

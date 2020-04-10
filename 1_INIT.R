@@ -12,7 +12,7 @@
   SIM_NUMB =         200                #Control Variable - Number of Simulations for every single environment (standard: 30)     
   TC =               1000000             #Total costs
 
-  ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
+  ProductCostOutput= 1                      #Control Variable -  Zero = no tracking of the product level
 
   set_DEMAND_fix=   0                  #Control Variable -  Decide if always the same demand is used
   set_RES_CONS_PAT_fix = 0            #Control variable - Decide if the resource consumption is constant
@@ -22,10 +22,10 @@
 
 
   CP = c(1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50)       #No. of Cost Pools
-  COR1 = c(-0.8,-0.4,0.001,0.4,0.8)                              #Correlation between resources
-  COR2 = c(-0.8,-0.4,0.001,0.4,0.8)
+  COR1 = c(-1)                              #Correlation between resources
+  COR2 = c(-1)
   RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2
-  Q_VAR = c(-1)                            #Demand variation
+  Q_VAR = c(0.5, 2)                            #Demand variation
   Error = c(0)                    #Measurement error
   NUMB_Error = c(1)                 #Number of errornoues links
   DENS = c(1)                     #Number of links between products and resources (sharing)
