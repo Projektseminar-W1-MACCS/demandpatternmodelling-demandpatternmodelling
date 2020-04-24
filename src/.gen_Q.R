@@ -160,10 +160,6 @@
   
   
   
-  
-  
-  
-  
   ### 6. Actual Demand von Apple (nach Produktgruppen jährlich 2013 bis 2019) ###
   
   # in diesem Pattern wird eine Maxrix aus den jährlichen Umsätzen nach Produktgruppen von Apple erstellt #
@@ -171,72 +167,114 @@
   # so wird in den Experimenten die tatsächliche Verteilung abgebildet, wobei die Simulation mit 6 Produkten durchgeführt wird #
   
   
+  # units = 10^3
+  # 
+  # Jahre = c(2013, 2014, 2015, 2016, 2017, 2018, 2019)
+  # 
+  # iPhone =    c(91.283031,
+  #               102.0024,
+  #               155.049848,
+  #               136.694196,
+  #               141.320295,
+  #               164.88448,
+  #               142.3620341)
+  # 
+  # Software =  c(16.048449,
+  #               18.06064,
+  #               19.912944,
+  #               24.345756,
+  #               29.983284,
+  #               39.76032,
+  #               46.2748143)
+  # 
+  # MAC =       c(21.483387,
+  #               24.07476,
+  #               25.47548,
+  #               22.836276,
+  #               25.857144,
+  #               25.20544,
+  #               25.7255713)
+  # 
+  # Werables =  c(5.708394,
+  #               6.08724,
+  #               10.073332,
+  #               11.127024,
+  #               12.859803,
+  #               17.37024,
+  #               24.4770097)
+  # 
+  # iPad =      c(31.977261,
+  #               30.28996,
+  #               23.231768,
+  #               20.636748,
+  #               19.232397,
+  #               18.37952,
+  #               21.2775706)
+  # 
+  # iPod =      c(4.409478,
+  #               2.285,0.001,0.001,0.001,0.001,0.001)
+  # 
+  # MATRIX = cbind(Jahre,iPhone, Software, MAC, Werables, iPad, iPod) # Matrix aus den vorher eingegebenen Vektoren wir erstellt
+  # 
+  # preDemand = 0
+  # for (i in 2:7) {      # Alle Spalten der Matrix werden durchgegangen (Außnahme ist die erste Spalte, in der die Jahreszahl steht)
+  #   Jahr = runif(1, 1,7)      # Jahr des verwendeten Wertes wird gleichverteilt gezogen
+  #   
+  #   if (preDemand[1] == 0) {
+  #     preDemand = MATRIX[Jahr,i] 
+  #   }else{
+  #     preDemand = c(preDemand, MATRIX[Jahr,i])  # Demand der Produktgruppe wird aus Feld in der Matrix entnommen und zum Demandvektor hinzugefügt
+  #   }
+  # }
+  # 
+  # DEMAND = ceiling((preDemand/sum(preDemand))*units) # Anteile der produktgruppen werden auf Gesamtdemand von 1000 heruntergebrochen
+  # 
+  # FIRM$PRODUCTION_ENVIRONMENT$DEMAND = as.vector(DEMAND)
+  # 
+  # FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw = sd(DEMAND)/mean(DEMAND)
+  
+  
+  
+  
+  
+  
+  
+  
+  ###  6.1. Darstellung Apple Anhand von Nromalverteilungen ###
+  
   units = 10^3
   
-  Jahre = c(2013, 2014, 2015, 2016, 2017, 2018, 2019)
+  preDemandiPhone = as.integer(rnorm(1, mean = 133.371, sd = 26.999))
   
-  iPhone =    c(91.283031,
-                102.0024,
-                155.049848,
-                136.694196,
-                141.320295,
-                164.88448,
-                142.3620341)
+  predemandSoftware = as.integer(rnorm(1, mean =27.769, sd = 11.520))
   
-  Software =  c(16.048449,
-                18.06064,
-                19.912944,
-                24.345756,
-                29.983284,
-                39.76032,
-                46.2748143)
+  predemandMAC = as.integer(rnorm(1, mean =24.380, sd = 1.670))
   
-  MAC =       c(21.483387,
-                24.07476,
-                25.47548,
-                22.836276,
-                25.857144,
-                25.20544,
-                25.7255713)
+  predemandWerables = as.integer(rnorm(1, mean =12.529, sd = 6.612))
   
-  Werables =  c(5.708394,
-                6.08724,
-                10.073332,
-                11.127024,
-                12.859803,
-                17.37024,
-                24.4770097)
+  predemandiPad = as.integer(rnorm(1, mean =23.575, sd = 5.409))
   
-  iPad =      c(31.977261,
-                30.28996,
-                23.231768,
-                20.636748,
-                19.232397,
-                18.37952,
-                21.2775706)
+  predemandiPod = as.integer(rnorm(1, mean =0.956, sd = 1.745))
   
-  iPod =      c(4.409478,
-                2.285,0,0,0,0,0)
   
-  MATRIX = cbind(Jahre,iPhone, Software, MAC, Werables, iPad, iPod) # Matrix aus den vorher eingegebenen Vektoren wir erstellt
+  preDemand = c(preDemandiPhone, predemandSoftware, predemandMAC, predemandWerables, predemandiPad, predemandiPod)
   
-  preDemand = 0
-  for (i in 2:7) {      # Alle Spalten der Matrix werden durchgegangen (Außnahme ist die erste Spalte, in der die Jahreszahl steht)
-    Jahr = runif(1, 1,7)      # Jahr des verwendeten Wertes wird gleichverteilt gezogen
-    
-    if (preDemand[1] == 0) {
-      preDemand = MATRIX[Jahr,i] 
-    }else{
-      preDemand = c(preDemand, MATRIX[Jahr,i])  # Demand der Produktgruppe wird aus Feld in der Matrix entnommen und zum Demandvektor hinzugefügt
+  ### Da Normalverteilungen in den negativen Bereich reichen, werden negative Werte zum Demand von 0.001 geändert -> führt zu Demand von 1 ###
+  
+  for (i in 1:6) { 
+    if (preDemand [i] <= 0){
+      preDemand [i] = 0.001
     }
   }
   
-  DEMAND = ceiling((preDemand/sum(preDemand))*units) # Anteile der produktgruppen werden auf Gesamtdemand von 1000 heruntergebrochen
+  DEMAND = ceiling((preDemand/sum(preDemand))*units) #normalizing it #ceiled realized demand for each product
   
-  FIRM$PRODUCTION_ENVIRONMENT$DEMAND = as.vector(DEMAND)
+  FIRM$PRODUCTION_ENVIRONMENT$DEMAND = sample(as.vector(DEMAND)) ### mit verschiedener Reihenfolge (sample)
   
   FIRM$PRODUCTION_ENVIRONMENT$Q_VAR_draw = sd(DEMAND)/mean(DEMAND)
   
+  
+
   
   
   
