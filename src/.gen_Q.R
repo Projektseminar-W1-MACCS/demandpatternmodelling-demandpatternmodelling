@@ -216,7 +216,7 @@
                 21.2775706)
   
   iPod =      c(4.409478,
-                2.285,0,0,0,0,0)
+                2.285,0.001,0.001,0.001,0.001,0.001)
   
   MATRIX = cbind(Jahre,iPhone, Software, MAC, Werables, iPad, iPod) # Matrix aus den vorher eingegebenen Vektoren wir erstellt
   
