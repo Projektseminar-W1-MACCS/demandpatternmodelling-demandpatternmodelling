@@ -417,9 +417,9 @@
   ###CHECK###
   
   Qs = sort(DEMAND, decreasing = TRUE)
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q01 = sum(Qs[1:(1/6 * NUMB_PRO)])/units        #no. of units of the biggest product
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5u = sum(Qs[1:(0.5 * NUMB_PRO)])/units        #no. of units of 50% biggest products
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5d = sum(Qs[(0.5 * NUMB_PRO):NUMB_PRO])/units #no. of units of 50% lowest products
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q01 = sum(Qs[1:(1/6 * NUMB_PRO)])/units        #share of units of the biggest product
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5u = sum(Qs[1:(3/6 * NUMB_PRO)])/units        #share of units of 50% biggest products
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5d = sum(Qs[(4/6 * NUMB_PRO):NUMB_PRO])/units #share of units of 50% lowest products
   
   return(FIRM)
 }
