@@ -338,6 +338,8 @@
   
   
   
+
+
   
   #=== Zusaetzliche, in der Arbeit  NICHT verwendete Demand Pattern ===#
   
