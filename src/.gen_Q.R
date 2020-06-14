@@ -447,9 +447,9 @@
   ###CHECK###
   
   Qs = sort(DEMAND, decreasing = TRUE)
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q20 = sum(Qs[1:(0.2 * NUMB_PRO)])/units        #no. of units of 20% biggest products
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q10 = sum(Qs[1:(0.1 * NUMB_PRO)])/units        #no. of units of 10% biggest products
-  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q02 = sum(Qs[1:(0.02 * NUMB_PRO)])/units       ##no. of units of 2% biggest products
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q01 = sum(Qs[1:(0.2 * NUMB_PRO)])/units        #no. of units of 20% biggest products
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5u = sum(Qs[1:(0.1 * NUMB_PRO)])/units        #no. of units of 10% biggest products
+  FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5d = sum(Qs[1:(0.02 * NUMB_PRO)])/units       ##no. of units of 2% biggest products
 
   
   # it is possible that the sum(units) >= units !

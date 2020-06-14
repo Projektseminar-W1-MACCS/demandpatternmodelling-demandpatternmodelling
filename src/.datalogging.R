@@ -22,9 +22,9 @@
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC20,
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC10,
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$RCC02,
-                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q20,
-                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q10,
-                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q02,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q01,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5u,
+                       FIRM$PRODUCTION_ENVIRONMENT$CHECK$Q5d,
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$NonZeroConsumption,
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$countNonZero,
                        FIRM$PRODUCTION_ENVIRONMENT$CHECK$COR1,
@@ -40,8 +40,8 @@
 
   #preData_p = .datalogging()
   colnames(preData) = c('o','nn','CPH','CDH','CP','RC_VAR', 'NUMB_ME', 'ME_AD','DENS', 'COR1','COR2', 'Q_VAR',
-                        'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q20',
-                        'CHECK_Q10','CHECK_Q02','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
+                        'NUMB_PRO', 'NUMB_RES','CHECK_RCC20','CHECK_RCC10','CHECK_RCC02','CHECK_Q01',
+                        'CHECK_Q5u','CHECK_Q5d','CHECK_NonZeroCons','CHECK_countNonZero','CHECK_COR1','CHECK_COR2',
                         'MISCPOOL','OC','UC','OC5','UC5','EUCD','MAPE','MSE')
 
   
